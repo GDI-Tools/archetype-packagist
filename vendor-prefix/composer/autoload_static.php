@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
+class ComposerStaticInit9ca082ead18d171b74bb65df40d4d1b2
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -16,6 +16,8 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         'f625ee536139dfb962a398b200bdb2bd' => __DIR__ . '/..' . '/illuminate/support/functions.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         'ef65a1626449d89d0811cf9befce46f0' => __DIR__ . '/..' . '/illuminate/events/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
@@ -25,7 +27,9 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         array (
             'Archetype\\Vendor\\voku\\' => 22,
             'Archetype\\Vendor\\Symfony\\Polyfill\\Php83\\' => 40,
+            'Archetype\\Vendor\\Symfony\\Polyfill\\Php80\\' => 40,
             'Archetype\\Vendor\\Symfony\\Polyfill\\Mbstring\\' => 43,
+            'Archetype\\Vendor\\Symfony\\Polyfill\\Ctype\\' => 40,
             'Archetype\\Vendor\\Symfony\\Contracts\\Translation\\' => 47,
             'Archetype\\Vendor\\Symfony\\Component\\Translation\\' => 47,
             'Archetype\\Vendor\\Symfony\\Component\\Clock\\' => 41,
@@ -36,6 +40,7 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
             'Archetype\\Vendor\\Psr\\Container\\' => 31,
             'Archetype\\Vendor\\Psr\\Clock\\' => 27,
             'Archetype\\Vendor\\Psr\\Cache\\' => 27,
+            'Archetype\\Vendor\\PhpOption\\' => 27,
             'Archetype\\Vendor\\Laravel\\SerializableClosure\\' => 45,
             'Archetype\\Vendor\\Illuminate\\Support\\' => 36,
             'Archetype\\Vendor\\Illuminate\\Pipeline\\' => 37,
@@ -44,6 +49,8 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
             'Archetype\\Vendor\\Illuminate\\Contracts\\' => 38,
             'Archetype\\Vendor\\Illuminate\\Container\\' => 38,
             'Archetype\\Vendor\\Illuminate\\Bus\\' => 32,
+            'Archetype\\Vendor\\GrahamCampbell\\ResultType\\' => 43,
+            'Archetype\\Vendor\\Dotenv\\' => 24,
             'Archetype\\Vendor\\Doctrine\\Inflector\\' => 36,
             'Archetype\\Vendor\\Doctrine\\Deprecations\\' => 39,
             'Archetype\\Vendor\\Doctrine\\DBAL\\' => 31,
@@ -66,9 +73,17 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php83',
         ),
+        'Archetype\\Vendor\\Symfony\\Polyfill\\Php80\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
+        ),
         'Archetype\\Vendor\\Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Archetype\\Vendor\\Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
         'Archetype\\Vendor\\Symfony\\Contracts\\Translation\\' => 
         array (
@@ -110,6 +125,10 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'Archetype\\Vendor\\PhpOption\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
         'Archetype\\Vendor\\Laravel\\SerializableClosure\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
@@ -144,6 +163,14 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'Archetype\\Vendor\\Illuminate\\Bus\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/bus',
+        ),
+        'Archetype\\Vendor\\GrahamCampbell\\ResultType\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
+        'Archetype\\Vendor\\Dotenv\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
         ),
         'Archetype\\Vendor\\Doctrine\\Inflector\\' => 
         array (
@@ -216,6 +243,7 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'Archetype\\Vendor\\Analog\\Handler\\Variable' => __DIR__ . '/..' . '/analog/analog/lib/Analog/Handler/Variable.php',
         'Archetype\\Vendor\\Analog\\Handler\\WPMail' => __DIR__ . '/..' . '/analog/analog/lib/Analog/Handler/WPMail.php',
         'Archetype\\Vendor\\Analog\\Logger' => __DIR__ . '/..' . '/analog/analog/lib/Analog/Logger.php',
+        'Archetype\\Vendor\\Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Archetype\\Vendor\\Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Archetype\\Vendor\\Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
         'Archetype\\Vendor\\Brick\\Math\\BigNumber' => __DIR__ . '/..' . '/brick/math/src/BigNumber.php',
@@ -730,6 +758,50 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'Archetype\\Vendor\\Doctrine\\Inflector\\Rules\\Word' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/Rules/Word.php',
         'Archetype\\Vendor\\Doctrine\\Inflector\\RulesetInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/RulesetInflector.php',
         'Archetype\\Vendor\\Doctrine\\Inflector\\WordInflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector/WordInflector.php',
+        'Archetype\\Vendor\\Dotenv\\Dotenv' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Dotenv.php',
+        'Archetype\\Vendor\\Dotenv\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/ExceptionInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Exception\\InvalidEncodingException' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/InvalidEncodingException.php',
+        'Archetype\\Vendor\\Dotenv\\Exception\\InvalidFileException' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/InvalidFileException.php',
+        'Archetype\\Vendor\\Dotenv\\Exception\\InvalidPathException' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/InvalidPathException.php',
+        'Archetype\\Vendor\\Dotenv\\Exception\\ValidationException' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/ValidationException.php',
+        'Archetype\\Vendor\\Dotenv\\Loader\\Loader' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Loader/Loader.php',
+        'Archetype\\Vendor\\Dotenv\\Loader\\LoaderInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Loader/LoaderInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Loader\\Resolver' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Loader/Resolver.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\Entry' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/Entry.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\EntryParser' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/EntryParser.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\Lexer' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/Lexer.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\Lines' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/Lines.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\Parser' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/Parser.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\ParserInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/ParserInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Parser\\Value' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Parser/Value.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\AdapterRepository' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/AdapterRepository.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\AdapterInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/AdapterInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\ApacheAdapter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/ApacheAdapter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\ArrayAdapter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/ArrayAdapter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\EnvConstAdapter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/EnvConstAdapter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\GuardedWriter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/GuardedWriter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\ImmutableWriter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/ImmutableWriter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\MultiReader' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/MultiReader.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\MultiWriter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/MultiWriter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\PutenvAdapter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/PutenvAdapter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\ReaderInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/ReaderInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\ReplacingWriter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/ReplacingWriter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\ServerConstAdapter' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/ServerConstAdapter.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\Adapter\\WriterInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/Adapter/WriterInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\RepositoryBuilder' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/RepositoryBuilder.php',
+        'Archetype\\Vendor\\Dotenv\\Repository\\RepositoryInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Repository/RepositoryInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Store\\FileStore' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Store/FileStore.php',
+        'Archetype\\Vendor\\Dotenv\\Store\\File\\Paths' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Store/File/Paths.php',
+        'Archetype\\Vendor\\Dotenv\\Store\\File\\Reader' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Store/File/Reader.php',
+        'Archetype\\Vendor\\Dotenv\\Store\\StoreBuilder' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Store/StoreBuilder.php',
+        'Archetype\\Vendor\\Dotenv\\Store\\StoreInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Store/StoreInterface.php',
+        'Archetype\\Vendor\\Dotenv\\Store\\StringStore' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Store/StringStore.php',
+        'Archetype\\Vendor\\Dotenv\\Util\\Regex' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Util/Regex.php',
+        'Archetype\\Vendor\\Dotenv\\Util\\Str' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Util/Str.php',
+        'Archetype\\Vendor\\Dotenv\\Validator' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Validator.php',
+        'Archetype\\Vendor\\GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
+        'Archetype\\Vendor\\GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
+        'Archetype\\Vendor\\GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
         'Archetype\\Vendor\\Illuminate\\Bus\\Batch' => __DIR__ . '/..' . '/illuminate/bus/Batch.php',
         'Archetype\\Vendor\\Illuminate\\Bus\\BatchFactory' => __DIR__ . '/..' . '/illuminate/bus/BatchFactory.php',
         'Archetype\\Vendor\\Illuminate\\Bus\\BatchRepository' => __DIR__ . '/..' . '/illuminate/bus/BatchRepository.php',
@@ -1266,6 +1338,11 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'Archetype\\Vendor\\Laravel\\SerializableClosure\\Support\\SelfReference' => __DIR__ . '/..' . '/laravel/serializable-closure/src/Support/SelfReference.php',
         'Archetype\\Vendor\\Laravel\\SerializableClosure\\UnsignedSerializableClosure' => __DIR__ . '/..' . '/laravel/serializable-closure/src/UnsignedSerializableClosure.php',
         'Archetype\\Vendor\\Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
+        'Archetype\\Vendor\\PhpOption\\LazyOption' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/LazyOption.php',
+        'Archetype\\Vendor\\PhpOption\\None' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/None.php',
+        'Archetype\\Vendor\\PhpOption\\Option' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Option.php',
+        'Archetype\\Vendor\\PhpOption\\Some' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Some.php',
+        'Archetype\\Vendor\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'Archetype\\Vendor\\Psr\\Cache\\CacheException' => __DIR__ . '/..' . '/psr/cache/src/CacheException.php',
         'Archetype\\Vendor\\Psr\\Cache\\CacheItemInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemInterface.php',
         'Archetype\\Vendor\\Psr\\Cache\\CacheItemPoolInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemPoolInterface.php',
@@ -1428,6 +1505,7 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'Archetype\\Vendor\\Ramsey\\Uuid\\Validator\\GenericValidator' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/GenericValidator.php',
         'Archetype\\Vendor\\Ramsey\\Uuid\\Validator\\ValidatorInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
         'Archetype\\Vendor\\SQLite3Exception' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',
+        'Archetype\\Vendor\\Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Archetype\\Vendor\\Symfony\\Component\\Clock\\Clock' => __DIR__ . '/..' . '/symfony/clock/Clock.php',
         'Archetype\\Vendor\\Symfony\\Component\\Clock\\ClockAwareTrait' => __DIR__ . '/..' . '/symfony/clock/ClockAwareTrait.php',
         'Archetype\\Vendor\\Symfony\\Component\\Clock\\ClockInterface' => __DIR__ . '/..' . '/symfony/clock/ClockInterface.php',
@@ -1537,8 +1615,13 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
         'Archetype\\Vendor\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/translation-contracts/TranslatableInterface.php',
         'Archetype\\Vendor\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/translation-contracts/TranslatorInterface.php',
         'Archetype\\Vendor\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/translation-contracts/TranslatorTrait.php',
+        'Archetype\\Vendor\\Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
         'Archetype\\Vendor\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
+        'Archetype\\Vendor\\Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
+        'Archetype\\Vendor\\Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'Archetype\\Vendor\\Symfony\\Polyfill\\Php83\\Php83' => __DIR__ . '/..' . '/symfony/polyfill-php83/Php83.php',
+        'Archetype\\Vendor\\UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'Archetype\\Vendor\\ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'Archetype\\Vendor\\voku\\helper\\ASCII' => __DIR__ . '/..' . '/voku/portable-ascii/src/voku/helper/ASCII.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -1546,9 +1629,9 @@ class ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0e0c83b6c75ac97f0876e9eed995bc26::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9ca082ead18d171b74bb65df40d4d1b2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9ca082ead18d171b74bb65df40d4d1b2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9ca082ead18d171b74bb65df40d4d1b2::$classMap;
 
         }, null, ClassLoader::class);
     }
