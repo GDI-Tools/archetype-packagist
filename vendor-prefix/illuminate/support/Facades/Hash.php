@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -15,8 +20,8 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static mixed driver(string|null $driver = null)
  * @method static \Illuminate\Hashing\HashManager extend(string $driver, \Closure $callback)
  * @method static array getDrivers()
- * @method static \Illuminate\Contracts\Container\Container getContainer()
- * @method static \Illuminate\Hashing\HashManager setContainer(\Illuminate\Contracts\Container\Container $container)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Container\Container getContainer()
+ * @method static \Illuminate\Hashing\HashManager setContainer(\Archetype\Vendor\Illuminate\Contracts\Container\Container $container)
  * @method static \Illuminate\Hashing\HashManager forgetDrivers()
  *
  * @see \Illuminate\Hashing\HashManager

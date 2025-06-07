@@ -24,8 +24,12 @@
  * SOFTWARE.
  *
  * @link https://github.com/brick/math brick/math at GitHub
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Math;
 
 /**
@@ -42,6 +46,7 @@ final class RoundingMode
      * Asserts that the requested operation has an exact result; hence no rounding is necessary.
      */
     public const UNNECESSARY = 0;
+
     /**
      * Rounds away from zero.
      *
@@ -49,6 +54,7 @@ final class RoundingMode
      * the magnitude of the calculated value.
      */
     public const UP = 1;
+
     /**
      * Rounds towards zero.
      *
@@ -56,6 +62,7 @@ final class RoundingMode
      * increases the magnitude of the calculated value.
      */
     public const DOWN = 2;
+
     /**
      * Rounds towards positive infinity.
      *
@@ -63,6 +70,7 @@ final class RoundingMode
      * never decreases the calculated value.
      */
     public const CEILING = 3;
+
     /**
      * Rounds towards negative infinity.
      *
@@ -70,6 +78,7 @@ final class RoundingMode
      * increases the calculated value.
      */
     public const FLOOR = 4;
+
     /**
      * Rounds towards "nearest neighbor" unless both neighbors are equidistant, in which case round up.
      *
@@ -77,24 +86,28 @@ final class RoundingMode
      * rounding mode commonly taught at school.
      */
     public const HALF_UP = 5;
+
     /**
      * Rounds towards "nearest neighbor" unless both neighbors are equidistant, in which case round down.
      *
      * Behaves as for UP if the discarded fraction is > 0.5; otherwise, behaves as for DOWN.
      */
     public const HALF_DOWN = 6;
+
     /**
      * Rounds towards "nearest neighbor" unless both neighbors are equidistant, in which case round towards positive infinity.
      *
      * If the result is positive, behaves as for HALF_UP; if negative, behaves as for HALF_DOWN.
      */
     public const HALF_CEILING = 7;
+
     /**
      * Rounds towards "nearest neighbor" unless both neighbors are equidistant, in which case round towards negative infinity.
      *
      * If the result is positive, behaves as for HALF_DOWN; if negative, behaves as for HALF_UP.
      */
     public const HALF_FLOOR = 8;
+
     /**
      * Rounds towards the "nearest neighbor" unless both neighbors are equidistant, in which case rounds towards the even neighbor.
      *
@@ -104,6 +117,7 @@ final class RoundingMode
      * sequence of calculations. It is sometimes known as "Banker's rounding", and is chiefly used in the USA.
      */
     public const HALF_EVEN = 9;
+
     /**
      * Private constructor. This class is not instantiable.
      *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -16,6 +21,7 @@ use Archetype\Vendor\Illuminate\Database\Migrations\DatabaseMigrationRepository;
 use Archetype\Vendor\Illuminate\Database\Migrations\MigrationCreator;
 use Archetype\Vendor\Illuminate\Database\Migrations\Migrator;
 use Archetype\Vendor\Illuminate\Support\ServiceProvider;
+
 class MigrationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -23,7 +29,17 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
      *
      * @var array
      */
-    protected $commands = ['Migrate' => MigrateCommand::class, 'MigrateFresh' => FreshCommand::class, 'MigrateInstall' => InstallCommand::class, 'MigrateRefresh' => RefreshCommand::class, 'MigrateReset' => ResetCommand::class, 'MigrateRollback' => RollbackCommand::class, 'MigrateStatus' => StatusCommand::class, 'MigrateMake' => MigrateMakeCommand::class];
+    protected $commands = [
+        'Migrate' => MigrateCommand::class,
+        'MigrateFresh' => FreshCommand::class,
+        'MigrateInstall' => InstallCommand::class,
+        'MigrateRefresh' => RefreshCommand::class,
+        'MigrateReset' => ResetCommand::class,
+        'MigrateRollback' => RollbackCommand::class,
+        'MigrateStatus' => StatusCommand::class,
+        'MigrateMake' => MigrateMakeCommand::class,
+    ];
+
     /**
      * Register the service provider.
      *
@@ -32,10 +48,14 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
     public function register()
     {
         $this->registerRepository();
+
         $this->registerMigrator();
+
         $this->registerCreator();
+
         $this->registerCommands($this->commands);
     }
+
     /**
      * Register the migration repository service.
      *
@@ -45,10 +65,13 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
     {
         $this->app->singleton('migration.repository', function ($app) {
             $migrations = $app['config']['database.migrations'];
-            $table = is_array($migrations) ? $migrations['table'] ?? null : $migrations;
+
+            $table = is_array($migrations) ? ($migrations['table'] ?? null) : $migrations;
+
             return new DatabaseMigrationRepository($app['db'], $table);
         });
     }
+
     /**
      * Register the migrator service.
      *
@@ -61,10 +84,13 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
         // so the migrator can resolve any of these connections when it needs to.
         $this->app->singleton('migrator', function ($app) {
             $repository = $app['migration.repository'];
+
             return new Migrator($repository, $app['db'], $app['files'], $app['events']);
         });
-        $this->app->bind(Migrator::class, fn($app) => $app['migrator']);
+
+        $this->app->bind(Migrator::class, fn ($app) => $app['migrator']);
     }
+
     /**
      * Register the migration creator.
      *
@@ -76,6 +102,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new MigrationCreator($app['files'], $app->basePath('stubs'));
         });
     }
+
     /**
      * Register the given commands.
      *
@@ -87,8 +114,10 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
         foreach (array_keys($commands) as $command) {
             $this->{"register{$command}Command"}();
         }
+
         $this->commands(array_values($commands));
     }
+
     /**
      * Register the command.
      *
@@ -100,6 +129,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new MigrateCommand($app['migrator'], $app[Dispatcher::class]);
         });
     }
+
     /**
      * Register the command.
      *
@@ -111,6 +141,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new FreshCommand($app['migrator']);
         });
     }
+
     /**
      * Register the command.
      *
@@ -122,6 +153,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new InstallCommand($app['migration.repository']);
         });
     }
+
     /**
      * Register the command.
      *
@@ -134,10 +166,13 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             // and inject the creator. The creator is responsible for the actual file
             // creation of the migrations, and may be extended by these developers.
             $creator = $app['migration.creator'];
+
             $composer = $app['composer'];
+
             return new MigrateMakeCommand($creator, $composer);
         });
     }
+
     /**
      * Register the command.
      *
@@ -147,6 +182,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
     {
         $this->app->singleton(RefreshCommand::class);
     }
+
     /**
      * Register the command.
      *
@@ -158,6 +194,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new ResetCommand($app['migrator']);
         });
     }
+
     /**
      * Register the command.
      *
@@ -169,6 +206,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new RollbackCommand($app['migrator']);
         });
     }
+
     /**
      * Register the command.
      *
@@ -180,6 +218,7 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
             return new StatusCommand($app['migrator']);
         });
     }
+
     /**
      * Get the services provided by the provider.
      *
@@ -187,6 +226,8 @@ class MigrationServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function provides()
     {
-        return array_merge(['migrator', 'migration.repository', 'migration.creator', Migrator::class], array_values($this->commands));
+        return array_merge([
+            'migrator', 'migration.repository', 'migration.creator', Migrator::class,
+        ], array_values($this->commands));
     }
 }

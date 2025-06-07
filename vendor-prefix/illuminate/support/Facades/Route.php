@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -74,13 +79,13 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void setRoutes(\Illuminate\Routing\RouteCollection $routes)
  * @method static void setCompiledRoutes(array $routes)
  * @method static array uniqueMiddleware(array $middleware)
- * @method static \Illuminate\Routing\Router setContainer(\Illuminate\Container\Container $container)
+ * @method static \Illuminate\Routing\Router setContainer(\Archetype\Vendor\Illuminate\Container\Container $container)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
  * @method static mixed macroCall(string $method, array $parameters)
- * @method static \Illuminate\Support\HigherOrderTapProxy|\Illuminate\Routing\Router tap(callable|null $callback = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\HigherOrderTapProxy|\Illuminate\Routing\Router tap(callable|null $callback = null)
  * @method static \Illuminate\Routing\RouteRegistrar attribute(string $key, mixed $value)
  * @method static \Illuminate\Routing\RouteRegistrar whereAlpha(array|string $parameters)
  * @method static \Illuminate\Routing\RouteRegistrar whereAlphaNumeric(array|string $parameters)

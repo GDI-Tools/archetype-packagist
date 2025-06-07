@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
 use RuntimeException;
+
 class MultipleRecordsFoundException extends RuntimeException
 {
     /**
@@ -11,6 +17,7 @@ class MultipleRecordsFoundException extends RuntimeException
      * @var int
      */
     public $count;
+
     /**
      * Create a new exception instance.
      *
@@ -21,8 +28,10 @@ class MultipleRecordsFoundException extends RuntimeException
     public function __construct($count, $code = 0, $previous = null)
     {
         $this->count = $count;
-        parent::__construct("{$count} records were found.", $code, $previous);
+
+        parent::__construct("$count records were found.", $code, $previous);
     }
+
     /**
      * Get the number of records found.
      *

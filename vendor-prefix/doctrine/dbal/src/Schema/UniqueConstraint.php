@@ -1,11 +1,18 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 use function array_keys;
 use function array_map;
 use function strtolower;
+
 /**
  * Class for a unique constraint.
  */
@@ -18,6 +25,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
      * @var Identifier[]
      */
     protected $columns = [];
+
     /**
      * Platform specific flags.
      * array($flagName => true)
@@ -25,12 +33,14 @@ class UniqueConstraint extends AbstractAsset implements Constraint
      * @var true[]
      */
     protected $flags = [];
+
     /**
      * Platform specific options.
      *
      * @var mixed[]
      */
     private array $options;
+
     /**
      * @param string[] $columns
      * @param string[] $flags
@@ -39,14 +49,18 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     public function __construct(string $name, array $columns, array $flags = [], array $options = [])
     {
         $this->_setName($name);
+
         $this->options = $options;
+
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
+
         foreach ($flags as $flag) {
             $this->addFlag($flag);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -54,22 +68,27 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     {
         return array_keys($this->columns);
     }
+
     /**
      * {@inheritDoc}
      */
     public function getQuotedColumns(AbstractPlatform $platform)
     {
         $columns = [];
+
         foreach ($this->columns as $column) {
             $columns[] = $column->getQuotedName($platform);
         }
+
         return $columns;
     }
+
     /** @return string[] */
     public function getUnquotedColumns(): array
     {
         return array_map([$this, 'trimQuotes'], $this->getColumns());
     }
+
     /**
      * Returns platform specific flags for unique constraint.
      *
@@ -79,6 +98,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     {
         return array_keys($this->flags);
     }
+
     /**
      * Adds flag for a unique constraint that translates to platform specific handling.
      *
@@ -88,9 +108,11 @@ class UniqueConstraint extends AbstractAsset implements Constraint
      */
     public function addFlag(string $flag): UniqueConstraint
     {
-        $this->flags[strtolower($flag)] = \true;
+        $this->flags[strtolower($flag)] = true;
+
         return $this;
     }
+
     /**
      * Does this unique constraint have a specific flag?
      */
@@ -98,6 +120,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     {
         return isset($this->flags[strtolower($flag)]);
     }
+
     /**
      * Removes a flag.
      */
@@ -105,6 +128,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     {
         unset($this->flags[strtolower($flag)]);
     }
+
     /**
      * Does this unique constraint have a specific option?
      */
@@ -112,16 +136,19 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     {
         return isset($this->options[strtolower($name)]);
     }
+
     /** @return mixed */
     public function getOption(string $name)
     {
         return $this->options[strtolower($name)];
     }
+
     /** @return mixed[] */
     public function getOptions(): array
     {
         return $this->options;
     }
+
     /**
      * Adds a new column to the unique constraint.
      */

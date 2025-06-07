@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver;
 
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
+
 /**
  * Driver-level statement
  */
@@ -27,6 +33,7 @@ interface Statement
      * @throws Exception
      */
     public function bindValue($param, $value, $type = ParameterType::STRING);
+
     /**
      * Binds a PHP variable to a corresponding named (not supported by mysqli driver, see comment below) or question
      * mark placeholder in the SQL statement that was use to prepare the statement. Unlike {@see bindValue()},
@@ -57,6 +64,7 @@ interface Statement
      * @throws Exception
      */
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null);
+
     /**
      * Executes a prepared statement
      *

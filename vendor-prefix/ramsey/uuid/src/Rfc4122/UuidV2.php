@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use Archetype\Vendor\Ramsey\Uuid\Codec\CodecInterface;
@@ -19,7 +23,9 @@ use Archetype\Vendor\Ramsey\Uuid\Exception\InvalidArgumentException;
 use Archetype\Vendor\Ramsey\Uuid\Rfc4122\FieldsInterface as Rfc4122FieldsInterface;
 use Archetype\Vendor\Ramsey\Uuid\Type\Integer as IntegerObject;
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
+
 use function hexdec;
+
 /**
  * DCE Security version, or version 2, UUIDs include local domain identifier, local ID for the specified domain, and
  * node values that are combined into a 128-bit unsigned integer
@@ -46,6 +52,7 @@ use function hexdec;
 final class UuidV2 extends Uuid implements UuidInterface
 {
     use TimeTrait;
+
     /**
      * Creates a version 2 (DCE Security) UUID
      *
@@ -55,13 +62,21 @@ final class UuidV2 extends Uuid implements UuidInterface
      * @param TimeConverterInterface $timeConverter The time converter to use for converting timestamps extracted from a
      *     UUID to unix timestamps
      */
-    public function __construct(Rfc4122FieldsInterface $fields, NumberConverterInterface $numberConverter, CodecInterface $codec, TimeConverterInterface $timeConverter)
-    {
+    public function __construct(
+        Rfc4122FieldsInterface $fields,
+        NumberConverterInterface $numberConverter,
+        CodecInterface $codec,
+        TimeConverterInterface $timeConverter,
+    ) {
         if ($fields->getVersion() !== Uuid::UUID_TYPE_DCE_SECURITY) {
-            throw new InvalidArgumentException('Fields used to create a UuidV2 must represent a version 2 (DCE Security) UUID');
+            throw new InvalidArgumentException(
+                'Fields used to create a UuidV2 must represent a version 2 (DCE Security) UUID'
+            );
         }
+
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
+
     /**
      * Returns the local domain used to create this version 2 UUID
      */
@@ -69,8 +84,10 @@ final class UuidV2 extends Uuid implements UuidInterface
     {
         /** @var Rfc4122FieldsInterface $fields */
         $fields = $this->getFields();
+
         return (int) hexdec($fields->getClockSeqLow()->toString());
     }
+
     /**
      * Returns the string name of the local domain
      */
@@ -78,6 +95,7 @@ final class UuidV2 extends Uuid implements UuidInterface
     {
         return Uuid::DCE_DOMAIN_NAMES[$this->getLocalDomain()];
     }
+
     /**
      * Returns the local identifier for the domain used to create this version 2 UUID
      */
@@ -85,6 +103,7 @@ final class UuidV2 extends Uuid implements UuidInterface
     {
         /** @var Rfc4122FieldsInterface $fields */
         $fields = $this->getFields();
+
         return new IntegerObject($this->numberConverter->fromHex($fields->getTimeLow()->toString()));
     }
 }

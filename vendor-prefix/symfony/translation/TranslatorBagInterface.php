@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation;
 
 use Archetype\Vendor\Symfony\Component\Translation\Exception\InvalidArgumentException;
+
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
@@ -24,6 +28,7 @@ interface TranslatorBagInterface
      * @throws InvalidArgumentException If the locale contains invalid characters
      */
     public function getCatalogue(?string $locale = null): MessageCatalogueInterface;
+
     /**
      * Returns all catalogues of the instance.
      *

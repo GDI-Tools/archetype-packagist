@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Psr\Container;
 
 /**
@@ -19,6 +25,7 @@ interface ContainerInterface
      * @return mixed Entry.
      */
     public function get(string $id);
+
     /**
      * Returns true if the container can return an entry for the given identifier.
      * Returns false otherwise.

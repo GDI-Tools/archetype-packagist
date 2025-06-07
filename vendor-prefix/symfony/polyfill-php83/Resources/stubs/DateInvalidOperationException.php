@@ -1,7 +1,5 @@
 <?php
 
-namespace Archetype\Vendor;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -10,9 +8,9 @@ namespace Archetype\Vendor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 if (\PHP_VERSION_ID < 80300) {
-    class DateInvalidOperationException extends \DateException
+    class DateInvalidOperationException extends DateException
     {
     }
-    \class_alias('Archetype\Vendor\DateInvalidOperationException', 'DateInvalidOperationException', \false);
 }

@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection\Tool;
 
 use function is_array;
@@ -22,6 +26,7 @@ use function is_object;
 use function is_resource;
 use function is_scalar;
 use function is_string;
+
 /**
  * Provides functionality to check values for specific types.
  */
@@ -47,7 +52,7 @@ trait TypeTrait
             'resource' => is_resource($value),
             'scalar' => is_scalar($value),
             'string' => is_string($value),
-            'mixed' => \true,
+            'mixed' => true,
             default => $value instanceof $type,
         };
     }

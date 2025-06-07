@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Relations;
 
@@ -10,48 +15,57 @@ use Archetype\Vendor\Illuminate\Database\Eloquent\Relations\Concerns\CanBeOneOfM
 use Archetype\Vendor\Illuminate\Database\Eloquent\Relations\Concerns\ComparesRelatedModels;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Relations\Concerns\SupportsDefaultModels;
 use Archetype\Vendor\Illuminate\Database\Query\JoinClause;
+
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends \Illuminate\Database\Eloquent\Relations\MorphOneOrMany<TRelatedModel, TDeclaringModel, ?TRelatedModel>
+ * @extends \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\MorphOneOrMany<TRelatedModel, TDeclaringModel, ?TRelatedModel>
  */
 class MorphOne extends MorphOneOrMany implements SupportsPartialRelations
 {
     use CanBeOneOfMany, ComparesRelatedModels, SupportsDefaultModels;
+
     /** @inheritDoc */
     public function getResults()
     {
         if (is_null($this->getParentKey())) {
             return $this->getDefaultFor($this->parent);
         }
+
         return $this->query->first() ?: $this->getDefaultFor($this->parent);
     }
+
     /** @inheritDoc */
     public function initRelation(array $models, $relation)
     {
         foreach ($models as $model) {
             $model->setRelation($relation, $this->getDefaultFor($model));
         }
+
         return $models;
     }
+
     /** @inheritDoc */
     public function match(array $models, EloquentCollection $results, $relation)
     {
         return $this->matchOne($models, $results, $relation);
     }
+
     /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($this->isOneOfMany()) {
             $this->mergeOneOfManyJoinsTo($query);
         }
+
         return parent::getRelationExistenceQuery($query, $parentQuery, $columns);
     }
+
     /**
      * Add constraints for inner join subselect for one of many relationships.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<TRelatedModel>  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Builder<TRelatedModel>  $query
      * @param  string|null  $column
      * @param  string|null  $aggregate
      * @return void
@@ -60,6 +74,7 @@ class MorphOne extends MorphOneOrMany implements SupportsPartialRelations
     {
         $query->addSelect($this->foreignKey, $this->morphType);
     }
+
     /**
      * Get the columns that should be selected by the one of many subquery.
      *
@@ -69,16 +84,20 @@ class MorphOne extends MorphOneOrMany implements SupportsPartialRelations
     {
         return [$this->foreignKey, $this->morphType];
     }
+
     /**
      * Add join query constraints for one of many relationships.
      *
-     * @param  \Illuminate\Database\Query\JoinClause  $join
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\JoinClause  $join
      * @return void
      */
     public function addOneOfManyJoinSubQueryConstraints(JoinClause $join)
     {
-        $join->on($this->qualifySubSelectColumn($this->morphType), '=', $this->qualifyRelatedColumn($this->morphType))->on($this->qualifySubSelectColumn($this->foreignKey), '=', $this->qualifyRelatedColumn($this->foreignKey));
+        $join
+            ->on($this->qualifySubSelectColumn($this->morphType), '=', $this->qualifyRelatedColumn($this->morphType))
+            ->on($this->qualifySubSelectColumn($this->foreignKey), '=', $this->qualifyRelatedColumn($this->foreignKey));
     }
+
     /**
      * Make a new related instance for the given model.
      *
@@ -88,10 +107,13 @@ class MorphOne extends MorphOneOrMany implements SupportsPartialRelations
     public function newRelatedInstanceFor(Model $parent)
     {
         return tap($this->related->newInstance(), function ($instance) use ($parent) {
-            $instance->setAttribute($this->getForeignKeyName(), $parent->{$this->localKey})->setAttribute($this->getMorphType(), $this->morphClass);
+            $instance->setAttribute($this->getForeignKeyName(), $parent->{$this->localKey})
+                ->setAttribute($this->getMorphType(), $this->morphClass);
+
             $this->applyInverseRelationToModel($instance, $parent);
         });
     }
+
     /**
      * Get the value of the model's foreign key.
      *

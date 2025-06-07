@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,10 +15,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
+
 class UnknownSetterException extends BaseInvalidArgumentException implements BadMethodCallException
 {
     /**
@@ -21,6 +29,7 @@ class UnknownSetterException extends BaseInvalidArgumentException implements Bad
      * @var string
      */
     protected $setter;
+
     /**
      * Constructor.
      *
@@ -31,8 +40,10 @@ class UnknownSetterException extends BaseInvalidArgumentException implements Bad
     public function __construct($setter, $code = 0, ?Throwable $previous = null)
     {
         $this->setter = $setter;
-        parent::__construct("Unknown setter '{$setter}'", $code, $previous);
+
+        parent::__construct("Unknown setter '$setter'", $code, $previous);
     }
+
     /**
      * Get the setter.
      *

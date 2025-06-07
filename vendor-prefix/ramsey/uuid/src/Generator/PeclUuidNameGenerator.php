@@ -8,16 +8,22 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Generator;
 
 use Archetype\Vendor\Ramsey\Uuid\Exception\NameException;
 use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
+
 use function sprintf;
 use function uuid_generate_md5;
 use function uuid_generate_sha1;
 use function uuid_parse;
+
 /**
  * PeclUuidNameGenerator generates strings of binary data from a namespace and a name, using ext-uuid
  *
@@ -30,8 +36,11 @@ class PeclUuidNameGenerator implements NameGeneratorInterface
         $uuid = match ($hashAlgorithm) {
             'md5' => uuid_generate_md5($ns->toString(), $name),
             'sha1' => uuid_generate_sha1($ns->toString(), $name),
-            default => throw new NameException(sprintf('Unable to hash namespace and name with algorithm \'%s\'', $hashAlgorithm)),
+            default => throw new NameException(
+                sprintf('Unable to hash namespace and name with algorithm \'%s\'', $hashAlgorithm),
+            ),
         };
+
         return (string) uuid_parse($uuid);
     }
 }

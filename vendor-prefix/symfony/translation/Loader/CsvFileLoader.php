@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Loader;
 
 use Archetype\Vendor\Symfony\Component\Translation\Exception\NotFoundResourceException;
+
 /**
  * CsvFileLoader loads translations from CSV files.
  *
@@ -24,26 +28,33 @@ class CsvFileLoader extends FileLoader
      * @deprecated since Symfony 7.2, to be removed in 8.0
      */
     private string $escape = '';
+
     protected function loadResource(string $resource): array
     {
         $messages = [];
+
         try {
             $file = new \SplFileObject($resource, 'rb');
         } catch (\RuntimeException $e) {
             throw new NotFoundResourceException(\sprintf('Error opening file "%s".', $resource), 0, $e);
         }
+
         $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
         $file->setCsvControl($this->delimiter, $this->enclosure, $this->escape);
+
         foreach ($file as $data) {
-            if (\false === $data) {
+            if (false === $data) {
                 continue;
             }
+
             if (!str_starts_with($data[0], '#') && isset($data[1]) && 2 === \count($data)) {
                 $messages[$data[0]] = $data[1];
             }
         }
+
         return $messages;
     }
+
     /**
      * Sets the delimiter, enclosure, and escape character for CSV.
      */
@@ -54,6 +65,7 @@ class CsvFileLoader extends FileLoader
         if ('' !== $escape) {
             trigger_deprecation('symfony/translation', '7.2', 'The "escape" parameter of the "%s" method is deprecated. It will be removed in 8.0.', __METHOD__);
         }
+
         $this->escape = $escape;
     }
 }

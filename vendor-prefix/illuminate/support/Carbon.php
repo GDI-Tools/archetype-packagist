@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
@@ -7,10 +12,12 @@ use Archetype\Vendor\Carbon\CarbonImmutable as BaseCarbonImmutable;
 use Archetype\Vendor\Illuminate\Support\Traits\Conditionable;
 use Archetype\Vendor\Illuminate\Support\Traits\Dumpable;
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
-use Archetype\Vendor\Symfony\Component\Uid\Ulid;
+use Symfony\Component\Uid\Ulid;
+
 class Carbon extends BaseCarbon
 {
     use Conditionable, Dumpable;
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +26,7 @@ class Carbon extends BaseCarbon
         BaseCarbon::setTestNow($testNow);
         BaseCarbonImmutable::setTestNow($testNow);
     }
+
     /**
      * Create a Carbon instance from a given ordered UUID or ULID.
      */
@@ -27,6 +35,7 @@ class Carbon extends BaseCarbon
         if (is_string($id)) {
             $id = Ulid::isValid($id) ? Ulid::fromString($id) : Uuid::fromString($id);
         }
+
         return static::createFromInterface($id->getDateTime());
     }
 }

@@ -8,13 +8,18 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Generator;
 
 use Archetype\Vendor\Ramsey\Uuid\Rfc4122\UuidV2;
 use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
 use Archetype\Vendor\Ramsey\Uuid\Type\Integer as IntegerObject;
+
 /**
  * A DCE Security generator generates strings of binary data based on a local domain, local identifier, node ID, clock
  * sequence, and the current time
@@ -36,5 +41,10 @@ interface DceSecurityGeneratorInterface
      *
      * @return string A binary string
      */
-    public function generate(int $localDomain, ?IntegerObject $localIdentifier = null, ?Hexadecimal $node = null, ?int $clockSeq = null): string;
+    public function generate(
+        int $localDomain,
+        ?IntegerObject $localIdentifier = null,
+        ?Hexadecimal $node = null,
+        ?int $clockSeq = null,
+    ): string;
 }

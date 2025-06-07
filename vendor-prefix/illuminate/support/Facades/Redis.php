@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -21,8 +26,8 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void listen(\Closure $callback)
  * @method static string|null getName()
  * @method static \Illuminate\Redis\Connections\Connection setName(string $name)
- * @method static \Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
- * @method static void setEventDispatcher(\Illuminate\Contracts\Events\Dispatcher $events)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
+ * @method static void setEventDispatcher(\Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher $events)
  * @method static void unsetEventDispatcher()
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Repository\Adapter;
 
 final class ImmutableWriter implements WriterInterface
@@ -8,26 +14,29 @@ final class ImmutableWriter implements WriterInterface
     /**
      * The inner writer to use.
      *
-     * @var \Dotenv\Repository\Adapter\WriterInterface
+     * @var \Archetype\Vendor\Dotenv\Repository\Adapter\WriterInterface
      */
     private $writer;
+
     /**
      * The inner reader to use.
      *
-     * @var \Dotenv\Repository\Adapter\ReaderInterface
+     * @var \Archetype\Vendor\Dotenv\Repository\Adapter\ReaderInterface
      */
     private $reader;
+
     /**
      * The record of loaded variables.
      *
      * @var array<string, string>
      */
     private $loaded;
+
     /**
      * Create a new immutable writer instance.
      *
-     * @param \Dotenv\Repository\Adapter\WriterInterface $writer
-     * @param \Dotenv\Repository\Adapter\ReaderInterface $reader
+     * @param \Archetype\Vendor\Dotenv\Repository\Adapter\WriterInterface $writer
+     * @param \Archetype\Vendor\Dotenv\Repository\Adapter\ReaderInterface $reader
      *
      * @return void
      */
@@ -37,6 +46,7 @@ final class ImmutableWriter implements WriterInterface
         $this->reader = $reader;
         $this->loaded = [];
     }
+
     /**
      * Write to an environment variable, if possible.
      *
@@ -50,16 +60,20 @@ final class ImmutableWriter implements WriterInterface
         // Don't overwrite existing environment variables
         // Ruby's dotenv does this with `ENV[key] ||= value`
         if ($this->isExternallyDefined($name)) {
-            return \false;
+            return false;
         }
+
         // Set the value on the inner writer
         if (!$this->writer->write($name, $value)) {
-            return \false;
+            return false;
         }
+
         // Record that we have loaded the variable
         $this->loaded[$name] = '';
-        return \true;
+
+        return true;
     }
+
     /**
      * Delete an environment variable, if possible.
      *
@@ -71,16 +85,20 @@ final class ImmutableWriter implements WriterInterface
     {
         // Don't clear existing environment variables
         if ($this->isExternallyDefined($name)) {
-            return \false;
+            return false;
         }
+
         // Clear the value on the inner writer
         if (!$this->writer->delete($name)) {
-            return \false;
+            return false;
         }
+
         // Leave the variable as fair game
         unset($this->loaded[$name]);
-        return \true;
+
+        return true;
     }
+
     /**
      * Determine if the given variable is externally defined.
      *

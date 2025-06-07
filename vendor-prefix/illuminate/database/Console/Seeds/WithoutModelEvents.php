@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Console\Seeds;
 
 use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
+
 trait WithoutModelEvents
 {
     /**
@@ -13,6 +19,6 @@ trait WithoutModelEvents
      */
     public function withoutModelEvents(callable $callback)
     {
-        return fn() => Model::withoutEvents($callback);
+        return fn () => Model::withoutEvents($callback);
     }
 }

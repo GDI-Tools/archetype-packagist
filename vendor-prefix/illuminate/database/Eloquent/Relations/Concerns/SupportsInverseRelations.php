@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Relations\Concerns;
 
@@ -6,6 +11,7 @@ use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
 use Archetype\Vendor\Illuminate\Database\Eloquent\RelationNotFoundException;
 use Archetype\Vendor\Illuminate\Support\Arr;
 use Archetype\Vendor\Illuminate\Support\Str;
+
 trait SupportsInverseRelations
 {
     /**
@@ -14,6 +20,7 @@ trait SupportsInverseRelations
      * @var string|null
      */
     protected ?string $inverseRelationship = null;
+
     /**
      * Instruct Eloquent to link the related models back to the parent after the relationship query has run.
      *
@@ -26,6 +33,7 @@ trait SupportsInverseRelations
     {
         return $this->chaperone($relation);
     }
+
     /**
      * Instruct Eloquent to link the related models back to the parent after the relationship query has run.
      *
@@ -35,17 +43,24 @@ trait SupportsInverseRelations
     public function chaperone(?string $relation = null)
     {
         $relation ??= $this->guessInverseRelation();
-        if (!$relation || !$this->getModel()->isRelation($relation)) {
+
+        if (! $relation || ! $this->getModel()->isRelation($relation)) {
             throw RelationNotFoundException::make($this->getModel(), $relation ?: 'null');
         }
+
         if ($this->inverseRelationship === null && $relation) {
             $this->query->afterQuery(function ($result) {
-                return $this->inverseRelationship ? $this->applyInverseRelationToCollection($result, $this->getParent()) : $result;
+                return $this->inverseRelationship
+                    ? $this->applyInverseRelationToCollection($result, $this->getParent())
+                    : $result;
             });
         }
+
         $this->inverseRelationship = $relation;
+
         return $this;
     }
+
     /**
      * Guess the name of the inverse relationship.
      *
@@ -53,8 +68,12 @@ trait SupportsInverseRelations
      */
     protected function guessInverseRelation(): ?string
     {
-        return Arr::first($this->getPossibleInverseRelations(), fn($relation) => $relation && $this->getModel()->isRelation($relation));
+        return Arr::first(
+            $this->getPossibleInverseRelations(),
+            fn ($relation) => $relation && $this->getModel()->isRelation($relation)
+        );
     }
+
     /**
      * Get the possible inverse relations for the parent model.
      *
@@ -62,38 +81,51 @@ trait SupportsInverseRelations
      */
     protected function getPossibleInverseRelations(): array
     {
-        return array_filter(array_unique([Str::camel(Str::beforeLast($this->getForeignKeyName(), $this->getParent()->getKeyName())), Str::camel(Str::beforeLast($this->getParent()->getForeignKey(), $this->getParent()->getKeyName())), Str::camel(class_basename($this->getParent())), 'owner', get_class($this->getParent()) === get_class($this->getModel()) ? 'parent' : null]));
+        return array_filter(array_unique([
+            Str::camel(Str::beforeLast($this->getForeignKeyName(), $this->getParent()->getKeyName())),
+            Str::camel(Str::beforeLast($this->getParent()->getForeignKey(), $this->getParent()->getKeyName())),
+            Str::camel(class_basename($this->getParent())),
+            'owner',
+            get_class($this->getParent()) === get_class($this->getModel()) ? 'parent' : null,
+        ]));
     }
+
     /**
      * Set the inverse relation on all models in a collection.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $models
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Collection  $models
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Collection
      */
     protected function applyInverseRelationToCollection($models, ?Model $parent = null)
     {
         $parent ??= $this->getParent();
+
         foreach ($models as $model) {
             $model instanceof Model && $this->applyInverseRelationToModel($model, $parent);
         }
+
         return $models;
     }
+
     /**
      * Set the inverse relation on a model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model  $model
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Model
      */
     protected function applyInverseRelationToModel(Model $model, ?Model $parent = null)
     {
         if ($inverse = $this->getInverseRelationship()) {
             $parent ??= $this->getParent();
+
             $model->setRelation($inverse, $parent);
         }
+
         return $model;
     }
+
     /**
      * Get the name of the inverse relationship.
      *
@@ -103,6 +135,7 @@ trait SupportsInverseRelations
     {
         return $this->inverseRelationship;
     }
+
     /**
      * Remove the chaperone / inverse relationship for this query.
      *
@@ -114,6 +147,7 @@ trait SupportsInverseRelations
     {
         return $this->withoutChaperone();
     }
+
     /**
      * Remove the chaperone / inverse relationship for this query.
      *
@@ -122,6 +156,7 @@ trait SupportsInverseRelations
     public function withoutChaperone()
     {
         $this->inverseRelationship = null;
+
         return $this;
     }
 }

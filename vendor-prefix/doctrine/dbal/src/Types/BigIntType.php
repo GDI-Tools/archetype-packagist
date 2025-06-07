@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 /**
  * Type that maps a database BIGINT to a PHP string.
  */
@@ -16,6 +22,7 @@ class BigIntType extends Type implements PhpIntegerMappingType
     {
         return Types::BIGINT;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -23,6 +30,7 @@ class BigIntType extends Type implements PhpIntegerMappingType
     {
         return $platform->getBigIntTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -30,6 +38,7 @@ class BigIntType extends Type implements PhpIntegerMappingType
     {
         return ParameterType::STRING;
     }
+
     /**
      * {@inheritDoc}
      *

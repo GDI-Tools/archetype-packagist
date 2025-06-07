@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Store;
 
 interface StoreInterface
@@ -8,7 +14,7 @@ interface StoreInterface
     /**
      * Read the content of the environment file(s).
      *
-     * @throws \Dotenv\Exception\InvalidEncodingException|\Dotenv\Exception\InvalidPathException
+     * @throws \Archetype\Vendor\Dotenv\Exception\InvalidEncodingException|\Archetype\Vendor\Dotenv\Exception\InvalidPathException
      *
      * @return string
      */

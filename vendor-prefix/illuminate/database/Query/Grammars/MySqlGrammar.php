@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Query\Grammars;
 
@@ -6,6 +11,7 @@ use Archetype\Vendor\Illuminate\Database\Query\Builder;
 use Archetype\Vendor\Illuminate\Database\Query\JoinLateralClause;
 use Archetype\Vendor\Illuminate\Support\Collection;
 use Archetype\Vendor\Illuminate\Support\Str;
+
 class MySqlGrammar extends Grammar
 {
     /**
@@ -14,71 +20,92 @@ class MySqlGrammar extends Grammar
      * @var string[]
      */
     protected $operators = ['sounds like'];
+
     /**
      * Compile a "where like" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
     protected function whereLike(Builder $query, $where)
     {
         $where['operator'] = $where['not'] ? 'not ' : '';
+
         $where['operator'] .= $where['caseSensitive'] ? 'like binary' : 'like';
+
         return $this->whereBasic($query, $where);
     }
+
     /**
      * Add a "where null" clause to the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
     protected function whereNull(Builder $query, $where)
     {
         $columnValue = (string) $this->getValue($where['column']);
+
         if ($this->isJsonSelector($columnValue)) {
             [$field, $path] = $this->wrapJsonFieldAndPath($columnValue);
-            return '(json_extract(' . $field . $path . ') is null OR json_type(json_extract(' . $field . $path . ')) = \'NULL\')';
+
+            return '(json_extract('.$field.$path.') is null OR json_type(json_extract('.$field.$path.')) = \'NULL\')';
         }
+
         return parent::whereNull($query, $where);
     }
+
     /**
      * Add a "where not null" clause to the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
     protected function whereNotNull(Builder $query, $where)
     {
         $columnValue = (string) $this->getValue($where['column']);
+
         if ($this->isJsonSelector($columnValue)) {
             [$field, $path] = $this->wrapJsonFieldAndPath($columnValue);
-            return '(json_extract(' . $field . $path . ') is not null AND json_type(json_extract(' . $field . $path . ')) != \'NULL\')';
+
+            return '(json_extract('.$field.$path.') is not null AND json_type(json_extract('.$field.$path.')) != \'NULL\')';
         }
+
         return parent::whereNotNull($query, $where);
     }
+
     /**
      * Compile a "where fulltext" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $where
      * @return string
      */
     public function whereFullText(Builder $query, $where)
     {
         $columns = $this->columnize($where['columns']);
+
         $value = $this->parameter($where['value']);
-        $mode = ($where['options']['mode'] ?? []) === 'boolean' ? ' in boolean mode' : ' in natural language mode';
-        $expanded = ($where['options']['expanded'] ?? []) && ($where['options']['mode'] ?? []) !== 'boolean' ? ' with query expansion' : '';
-        return "match ({$columns}) against (" . $value . "{$mode}{$expanded})";
+
+        $mode = ($where['options']['mode'] ?? []) === 'boolean'
+            ? ' in boolean mode'
+            : ' in natural language mode';
+
+        $expanded = ($where['options']['expanded'] ?? []) && ($where['options']['mode'] ?? []) !== 'boolean'
+            ? ' with query expansion'
+            : '';
+
+        return "match ({$columns}) against (".$value."{$mode}{$expanded})";
     }
+
     /**
      * Compile the index hints for the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  \Illuminate\Database\Query\IndexHint  $indexHint
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\IndexHint  $indexHint
      * @return string
      */
     protected function compileIndexHint(Builder $query, $indexHint)
@@ -89,64 +116,87 @@ class MySqlGrammar extends Grammar
             default => "ignore index ({$indexHint->index})",
         };
     }
+
     /**
      * Compile a group limit clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @return string
      */
     protected function compileGroupLimit(Builder $query)
     {
-        return $this->useLegacyGroupLimit($query) ? $this->compileLegacyGroupLimit($query) : parent::compileGroupLimit($query);
+        return $this->useLegacyGroupLimit($query)
+            ? $this->compileLegacyGroupLimit($query)
+            : parent::compileGroupLimit($query);
     }
+
     /**
      * Determine whether to use a legacy group limit clause for MySQL < 8.0.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @return bool
      */
     public function useLegacyGroupLimit(Builder $query)
     {
         $version = $query->getConnection()->getServerVersion();
-        return !$query->getConnection()->isMaria() && version_compare($version, '8.0.11') < 0;
+
+        return ! $query->getConnection()->isMaria() && version_compare($version, '8.0.11') < 0;
     }
+
     /**
      * Compile a group limit clause for MySQL < 8.0.
      *
      * Derived from https://softonsofa.com/tweaking-eloquent-relations-how-to-get-n-related-models-per-parent/.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @return string
      */
     protected function compileLegacyGroupLimit(Builder $query)
     {
         $limit = (int) $query->groupLimit['value'];
         $offset = $query->offset;
+
         if (isset($offset)) {
             $offset = (int) $offset;
             $limit += $offset;
+
             $query->offset = null;
         }
+
         $column = last(explode('.', $query->groupLimit['column']));
         $column = $this->wrap($column);
-        $partition = ', @laravel_row := if(@laravel_group = ' . $column . ', @laravel_row + 1, 1) as `laravel_row`';
-        $partition .= ', @laravel_group := ' . $column;
+
+        $partition = ', @laravel_row := if(@laravel_group = '.$column.', @laravel_row + 1, 1) as `laravel_row`';
+        $partition .= ', @laravel_group := '.$column;
+
         $orders = (array) $query->orders;
-        array_unshift($orders, ['column' => $query->groupLimit['column'], 'direction' => 'asc']);
+
+        array_unshift($orders, [
+            'column' => $query->groupLimit['column'],
+            'direction' => 'asc',
+        ]);
+
         $query->orders = $orders;
+
         $components = $this->compileComponents($query);
+
         $sql = $this->concatenate($components);
-        $from = '(select @laravel_row := 0, @laravel_group := 0) as `laravel_vars`, (' . $sql . ') as `laravel_table`';
-        $sql = 'select `laravel_table`.*' . $partition . ' from ' . $from . ' having `laravel_row` <= ' . $limit;
+
+        $from = '(select @laravel_row := 0, @laravel_group := 0) as `laravel_vars`, ('.$sql.') as `laravel_table`';
+
+        $sql = 'select `laravel_table`.*'.$partition.' from '.$from.' having `laravel_row` <= '.$limit;
+
         if (isset($offset)) {
-            $sql .= ' and `laravel_row` > ' . $offset;
+            $sql .= ' and `laravel_row` > '.$offset;
         }
-        return $sql . ' order by `laravel_row`';
+
+        return $sql.' order by `laravel_row`';
     }
+
     /**
      * Compile an insert ignore statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
@@ -154,10 +204,11 @@ class MySqlGrammar extends Grammar
     {
         return Str::replaceFirst('insert', 'insert ignore', $this->compileInsert($query, $values));
     }
+
     /**
      * Compile an insert ignore statement using a subquery into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $columns
      * @param  string  $sql
      * @return string
@@ -166,6 +217,7 @@ class MySqlGrammar extends Grammar
     {
         return Str::replaceFirst('insert', 'insert ignore', $this->compileInsertUsing($query, $columns, $sql));
     }
+
     /**
      * Compile a "JSON contains" statement into SQL.
      *
@@ -176,8 +228,10 @@ class MySqlGrammar extends Grammar
     protected function compileJsonContains($column, $value)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($column);
-        return 'json_contains(' . $field . ', ' . $value . $path . ')';
+
+        return 'json_contains('.$field.', '.$value.$path.')';
     }
+
     /**
      * Compile a "JSON overlaps" statement into SQL.
      *
@@ -188,8 +242,10 @@ class MySqlGrammar extends Grammar
     protected function compileJsonOverlaps($column, $value)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($column);
-        return 'json_overlaps(' . $field . ', ' . $value . $path . ')';
+
+        return 'json_overlaps('.$field.', '.$value.$path.')';
     }
+
     /**
      * Compile a "JSON contains key" statement into SQL.
      *
@@ -199,8 +255,10 @@ class MySqlGrammar extends Grammar
     protected function compileJsonContainsKey($column)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($column);
-        return 'ifnull(json_contains_path(' . $field . ', \'one\'' . $path . '), 0)';
+
+        return 'ifnull(json_contains_path('.$field.', \'one\''.$path.'), 0)';
     }
+
     /**
      * Compile a "JSON length" statement into SQL.
      *
@@ -212,8 +270,10 @@ class MySqlGrammar extends Grammar
     protected function compileJsonLength($column, $operator, $value)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($column);
-        return 'json_length(' . $field . $path . ') ' . $operator . ' ' . $value;
+
+        return 'json_length('.$field.$path.') '.$operator.' '.$value;
     }
+
     /**
      * Compile a "JSON value cast" statement into SQL.
      *
@@ -222,8 +282,9 @@ class MySqlGrammar extends Grammar
      */
     public function compileJsonValueCast($value)
     {
-        return 'cast(' . $value . ' as json)';
+        return 'cast('.$value.' as json)';
     }
+
     /**
      * Compile the random statement into SQL.
      *
@@ -232,26 +293,29 @@ class MySqlGrammar extends Grammar
      */
     public function compileRandom($seed)
     {
-        return 'RAND(' . $seed . ')';
+        return 'RAND('.$seed.')';
     }
+
     /**
      * Compile the lock into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  bool|string  $value
      * @return string
      */
     protected function compileLock(Builder $query, $value)
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return $value ? 'for update' : 'lock in share mode';
         }
+
         return $value;
     }
+
     /**
      * Compile an insert statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
@@ -260,12 +324,14 @@ class MySqlGrammar extends Grammar
         if (empty($values)) {
             $values = [[]];
         }
+
         return parent::compileInsert($query, $values);
     }
+
     /**
      * Compile the columns for an update statement.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $values
      * @return string
      */
@@ -275,13 +341,15 @@ class MySqlGrammar extends Grammar
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($key, $value);
             }
-            return $this->wrap($key) . ' = ' . $this->parameter($value);
+
+            return $this->wrap($key).' = '.$this->parameter($value);
         })->implode(', ');
     }
+
     /**
      * Compile an "upsert" statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $values
      * @param  array  $uniqueBy
      * @param  array  $update
@@ -290,23 +358,32 @@ class MySqlGrammar extends Grammar
     public function compileUpsert(Builder $query, array $values, array $uniqueBy, array $update)
     {
         $useUpsertAlias = $query->connection->getConfig('use_upsert_alias');
+
         $sql = $this->compileInsert($query, $values);
+
         if ($useUpsertAlias) {
             $sql .= ' as laravel_upsert_alias';
         }
+
         $sql .= ' on duplicate key update ';
+
         $columns = (new Collection($update))->map(function ($value, $key) use ($useUpsertAlias) {
-            if (!is_numeric($key)) {
-                return $this->wrap($key) . ' = ' . $this->parameter($value);
+            if (! is_numeric($key)) {
+                return $this->wrap($key).' = '.$this->parameter($value);
             }
-            return $useUpsertAlias ? $this->wrap($value) . ' = ' . $this->wrap('laravel_upsert_alias') . '.' . $this->wrap($value) : $this->wrap($value) . ' = values(' . $this->wrap($value) . ')';
+
+            return $useUpsertAlias
+                ? $this->wrap($value).' = '.$this->wrap('laravel_upsert_alias').'.'.$this->wrap($value)
+                : $this->wrap($value).' = values('.$this->wrap($value).')';
         })->implode(', ');
-        return $sql . $columns;
+
+        return $sql.$columns;
     }
+
     /**
      * Compile a "lateral join" clause.
      *
-     * @param  \Illuminate\Database\Query\JoinLateralClause  $join
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\JoinLateralClause  $join
      * @param  string  $expression
      * @return string
      */
@@ -314,6 +391,7 @@ class MySqlGrammar extends Grammar
     {
         return trim("{$join->type} join lateral {$expression} on true");
     }
+
     /**
      * Prepare a JSON column being updated using the JSON_SET function.
      *
@@ -330,13 +408,16 @@ class MySqlGrammar extends Grammar
         } else {
             $value = $this->parameter($value);
         }
+
         [$field, $path] = $this->wrapJsonFieldAndPath($key);
+
         return "{$field} = json_set({$field}{$path}, {$value})";
     }
+
     /**
      * Compile an update statement without joins into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  string  $table
      * @param  string  $columns
      * @param  string  $where
@@ -345,14 +426,18 @@ class MySqlGrammar extends Grammar
     protected function compileUpdateWithoutJoins(Builder $query, $table, $columns, $where)
     {
         $sql = parent::compileUpdateWithoutJoins($query, $table, $columns, $where);
-        if (!empty($query->orders)) {
-            $sql .= ' ' . $this->compileOrders($query, $query->orders);
+
+        if (! empty($query->orders)) {
+            $sql .= ' '.$this->compileOrders($query, $query->orders);
         }
+
         if (isset($query->limit)) {
-            $sql .= ' ' . $this->compileLimit($query, $query->limit);
+            $sql .= ' '.$this->compileLimit($query, $query->limit);
         }
+
         return $sql;
     }
+
     /**
      * Prepare the bindings for an update statement.
      *
@@ -364,13 +449,18 @@ class MySqlGrammar extends Grammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
-        $values = (new Collection($values))->reject(fn($value, $column) => $this->isJsonSelector($column) && is_bool($value))->map(fn($value) => is_array($value) ? json_encode($value) : $value)->all();
+        $values = (new Collection($values))
+            ->reject(fn ($value, $column) => $this->isJsonSelector($column) && is_bool($value))
+            ->map(fn ($value) => is_array($value) ? json_encode($value) : $value)
+            ->all();
+
         return parent::prepareBindingsForUpdate($bindings, $values);
     }
+
     /**
      * Compile a delete query that does not use joins.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  string  $table
      * @param  string  $where
      * @return string
@@ -378,17 +468,21 @@ class MySqlGrammar extends Grammar
     protected function compileDeleteWithoutJoins(Builder $query, $table, $where)
     {
         $sql = parent::compileDeleteWithoutJoins($query, $table, $where);
+
         // When using MySQL, delete statements may contain order by statements and limits
         // so we will compile both of those here. Once we have finished compiling this
         // we will return the completed SQL statement so it will be executed for us.
-        if (!empty($query->orders)) {
-            $sql .= ' ' . $this->compileOrders($query, $query->orders);
+        if (! empty($query->orders)) {
+            $sql .= ' '.$this->compileOrders($query, $query->orders);
         }
+
         if (isset($query->limit)) {
-            $sql .= ' ' . $this->compileLimit($query, $query->limit);
+            $sql .= ' '.$this->compileLimit($query, $query->limit);
         }
+
         return $sql;
     }
+
     /**
      * Compile a query to get the number of open connections for a database.
      *
@@ -398,6 +492,7 @@ class MySqlGrammar extends Grammar
     {
         return 'select variable_value as `Value` from performance_schema.session_status where variable_name = \'threads_connected\'';
     }
+
     /**
      * Wrap a single string in keyword identifiers.
      *
@@ -406,8 +501,9 @@ class MySqlGrammar extends Grammar
      */
     protected function wrapValue($value)
     {
-        return $value === '*' ? $value : '`' . str_replace('`', '``', $value) . '`';
+        return $value === '*' ? $value : '`'.str_replace('`', '``', $value).'`';
     }
+
     /**
      * Wrap the given JSON selector.
      *
@@ -417,8 +513,10 @@ class MySqlGrammar extends Grammar
     protected function wrapJsonSelector($value)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($value);
-        return 'json_unquote(json_extract(' . $field . $path . '))';
+
+        return 'json_unquote(json_extract('.$field.$path.'))';
     }
+
     /**
      * Wrap the given JSON selector for boolean values.
      *
@@ -428,6 +526,7 @@ class MySqlGrammar extends Grammar
     protected function wrapJsonBooleanSelector($value)
     {
         [$field, $path] = $this->wrapJsonFieldAndPath($value);
-        return 'json_extract(' . $field . $path . ')';
+
+        return 'json_extract('.$field.$path.')';
     }
 }

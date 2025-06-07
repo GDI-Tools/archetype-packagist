@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Extractor;
 
 use Archetype\Vendor\Symfony\Component\Translation\Exception\InvalidArgumentException;
+
 /**
  * Base class used by classes that extract translation messages from files.
  *
@@ -32,12 +36,15 @@ abstract class AbstractFileExtractor
         } else {
             $files = $this->extractFromDirectory($resource);
         }
+
         return $files;
     }
+
     private function toSplFileInfo(string $file): \SplFileInfo
     {
         return new \SplFileInfo($file);
     }
+
     /**
      * @throws InvalidArgumentException
      */
@@ -46,8 +53,11 @@ abstract class AbstractFileExtractor
         if (!is_file($file)) {
             throw new InvalidArgumentException(\sprintf('The "%s" file does not exist.', $file));
         }
-        return \true;
+
+        return true;
     }
+
     abstract protected function canBeExtracted(string $file): bool;
+
     abstract protected function extractFromDirectory(string|array $resource): iterable;
 }

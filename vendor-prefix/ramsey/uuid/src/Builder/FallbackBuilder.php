@@ -8,14 +8,19 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Builder;
 
 use Archetype\Vendor\Ramsey\Uuid\Codec\CodecInterface;
 use Archetype\Vendor\Ramsey\Uuid\Exception\BuilderNotFoundException;
 use Archetype\Vendor\Ramsey\Uuid\Exception\UnableToBuildUuidException;
 use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
+
 /**
  * FallbackBuilder builds a UUID by stepping through a list of UUID builders until a UUID can be constructed without exceptions
  *
@@ -29,6 +34,7 @@ class FallbackBuilder implements UuidBuilderInterface
     public function __construct(private iterable $builders)
     {
     }
+
     /**
      * Builds and returns a UuidInterface instance using the first builder that succeeds
      *
@@ -40,14 +46,21 @@ class FallbackBuilder implements UuidBuilderInterface
     public function build(CodecInterface $codec, string $bytes): UuidInterface
     {
         $lastBuilderException = null;
+
         foreach ($this->builders as $builder) {
             try {
                 return $builder->build($codec, $bytes);
             } catch (UnableToBuildUuidException $exception) {
                 $lastBuilderException = $exception;
+
                 continue;
             }
         }
-        throw new BuilderNotFoundException('Could not find a suitable builder for the provided codec and fields', 0, $lastBuilderException);
+
+        throw new BuilderNotFoundException(
+            'Could not find a suitable builder for the provided codec and fields',
+            0,
+            $lastBuilderException,
+        );
     }
 }

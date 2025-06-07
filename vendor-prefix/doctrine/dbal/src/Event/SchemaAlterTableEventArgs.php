@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Event;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Schema\TableDiff;
+
 use function array_merge;
 use function func_get_args;
 use function is_array;
+
 /**
  * Event Arguments used when SQL queries for creating tables are generated inside {@see AbstractPlatform}.
  *
@@ -16,23 +23,28 @@ class SchemaAlterTableEventArgs extends SchemaEventArgs
 {
     private TableDiff $tableDiff;
     private AbstractPlatform $platform;
+
     /** @var string[] */
     private array $sql = [];
+
     public function __construct(TableDiff $tableDiff, AbstractPlatform $platform)
     {
         $this->tableDiff = $tableDiff;
-        $this->platform = $platform;
+        $this->platform  = $platform;
     }
+
     /** @return TableDiff */
     public function getTableDiff()
     {
         return $this->tableDiff;
     }
+
     /** @return AbstractPlatform */
     public function getPlatform()
     {
         return $this->platform;
     }
+
     /**
      * Passing multiple SQL statements as an array is deprecated. Pass each statement as an individual argument instead.
      *
@@ -43,8 +55,10 @@ class SchemaAlterTableEventArgs extends SchemaEventArgs
     public function addSql($sql)
     {
         $this->sql = array_merge($this->sql, is_array($sql) ? $sql : func_get_args());
+
         return $this;
     }
+
     /** @return string[] */
     public function getSql()
     {

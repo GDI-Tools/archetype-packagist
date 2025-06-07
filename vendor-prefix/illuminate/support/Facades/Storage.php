@@ -1,25 +1,31 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
+
 /**
- * @method static \Illuminate\Contracts\Filesystem\Filesystem drive(string|null $name = null)
- * @method static \Illuminate\Contracts\Filesystem\Filesystem disk(string|null $name = null)
- * @method static \Illuminate\Contracts\Filesystem\Cloud cloud()
- * @method static \Illuminate\Contracts\Filesystem\Filesystem build(string|array $config)
- * @method static \Illuminate\Contracts\Filesystem\Filesystem createLocalDriver(array $config, string $name = 'local')
- * @method static \Illuminate\Contracts\Filesystem\Filesystem createFtpDriver(array $config)
- * @method static \Illuminate\Contracts\Filesystem\Filesystem createSftpDriver(array $config)
- * @method static \Illuminate\Contracts\Filesystem\Cloud createS3Driver(array $config)
- * @method static \Illuminate\Contracts\Filesystem\Filesystem createScopedDriver(array $config)
- * @method static \Illuminate\Filesystem\FilesystemManager set(string $name, mixed $disk)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem drive(string|null $name = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem disk(string|null $name = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Cloud cloud()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem build(string|array $config)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem createLocalDriver(array $config, string $name = 'local')
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem createFtpDriver(array $config)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem createSftpDriver(array $config)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Cloud createS3Driver(array $config)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem createScopedDriver(array $config)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemManager set(string $name, mixed $disk)
  * @method static string getDefaultDriver()
  * @method static string getDefaultCloudDriver()
- * @method static \Illuminate\Filesystem\FilesystemManager forgetDisk(array|string $disk)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemManager forgetDisk(array|string $disk)
  * @method static void purge(string|null $name = null)
- * @method static \Illuminate\Filesystem\FilesystemManager extend(string $driver, \Closure $callback)
- * @method static \Illuminate\Filesystem\FilesystemManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemManager extend(string $driver, \Closure $callback)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static string path(string $path)
  * @method static bool exists(string $path)
  * @method static string|null get(string $path)
@@ -43,10 +49,10 @@ use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
  * @method static array allDirectories(string|null $directory = null)
  * @method static bool makeDirectory(string $path)
  * @method static bool deleteDirectory(string $directory)
- * @method static \Illuminate\Filesystem\FilesystemAdapter assertExists(string|array $path, string|null $content = null)
- * @method static \Illuminate\Filesystem\FilesystemAdapter assertCount(string $path, int $count, bool $recursive = false)
- * @method static \Illuminate\Filesystem\FilesystemAdapter assertMissing(string|array $path)
- * @method static \Illuminate\Filesystem\FilesystemAdapter assertDirectoryEmpty(string $path)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemAdapter assertExists(string|array $path, string|null $content = null)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemAdapter assertCount(string $path, int $count, bool $recursive = false)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemAdapter assertMissing(string|array $path)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemAdapter assertDirectoryEmpty(string $path)
  * @method static bool missing(string $path)
  * @method static bool fileExists(string $path)
  * @method static bool fileMissing(string $path)
@@ -67,8 +73,8 @@ use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
  * @method static array getConfig()
  * @method static void serveUsing(\Closure $callback)
  * @method static void buildTemporaryUrlsUsing(\Closure $callback)
- * @method static \Illuminate\Filesystem\FilesystemAdapter|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
- * @method static \Illuminate\Filesystem\FilesystemAdapter|mixed unless(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemAdapter|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
+ * @method static \Archetype\Vendor\Illuminate\Filesystem\FilesystemAdapter|mixed unless(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
@@ -82,7 +88,7 @@ use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
  * @method static void write(string $location, string $contents, array $config = [])
  * @method static void createDirectory(string $location, array $config = [])
  *
- * @see \Illuminate\Filesystem\FilesystemManager
+ * @see \Archetype\Vendor\Illuminate\Filesystem\FilesystemManager
  */
 class Storage extends Facade
 {
@@ -91,33 +97,45 @@ class Storage extends Facade
      *
      * @param  string|null  $disk
      * @param  array  $config
-     * @return \Illuminate\Contracts\Filesystem\Filesystem
+     * @return \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem
      */
     public static function fake($disk = null, array $config = [])
     {
         $root = self::getRootPath($disk = $disk ?: static::$app['config']->get('filesystems.default'));
+
         if ($token = ParallelTesting::token()) {
             $root = "{$root}_test_{$token}";
         }
-        (new Filesystem())->cleanDirectory($root);
-        static::set($disk, $fake = static::createLocalDriver(self::buildDiskConfiguration($disk, $config, root: $root)));
+
+        (new Filesystem)->cleanDirectory($root);
+
+        static::set($disk, $fake = static::createLocalDriver(
+            self::buildDiskConfiguration($disk, $config, root: $root)
+        ));
+
         return tap($fake)->buildTemporaryUrlsUsing(function ($path, $expiration) {
-            return URL::to($path . '?expiration=' . $expiration->getTimestamp());
+            return URL::to($path.'?expiration='.$expiration->getTimestamp());
         });
     }
+
     /**
      * Replace the given disk with a persistent local testing disk.
      *
      * @param  string|null  $disk
      * @param  array  $config
-     * @return \Illuminate\Contracts\Filesystem\Filesystem
+     * @return \Archetype\Vendor\Illuminate\Contracts\Filesystem\Filesystem
      */
     public static function persistentFake($disk = null, array $config = [])
     {
         $disk = $disk ?: static::$app['config']->get('filesystems.default');
-        static::set($disk, $fake = static::createLocalDriver(self::buildDiskConfiguration($disk, $config, root: self::getRootPath($disk))));
+
+        static::set($disk, $fake = static::createLocalDriver(
+            self::buildDiskConfiguration($disk, $config, root: self::getRootPath($disk))
+        ));
+
         return $fake;
     }
+
     /**
      * Get the root path of the given disk.
      *
@@ -126,8 +144,9 @@ class Storage extends Facade
      */
     protected static function getRootPath(string $disk): string
     {
-        return storage_path('framework/testing/disks/' . $disk);
+        return storage_path('framework/testing/disks/'.$disk);
     }
+
     /**
      * Assemble the configuration of the given disk.
      *
@@ -139,8 +158,14 @@ class Storage extends Facade
     protected static function buildDiskConfiguration(string $disk, array $config, string $root): array
     {
         $originalConfig = static::$app['config']["filesystems.disks.{$disk}"] ?? [];
-        return array_merge(['throw' => $originalConfig['throw'] ?? \false], $config, ['root' => $root]);
+
+        return array_merge([
+            'throw' => $originalConfig['throw'] ?? false],
+            $config,
+            ['root' => $root]
+        );
     }
+
     /**
      * Get the registered name of the component.
      *

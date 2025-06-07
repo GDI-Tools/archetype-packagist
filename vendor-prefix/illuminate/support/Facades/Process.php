@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Closure;
-use Archetype\Vendor\Illuminate\Process\Factory;
+use Illuminate\Process\Factory;
+
 /**
  * @method static \Illuminate\Process\PendingProcess command(array|string $command)
  * @method static \Illuminate\Process\PendingProcess path(string $path)
@@ -15,7 +21,7 @@ use Archetype\Vendor\Illuminate\Process\Factory;
  * @method static \Illuminate\Process\PendingProcess quietly()
  * @method static \Illuminate\Process\PendingProcess tty(bool $tty = true)
  * @method static \Illuminate\Process\PendingProcess options(array $options)
- * @method static \Illuminate\Contracts\Process\ProcessResult run(array|string|null $command = null, callable|null $output = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Process\ProcessResult run(array|string|null $command = null, callable|null $output = null)
  * @method static \Illuminate\Process\InvokedProcess start(array|string|null $command = null, callable|null $output = null)
  * @method static bool supportsTty()
  * @method static \Illuminate\Process\PendingProcess withFakeHandlers(array $fakeHandlers)
@@ -25,8 +31,8 @@ use Archetype\Vendor\Illuminate\Process\Factory;
  * @method static \Illuminate\Process\FakeProcessDescription describe()
  * @method static \Illuminate\Process\FakeProcessSequence sequence(array $processes = [])
  * @method static bool isRecording()
- * @method static \Illuminate\Process\Factory recordIfRecording(\Illuminate\Process\PendingProcess $process, \Illuminate\Contracts\Process\ProcessResult $result)
- * @method static \Illuminate\Process\Factory record(\Illuminate\Process\PendingProcess $process, \Illuminate\Contracts\Process\ProcessResult $result)
+ * @method static \Illuminate\Process\Factory recordIfRecording(\Illuminate\Process\PendingProcess $process, \Archetype\Vendor\Illuminate\Contracts\Process\ProcessResult $result)
+ * @method static \Illuminate\Process\Factory record(\Illuminate\Process\PendingProcess $process, \Archetype\Vendor\Illuminate\Contracts\Process\ProcessResult $result)
  * @method static \Illuminate\Process\Factory preventStrayProcesses(bool $prevent = true)
  * @method static bool preventingStrayProcesses()
  * @method static \Illuminate\Process\Factory assertRan(\Closure|string $callback)
@@ -35,7 +41,7 @@ use Archetype\Vendor\Illuminate\Process\Factory;
  * @method static \Illuminate\Process\Factory assertDidntRun(\Closure|string $callback)
  * @method static \Illuminate\Process\Factory assertNothingRan()
  * @method static \Illuminate\Process\Pool pool(callable $callback)
- * @method static \Illuminate\Contracts\Process\ProcessResult pipe(callable|array $callback, callable|null $output = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Process\ProcessResult pipe(callable|array $callback, callable|null $output = null)
  * @method static \Illuminate\Process\ProcessPoolResults concurrently(callable $callback, callable|null $output = null)
  * @method static \Illuminate\Process\PendingProcess newPendingProcess()
  * @method static void macro(string $name, object|callable $macro)
@@ -58,6 +64,7 @@ class Process extends Facade
     {
         return Factory::class;
     }
+
     /**
      * Indicate that the process factory should fake processes.
      *

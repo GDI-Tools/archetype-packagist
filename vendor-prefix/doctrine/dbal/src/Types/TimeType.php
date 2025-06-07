@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -7,7 +12,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function get_class;
+
 /**
  * Type that maps an SQL TIME to a PHP DateTime object.
  */
@@ -20,6 +27,7 @@ class TimeType extends Type
     {
         return Types::TIME_MUTABLE;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -27,6 +35,7 @@ class TimeType extends Type
     {
         return $platform->getTimeTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -41,14 +50,25 @@ class TimeType extends Type
         if ($value === null) {
             return $value;
         }
+
         if ($value instanceof DateTimeImmutable) {
-            Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6017', 'Passing an instance of %s is deprecated, use %s::%s() instead.', get_class($value), TimeImmutableType::class, __FUNCTION__);
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/6017',
+                'Passing an instance of %s is deprecated, use %s::%s() instead.',
+                get_class($value),
+                TimeImmutableType::class,
+                __FUNCTION__,
+            );
         }
+
         if ($value instanceof DateTimeInterface) {
             return $value->format($platform->getTimeFormatString());
         }
+
         throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', DateTime::class]);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -61,15 +81,29 @@ class TimeType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value instanceof DateTimeImmutable) {
-            Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6017', 'Passing an instance of %s is deprecated, use %s::%s() instead.', get_class($value), TimeImmutableType::class, __FUNCTION__);
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/6017',
+                'Passing an instance of %s is deprecated, use %s::%s() instead.',
+                get_class($value),
+                TimeImmutableType::class,
+                __FUNCTION__,
+            );
         }
+
         if ($value === null || $value instanceof DateTimeInterface) {
             return $value;
         }
+
         $dateTime = DateTime::createFromFormat('!' . $platform->getTimeFormatString(), $value);
-        if ($dateTime !== \false) {
+        if ($dateTime !== false) {
             return $dateTime;
         }
-        throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getTimeFormatString());
+
+        throw ConversionException::conversionFailedFormat(
+            $value,
+            $this->getName(),
+            $platform->getTimeFormatString(),
+        );
     }
 }

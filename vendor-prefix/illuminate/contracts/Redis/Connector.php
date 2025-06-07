@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Redis;
 
@@ -12,6 +17,7 @@ interface Connector
      * @return \Illuminate\Redis\Connections\Connection
      */
     public function connect(array $config, array $options);
+
     /**
      * Create a connection to a Redis instance.
      *

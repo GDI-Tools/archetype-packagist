@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Parser;
 
 use Archetype\Vendor\PhpOption\Option;
+
 final class Entry
 {
     /**
@@ -12,17 +19,19 @@ final class Entry
      * @var string
      */
     private $name;
+
     /**
      * The entry value.
      *
-     * @var \Dotenv\Parser\Value|null
+     * @var \Archetype\Vendor\Dotenv\Parser\Value|null
      */
     private $value;
+
     /**
      * Create a new entry instance.
      *
      * @param string                    $name
-     * @param \Dotenv\Parser\Value|null $value
+     * @param \Archetype\Vendor\Dotenv\Parser\Value|null $value
      *
      * @return void
      */
@@ -31,6 +40,7 @@ final class Entry
         $this->name = $name;
         $this->value = $value;
     }
+
     /**
      * Get the entry name.
      *
@@ -40,14 +50,15 @@ final class Entry
     {
         return $this->name;
     }
+
     /**
      * Get the entry value.
      *
-     * @return \PhpOption\Option<\Dotenv\Parser\Value>
+     * @return \Archetype\Vendor\PhpOption\Option<\Dotenv\Parser\Value>
      */
     public function getValue()
     {
-        /** @var \PhpOption\Option<\Dotenv\Parser\Value> */
+        /** @var \Archetype\Vendor\PhpOption\Option<\Dotenv\Parser\Value> */
         return Option::fromValue($this->value);
     }
 }

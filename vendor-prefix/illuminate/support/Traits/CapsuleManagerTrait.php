@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Traits;
 
 use Archetype\Vendor\Illuminate\Contracts\Container\Container;
 use Archetype\Vendor\Illuminate\Support\Fluent;
+
 trait CapsuleManagerTrait
 {
     /**
@@ -12,25 +18,29 @@ trait CapsuleManagerTrait
      * @var object
      */
     protected static $instance;
+
     /**
      * The container instance.
      *
-     * @var \Illuminate\Contracts\Container\Container
+     * @var \Archetype\Vendor\Illuminate\Contracts\Container\Container
      */
     protected $container;
+
     /**
      * Setup the IoC container instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     protected function setupContainer(Container $container)
     {
         $this->container = $container;
-        if (!$this->container->bound('config')) {
-            $this->container->instance('config', new Fluent());
+
+        if (! $this->container->bound('config')) {
+            $this->container->instance('config', new Fluent);
         }
     }
+
     /**
      * Make this capsule instance available globally.
      *
@@ -40,19 +50,21 @@ trait CapsuleManagerTrait
     {
         static::$instance = $this;
     }
+
     /**
      * Get the IoC container instance.
      *
-     * @return \Illuminate\Contracts\Container\Container
+     * @return \Archetype\Vendor\Illuminate\Contracts\Container\Container
      */
     public function getContainer()
     {
         return $this->container;
     }
+
     /**
      * Set the IoC container instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     public function setContainer(Container $container)

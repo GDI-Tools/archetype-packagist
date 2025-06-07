@@ -8,11 +8,16 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Codec;
 
 use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
+
 /**
  * A codec encodes and decodes a UUID according to defined rules
  *
@@ -28,6 +33,7 @@ interface CodecInterface
      * @return non-empty-string Hexadecimal string representation of a UUID
      */
     public function encode(UuidInterface $uuid): string;
+
     /**
      * Returns a binary string representation of a UuidInterface
      *
@@ -36,6 +42,7 @@ interface CodecInterface
      * @return non-empty-string Binary string representation of a UUID
      */
     public function encodeBinary(UuidInterface $uuid): string;
+
     /**
      * Returns a UuidInterface derived from a hexadecimal string representation
      *
@@ -44,6 +51,7 @@ interface CodecInterface
      * @return UuidInterface An instance of a UUID decoded from a hexadecimal string representation
      */
     public function decode(string $encodedUuid): UuidInterface;
+
     /**
      * Returns a UuidInterface derived from a binary string representation
      *

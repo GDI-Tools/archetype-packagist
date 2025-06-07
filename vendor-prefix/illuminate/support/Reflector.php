@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
@@ -8,6 +13,7 @@ use ReflectionEnum;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionUnionType;
+
 class Reflector
 {
     /**
@@ -17,33 +23,45 @@ class Reflector
      * @param  bool  $syntaxOnly
      * @return bool
      */
-    public static function isCallable($var, $syntaxOnly = \false)
+    public static function isCallable($var, $syntaxOnly = false)
     {
-        if (!is_array($var)) {
+        if (! is_array($var)) {
             return is_callable($var, $syntaxOnly);
         }
-        if (!isset($var[0], $var[1]) || !is_string($var[1] ?? null)) {
-            return \false;
+
+        if (! isset($var[0], $var[1]) || ! is_string($var[1] ?? null)) {
+            return false;
         }
-        if ($syntaxOnly && (is_string($var[0]) || is_object($var[0])) && is_string($var[1])) {
-            return \true;
+
+        if ($syntaxOnly &&
+            (is_string($var[0]) || is_object($var[0])) &&
+            is_string($var[1])) {
+            return true;
         }
+
         $class = is_object($var[0]) ? get_class($var[0]) : $var[0];
+
         $method = $var[1];
-        if (!class_exists($class)) {
-            return \false;
+
+        if (! class_exists($class)) {
+            return false;
         }
+
         if (method_exists($class, $method)) {
             return (new ReflectionMethod($class, $method))->isPublic();
         }
+
         if (is_object($var[0]) && method_exists($class, '__call')) {
             return (new ReflectionMethod($class, '__call'))->isPublic();
         }
-        if (!is_object($var[0]) && method_exists($class, '__callStatic')) {
+
+        if (! is_object($var[0]) && method_exists($class, '__callStatic')) {
             return (new ReflectionMethod($class, '__callStatic'))->isPublic();
         }
-        return \false;
+
+        return false;
     }
+
     /**
      * Get the specified class attribute, optionally following an inheritance chain.
      *
@@ -53,10 +71,11 @@ class Reflector
      * @param  class-string<TAttribute>  $attribute
      * @return TAttribute|null
      */
-    public static function getClassAttribute($objectOrClass, $attribute, $ascend = \false)
+    public static function getClassAttribute($objectOrClass, $attribute, $ascend = false)
     {
         return static::getClassAttributes($objectOrClass, $attribute, $ascend)->flatten()->first();
     }
+
     /**
      * Get the specified class attribute(s), optionally following an inheritance chain.
      *
@@ -67,15 +86,22 @@ class Reflector
      * @param  class-string<TAttribute>  $attribute
      * @return ($includeParents is true ? Collection<class-string<contravariant TTarget>, Collection<int, TAttribute>> : Collection<int, TAttribute>)
      */
-    public static function getClassAttributes($objectOrClass, $attribute, $includeParents = \false)
+    public static function getClassAttributes($objectOrClass, $attribute, $includeParents = false)
     {
         $reflectionClass = new ReflectionClass($objectOrClass);
+
         $attributes = [];
+
         do {
-            $attributes[$reflectionClass->name] = new Collection(array_map(fn(ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(), $reflectionClass->getAttributes($attribute)));
-        } while ($includeParents && \false !== $reflectionClass = $reflectionClass->getParentClass());
+            $attributes[$reflectionClass->name] = new Collection(array_map(
+                fn (ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
+                $reflectionClass->getAttributes($attribute)
+            ));
+        } while ($includeParents && false !== $reflectionClass = $reflectionClass->getParentClass());
+
         return $includeParents ? new Collection($attributes) : reset($attributes);
     }
+
     /**
      * Get the class name of the given parameter's type, if possible.
      *
@@ -85,11 +111,14 @@ class Reflector
     public static function getParameterClassName($parameter)
     {
         $type = $parameter->getType();
-        if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
+
+        if (! $type instanceof ReflectionNamedType || $type->isBuiltin()) {
             return;
         }
+
         return static::getTypeName($parameter, $type);
     }
+
     /**
      * Get the class names of the given parameter's type, including union types.
      *
@@ -99,18 +128,24 @@ class Reflector
     public static function getParameterClassNames($parameter)
     {
         $type = $parameter->getType();
-        if (!$type instanceof ReflectionUnionType) {
+
+        if (! $type instanceof ReflectionUnionType) {
             return array_filter([static::getParameterClassName($parameter)]);
         }
+
         $unionTypes = [];
+
         foreach ($type->getTypes() as $listedType) {
-            if (!$listedType instanceof ReflectionNamedType || $listedType->isBuiltin()) {
+            if (! $listedType instanceof ReflectionNamedType || $listedType->isBuiltin()) {
                 continue;
             }
+
             $unionTypes[] = static::getTypeName($parameter, $listedType);
         }
+
         return array_filter($unionTypes);
     }
+
     /**
      * Get the given type's class name.
      *
@@ -121,16 +156,20 @@ class Reflector
     protected static function getTypeName($parameter, $type)
     {
         $name = $type->getName();
-        if (!is_null($class = $parameter->getDeclaringClass())) {
+
+        if (! is_null($class = $parameter->getDeclaringClass())) {
             if ($name === 'self') {
                 return $class->getName();
             }
+
             if ($name === 'parent' && $parent = $class->getParentClass()) {
                 return $parent->getName();
             }
         }
+
         return $name;
     }
+
     /**
      * Determine if the parameter's type is a subclass of the given type.
      *
@@ -141,8 +180,12 @@ class Reflector
     public static function isParameterSubclassOf($parameter, $className)
     {
         $paramClassName = static::getParameterClassName($parameter);
-        return $paramClassName && (class_exists($paramClassName) || interface_exists($paramClassName)) && (new ReflectionClass($paramClassName))->isSubclassOf($className);
+
+        return $paramClassName
+            && (class_exists($paramClassName) || interface_exists($paramClassName))
+            && (new ReflectionClass($paramClassName))->isSubclassOf($className);
     }
+
     /**
      * Determine if the parameter's type is a Backed Enum with a string backing type.
      *
@@ -151,17 +194,23 @@ class Reflector
      */
     public static function isParameterBackedEnumWithStringBackingType($parameter)
     {
-        if (!$parameter->getType() instanceof ReflectionNamedType) {
-            return \false;
+        if (! $parameter->getType() instanceof ReflectionNamedType) {
+            return false;
         }
+
         $backedEnumClass = $parameter->getType()?->getName();
+
         if (is_null($backedEnumClass)) {
-            return \false;
+            return false;
         }
+
         if (enum_exists($backedEnumClass)) {
             $reflectionBackedEnum = new ReflectionEnum($backedEnumClass);
-            return $reflectionBackedEnum->isBacked() && $reflectionBackedEnum->getBackingType()->getName() == 'string';
+
+            return $reflectionBackedEnum->isBacked()
+                && $reflectionBackedEnum->getBackingType()->getName() == 'string';
         }
-        return \false;
+
+        return false;
     }
 }

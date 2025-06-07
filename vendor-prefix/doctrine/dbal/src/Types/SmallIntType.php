@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 /**
  * Type that maps a database SMALLINT to a PHP integer.
  */
@@ -16,6 +22,7 @@ class SmallIntType extends Type implements PhpIntegerMappingType
     {
         return Types::SMALLINT;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -23,6 +30,7 @@ class SmallIntType extends Type implements PhpIntegerMappingType
     {
         return $platform->getSmallIntTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -36,6 +44,7 @@ class SmallIntType extends Type implements PhpIntegerMappingType
     {
         return $value === null ? null : (int) $value;
     }
+
     /**
      * {@inheritDoc}
      */

@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Container\Attributes;
 
 use Attribute;
 use Archetype\Vendor\Illuminate\Contracts\Container\Container;
 use Archetype\Vendor\Illuminate\Contracts\Container\ContextualAttribute;
+
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Cache implements ContextualAttribute
 {
@@ -14,12 +20,13 @@ class Cache implements ContextualAttribute
     public function __construct(public ?string $store = null)
     {
     }
+
     /**
      * Resolve the cache store.
      *
      * @param  self  $attribute
-     * @param  \Illuminate\Contracts\Container\Container  $container
-     * @return \Illuminate\Contracts\Cache\Repository
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container  $container
+     * @return \Archetype\Vendor\Illuminate\Contracts\Cache\Repository
      */
     public static function resolve(self $attribute, Container $container)
     {

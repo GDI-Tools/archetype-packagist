@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Broadcasting;
 
@@ -11,6 +16,7 @@ interface Broadcaster
      * @return mixed
      */
     public function auth($request);
+
     /**
      * Return the valid authentication response.
      *
@@ -19,6 +25,7 @@ interface Broadcaster
      * @return mixed
      */
     public function validAuthenticationResponse($request, $result);
+
     /**
      * Broadcast the given event.
      *

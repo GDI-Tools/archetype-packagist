@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Queue;
 
@@ -10,12 +15,14 @@ interface QueueableEntity
      * @return mixed
      */
     public function getQueueableId();
+
     /**
      * Get the relationships for the entity.
      *
      * @return array
      */
     public function getQueueableRelations();
+
     /**
      * Get the connection of the entity.
      *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -17,7 +22,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void determineLocalesUsing(callable $callback)
  * @method static \Illuminate\Translation\MessageSelector getSelector()
  * @method static void setSelector(\Illuminate\Translation\MessageSelector $selector)
- * @method static \Illuminate\Contracts\Translation\Loader getLoader()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Translation\Loader getLoader()
  * @method static string locale()
  * @method static string getLocale()
  * @method static void setLocale(string $locale)

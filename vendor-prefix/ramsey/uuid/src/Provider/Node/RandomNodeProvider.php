@@ -8,21 +8,28 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Provider\Node;
 
 use Archetype\Vendor\Ramsey\Uuid\Exception\RandomSourceException;
 use Archetype\Vendor\Ramsey\Uuid\Provider\NodeProviderInterface;
 use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
 use Throwable;
+
 use function bin2hex;
 use function dechex;
 use function hex2bin;
 use function hexdec;
 use function str_pad;
 use function substr;
+
 use const STR_PAD_LEFT;
+
 /**
  * RandomNodeProvider generates a random node ID
  *
@@ -37,11 +44,14 @@ class RandomNodeProvider implements NodeProviderInterface
         } catch (Throwable $exception) {
             throw new RandomSourceException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
+
         // Split the node bytes for math on 32-bit systems.
         $nodeMsb = substr($nodeBytes, 0, 3);
         $nodeLsb = substr($nodeBytes, 3);
+
         // Set the multicast bit; see RFC 9562, section 6.10.
-        $nodeMsb = hex2bin(str_pad(dechex(hexdec(bin2hex($nodeMsb)) | 0x10000), 6, '0', STR_PAD_LEFT));
+        $nodeMsb = hex2bin(str_pad(dechex(hexdec(bin2hex($nodeMsb)) | 0x010000), 6, '0', STR_PAD_LEFT));
+
         return new Hexadecimal(str_pad(bin2hex($nodeMsb . $nodeLsb), 12, '0', STR_PAD_LEFT));
     }
 }

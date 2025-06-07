@@ -1,15 +1,22 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function count;
 use function explode;
 use function implode;
 use function is_array;
 use function is_resource;
 use function stream_get_contents;
+
 /**
  * Array Type which can be used for simple values.
  *
@@ -24,6 +31,7 @@ class SimpleArrayType extends Type
     {
         return $platform->getClobTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -33,11 +41,13 @@ class SimpleArrayType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!is_array($value) || count($value) === 0) {
+        if (! is_array($value) || count($value) === 0) {
             return null;
         }
+
         return implode(',', $value);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -50,9 +60,12 @@ class SimpleArrayType extends Type
         if ($value === null) {
             return [];
         }
+
         $value = is_resource($value) ? stream_get_contents($value) : $value;
+
         return explode(',', $value);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -60,6 +73,7 @@ class SimpleArrayType extends Type
     {
         return Types::SIMPLE_ARRAY;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -67,7 +81,13 @@ class SimpleArrayType extends Type
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return \true;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return true;
     }
 }

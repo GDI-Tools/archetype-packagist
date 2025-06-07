@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\OCI8;
 
 /**
@@ -10,15 +16,18 @@ namespace Archetype\Vendor\Doctrine\DBAL\Driver\OCI8;
  */
 final class ExecutionMode
 {
-    private bool $isAutoCommitEnabled = \true;
+    private bool $isAutoCommitEnabled = true;
+
     public function enableAutoCommit(): void
     {
-        $this->isAutoCommitEnabled = \true;
+        $this->isAutoCommitEnabled = true;
     }
+
     public function disableAutoCommit(): void
     {
-        $this->isAutoCommitEnabled = \false;
+        $this->isAutoCommitEnabled = false;
     }
+
     public function isAutoCommitEnabled(): bool
     {
         return $this->isAutoCommitEnabled;

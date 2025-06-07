@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Pipeline;
 
@@ -8,48 +13,56 @@ use Archetype\Vendor\Illuminate\Contracts\Pipeline\Pipeline as PipelineContract;
 use Archetype\Vendor\Illuminate\Support\Traits\Conditionable;
 use RuntimeException;
 use Throwable;
+
 class Pipeline implements PipelineContract
 {
     use Conditionable;
+
     /**
      * The container implementation.
      *
-     * @var \Illuminate\Contracts\Container\Container|null
+     * @var \Archetype\Vendor\Illuminate\Contracts\Container\Container|null
      */
     protected $container;
+
     /**
      * The object being passed through the pipeline.
      *
      * @var mixed
      */
     protected $passable;
+
     /**
      * The array of class pipes.
      *
      * @var array
      */
     protected $pipes = [];
+
     /**
      * The method to call on each pipe.
      *
      * @var string
      */
     protected $method = 'handle';
+
     /**
      * The final callback to be executed after the pipeline ends regardless of the outcome.
      *
      * @var \Closure|null
      */
     protected $finally;
+
     /**
      * Create a new class instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container|null  $container
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container|null  $container
      */
     public function __construct(?Container $container = null)
     {
         $this->container = $container;
     }
+
     /**
      * Set the object being sent through the pipeline.
      *
@@ -59,8 +72,10 @@ class Pipeline implements PipelineContract
     public function send($passable)
     {
         $this->passable = $passable;
+
         return $this;
     }
+
     /**
      * Set the array of pipes.
      *
@@ -70,8 +85,10 @@ class Pipeline implements PipelineContract
     public function through($pipes)
     {
         $this->pipes = is_array($pipes) ? $pipes : func_get_args();
+
         return $this;
     }
+
     /**
      * Push additional pipes onto the pipeline.
      *
@@ -80,9 +97,11 @@ class Pipeline implements PipelineContract
      */
     public function pipe($pipes)
     {
-        array_push($this->pipes, ...is_array($pipes) ? $pipes : func_get_args());
+        array_push($this->pipes, ...(is_array($pipes) ? $pipes : func_get_args()));
+
         return $this;
     }
+
     /**
      * Set the method to call on the pipes.
      *
@@ -92,8 +111,10 @@ class Pipeline implements PipelineContract
     public function via($method)
     {
         $this->method = $method;
+
         return $this;
     }
+
     /**
      * Run the pipeline with a final destination callback.
      *
@@ -102,7 +123,10 @@ class Pipeline implements PipelineContract
      */
     public function then(Closure $destination)
     {
-        $pipeline = array_reduce(array_reverse($this->pipes()), $this->carry(), $this->prepareDestination($destination));
+        $pipeline = array_reduce(
+            array_reverse($this->pipes()), $this->carry(), $this->prepareDestination($destination)
+        );
+
         try {
             return $pipeline($this->passable);
         } finally {
@@ -111,6 +135,7 @@ class Pipeline implements PipelineContract
             }
         }
     }
+
     /**
      * Run the pipeline and return the result.
      *
@@ -122,6 +147,7 @@ class Pipeline implements PipelineContract
             return $passable;
         });
     }
+
     /**
      * Set a final callback to be executed after the pipeline ends regardless of the outcome.
      *
@@ -131,8 +157,10 @@ class Pipeline implements PipelineContract
     public function finally(Closure $callback)
     {
         $this->finally = $callback;
+
         return $this;
     }
+
     /**
      * Get the final piece of the Closure onion.
      *
@@ -149,6 +177,7 @@ class Pipeline implements PipelineContract
             }
         };
     }
+
     /**
      * Get a Closure that represents a slice of the application onion.
      *
@@ -164,12 +193,14 @@ class Pipeline implements PipelineContract
                         // will resolve the pipes out of the dependency container and call it with
                         // the appropriate method and arguments, returning the results back out.
                         return $pipe($passable, $stack);
-                    } elseif (!is_object($pipe)) {
+                    } elseif (! is_object($pipe)) {
                         [$name, $parameters] = $this->parsePipeString($pipe);
+
                         // If the pipe is a string we will parse the string and resolve the class out
                         // of the dependency injection container. We can then build a callable and
                         // execute the pipe function giving in the parameters that are required.
                         $pipe = $this->getContainer()->make($name);
+
                         $parameters = array_merge([$passable, $stack], $parameters);
                     } else {
                         // If the pipe is already an object we'll just make a callable and pass it to
@@ -177,7 +208,11 @@ class Pipeline implements PipelineContract
                         // since the object we're given was already a fully instantiated object.
                         $parameters = [$passable, $stack];
                     }
-                    $carry = method_exists($pipe, $this->method) ? $pipe->{$this->method}(...$parameters) : $pipe(...$parameters);
+
+                    $carry = method_exists($pipe, $this->method)
+                        ? $pipe->{$this->method}(...$parameters)
+                        : $pipe(...$parameters);
+
                     return $this->handleCarry($carry);
                 } catch (Throwable $e) {
                     return $this->handleException($passable, $e);
@@ -185,6 +220,7 @@ class Pipeline implements PipelineContract
             };
         };
     }
+
     /**
      * Parse full pipe string to get name and parameters.
      *
@@ -194,13 +230,16 @@ class Pipeline implements PipelineContract
     protected function parsePipeString($pipe)
     {
         [$name, $parameters] = array_pad(explode(':', $pipe, 2), 2, null);
-        if (!is_null($parameters)) {
+
+        if (! is_null($parameters)) {
             $parameters = explode(',', $parameters);
         } else {
             $parameters = [];
         }
+
         return [$name, $parameters];
     }
+
     /**
      * Get the array of configured pipes.
      *
@@ -210,31 +249,36 @@ class Pipeline implements PipelineContract
     {
         return $this->pipes;
     }
+
     /**
      * Get the container instance.
      *
-     * @return \Illuminate\Contracts\Container\Container
+     * @return \Archetype\Vendor\Illuminate\Contracts\Container\Container
      *
      * @throws \RuntimeException
      */
     protected function getContainer()
     {
-        if (!$this->container) {
+        if (! $this->container) {
             throw new RuntimeException('A container instance has not been passed to the Pipeline.');
         }
+
         return $this->container;
     }
+
     /**
      * Set the container instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container  $container
      * @return $this
      */
     public function setContainer(Container $container)
     {
         $this->container = $container;
+
         return $this;
     }
+
     /**
      * Handle the value returned from each pipe before passing it to the next.
      *
@@ -245,6 +289,7 @@ class Pipeline implements PipelineContract
     {
         return $carry;
     }
+
     /**
      * Handle the given exception.
      *

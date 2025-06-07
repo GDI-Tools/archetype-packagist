@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function array_filter;
 use function array_values;
 use function count;
+
 /**
  * Table Diff.
  */
@@ -18,12 +25,14 @@ class TableDiff
      * @var string
      */
     public $name;
+
     /**
      * @deprecated Rename tables via {@link AbstractSchemaManager::renameTable()} instead.
      *
      * @var string|false
      */
-    public $newName = \false;
+    public $newName = false;
+
     /**
      * All added columns
      *
@@ -32,6 +41,7 @@ class TableDiff
      * @var Column[]
      */
     public $addedColumns;
+
     /**
      * All modified columns
      *
@@ -40,6 +50,7 @@ class TableDiff
      * @var ColumnDiff[]
      */
     public $changedColumns = [];
+
     /**
      * All dropped columns
      *
@@ -48,6 +59,7 @@ class TableDiff
      * @var Column[]
      */
     public $removedColumns = [];
+
     /**
      * Columns that are only renamed from key to column instance name.
      *
@@ -56,6 +68,7 @@ class TableDiff
      * @var Column[]
      */
     public $renamedColumns = [];
+
     /**
      * All added indexes.
      *
@@ -64,6 +77,7 @@ class TableDiff
      * @var Index[]
      */
     public $addedIndexes = [];
+
     /**
      * All changed indexes.
      *
@@ -72,6 +86,7 @@ class TableDiff
      * @var Index[]
      */
     public $changedIndexes = [];
+
     /**
      * All removed indexes
      *
@@ -80,6 +95,7 @@ class TableDiff
      * @var Index[]
      */
     public $removedIndexes = [];
+
     /**
      * Indexes that are only renamed but are identical otherwise.
      *
@@ -88,6 +104,7 @@ class TableDiff
      * @var Index[]
      */
     public $renamedIndexes = [];
+
     /**
      * All added foreign key definitions
      *
@@ -96,6 +113,7 @@ class TableDiff
      * @var ForeignKeyConstraint[]
      */
     public $addedForeignKeys = [];
+
     /**
      * All changed foreign keys
      *
@@ -104,6 +122,7 @@ class TableDiff
      * @var ForeignKeyConstraint[]
      */
     public $changedForeignKeys = [];
+
     /**
      * All removed foreign keys
      *
@@ -112,12 +131,14 @@ class TableDiff
      * @var (ForeignKeyConstraint|string)[]
      */
     public $removedForeignKeys = [];
+
     /**
      * @internal Use {@see getOldTable()} instead.
      *
      * @var Table|null
      */
     public $fromTable;
+
     /**
      * Constructs a TableDiff object.
      *
@@ -136,25 +157,46 @@ class TableDiff
      * @param array<string,Column>              $renamedColumns
      * @param array<string,Index>               $renamedIndexes
      */
-    public function __construct($tableName, $addedColumns = [], $modifiedColumns = [], $droppedColumns = [], $addedIndexes = [], $changedIndexes = [], $removedIndexes = [], ?Table $fromTable = null, $addedForeignKeys = [], $changedForeignKeys = [], $removedForeignKeys = [], $renamedColumns = [], $renamedIndexes = [])
-    {
-        $this->name = $tableName;
-        $this->addedColumns = $addedColumns;
-        $this->changedColumns = $modifiedColumns;
-        $this->renamedColumns = $renamedColumns;
-        $this->removedColumns = $droppedColumns;
-        $this->addedIndexes = $addedIndexes;
-        $this->changedIndexes = $changedIndexes;
-        $this->renamedIndexes = $renamedIndexes;
-        $this->removedIndexes = $removedIndexes;
-        $this->addedForeignKeys = $addedForeignKeys;
+    public function __construct(
+        $tableName,
+        $addedColumns = [],
+        $modifiedColumns = [],
+        $droppedColumns = [],
+        $addedIndexes = [],
+        $changedIndexes = [],
+        $removedIndexes = [],
+        ?Table $fromTable = null,
+        $addedForeignKeys = [],
+        $changedForeignKeys = [],
+        $removedForeignKeys = [],
+        $renamedColumns = [],
+        $renamedIndexes = []
+    ) {
+        $this->name               = $tableName;
+        $this->addedColumns       = $addedColumns;
+        $this->changedColumns     = $modifiedColumns;
+        $this->renamedColumns     = $renamedColumns;
+        $this->removedColumns     = $droppedColumns;
+        $this->addedIndexes       = $addedIndexes;
+        $this->changedIndexes     = $changedIndexes;
+        $this->renamedIndexes     = $renamedIndexes;
+        $this->removedIndexes     = $removedIndexes;
+        $this->addedForeignKeys   = $addedForeignKeys;
         $this->changedForeignKeys = $changedForeignKeys;
         $this->removedForeignKeys = $removedForeignKeys;
+
         if ($fromTable === null) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5678', 'Not passing the $fromTable to %s is deprecated.', __METHOD__);
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5678',
+                'Not passing the $fromTable to %s is deprecated.',
+                __METHOD__,
+            );
         }
+
         $this->fromTable = $fromTable;
     }
+
     /**
      * @deprecated Use {@see getOldTable()} instead.
      *
@@ -164,8 +206,11 @@ class TableDiff
      */
     public function getName(AbstractPlatform $platform)
     {
-        return new Identifier($this->fromTable instanceof Table ? $this->fromTable->getQuotedName($platform) : $this->name);
+        return new Identifier(
+            $this->fromTable instanceof Table ? $this->fromTable->getQuotedName($platform) : $this->name,
+        );
     }
+
     /**
      * @deprecated Rename tables via {@link AbstractSchemaManager::renameTable()} instead.
      *
@@ -173,91 +218,119 @@ class TableDiff
      */
     public function getNewName()
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5663', '%s is deprecated. Rename tables via AbstractSchemaManager::renameTable() instead.', __METHOD__);
-        if ($this->newName === \false) {
-            return \false;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5663',
+            '%s is deprecated. Rename tables via AbstractSchemaManager::renameTable() instead.',
+            __METHOD__,
+        );
+
+        if ($this->newName === false) {
+            return false;
         }
+
         return new Identifier($this->newName);
     }
+
     public function getOldTable(): ?Table
     {
         return $this->fromTable;
     }
+
     /** @return list<Column> */
     public function getAddedColumns(): array
     {
         return array_values($this->addedColumns);
     }
+
     /** @return list<ColumnDiff> */
     public function getModifiedColumns(): array
     {
         return array_values($this->changedColumns);
     }
+
     /** @return list<Column> */
     public function getDroppedColumns(): array
     {
         return array_values($this->removedColumns);
     }
+
     /** @return array<string,Column> */
     public function getRenamedColumns(): array
     {
         return $this->renamedColumns;
     }
+
     /** @return list<Index> */
     public function getAddedIndexes(): array
     {
         return array_values($this->addedIndexes);
     }
+
     /**
      * @internal This method exists only for compatibility with the current implementation of schema managers
      *           that modify the diff while processing it.
      */
     public function unsetAddedIndex(Index $index): void
     {
-        $this->addedIndexes = array_filter($this->addedIndexes, static function (Index $addedIndex) use ($index): bool {
-            return $addedIndex !== $index;
-        });
+        $this->addedIndexes = array_filter(
+            $this->addedIndexes,
+            static function (Index $addedIndex) use ($index): bool {
+                return $addedIndex !== $index;
+            },
+        );
     }
+
     /** @return array<Index> */
     public function getModifiedIndexes(): array
     {
         return array_values($this->changedIndexes);
     }
+
     /** @return list<Index> */
     public function getDroppedIndexes(): array
     {
         return array_values($this->removedIndexes);
     }
+
     /**
      * @internal This method exists only for compatibility with the current implementation of schema managers
      *           that modify the diff while processing it.
      */
     public function unsetDroppedIndex(Index $index): void
     {
-        $this->removedIndexes = array_filter($this->removedIndexes, static function (Index $removedIndex) use ($index): bool {
-            return $removedIndex !== $index;
-        });
+        $this->removedIndexes = array_filter(
+            $this->removedIndexes,
+            static function (Index $removedIndex) use ($index): bool {
+                return $removedIndex !== $index;
+            },
+        );
     }
+
     /** @return array<string,Index> */
     public function getRenamedIndexes(): array
     {
         return $this->renamedIndexes;
     }
+
     /** @return list<ForeignKeyConstraint> */
     public function getAddedForeignKeys(): array
     {
         return $this->addedForeignKeys;
     }
+
     /** @return list<ForeignKeyConstraint> */
     public function getModifiedForeignKeys(): array
     {
         return $this->changedForeignKeys;
     }
+
     /** @return list<ForeignKeyConstraint|string> */
     public function getDroppedForeignKeys(): array
     {
         return $this->removedForeignKeys;
     }
+
     /**
      * @internal This method exists only for compatibility with the current implementation of the schema comparator.
      *
@@ -265,15 +338,29 @@ class TableDiff
      */
     public function unsetDroppedForeignKey($foreignKey): void
     {
-        $this->removedForeignKeys = array_filter($this->removedForeignKeys, static function ($removedForeignKey) use ($foreignKey): bool {
-            return $removedForeignKey !== $foreignKey;
-        });
+        $this->removedForeignKeys = array_filter(
+            $this->removedForeignKeys,
+            static function ($removedForeignKey) use ($foreignKey): bool {
+                return $removedForeignKey !== $foreignKey;
+            },
+        );
     }
+
     /**
      * Returns whether the diff is empty (contains no changes).
      */
     public function isEmpty(): bool
     {
-        return count($this->addedColumns) === 0 && count($this->changedColumns) === 0 && count($this->removedColumns) === 0 && count($this->renamedColumns) === 0 && count($this->addedIndexes) === 0 && count($this->changedIndexes) === 0 && count($this->removedIndexes) === 0 && count($this->renamedIndexes) === 0 && count($this->addedForeignKeys) === 0 && count($this->changedForeignKeys) === 0 && count($this->removedForeignKeys) === 0;
+        return count($this->addedColumns) === 0
+            && count($this->changedColumns) === 0
+            && count($this->removedColumns) === 0
+            && count($this->renamedColumns) === 0
+            && count($this->addedIndexes) === 0
+            && count($this->changedIndexes) === 0
+            && count($this->removedIndexes) === 0
+            && count($this->renamedIndexes) === 0
+            && count($this->addedForeignKeys) === 0
+            && count($this->changedForeignKeys) === 0
+            && count($this->removedForeignKeys) === 0;
     }
 }

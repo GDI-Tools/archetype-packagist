@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection;
 
 /**
@@ -25,21 +29,25 @@ abstract class AbstractSet extends AbstractCollection
     public function add(mixed $element): bool
     {
         if ($this->contains($element)) {
-            return \false;
+            return false;
         }
+
         // Call offsetSet() on the parent instead of add(), since calling
         // parent::add() will invoke $this->offsetSet(), which will call
         // $this->contains() a second time. This can cause performance issues
         // with extremely large collections. For more information, see
         // https://github.com/ramsey/collection/issues/68.
         parent::offsetSet(null, $element);
-        return \true;
+
+        return true;
     }
+
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($this->contains($value)) {
             return;
         }
+
         parent::offsetSet($offset, $value);
     }
 }

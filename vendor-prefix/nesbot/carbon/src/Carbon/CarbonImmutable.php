@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,11 +15,13 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon;
 
 use Archetype\Vendor\Carbon\Traits\Date;
 use DateTimeImmutable;
 use DateTimeInterface;
+
 /**
  * A simple API extension for DateTimeImmutable.
  *
@@ -835,12 +843,14 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
     use Date {
         __clone as dateTraitClone;
     }
+
     public function __clone(): void
     {
         $this->dateTraitClone();
-        $this->endOfTime = \false;
-        $this->startOfTime = \false;
+        $this->endOfTime = false;
+        $this->startOfTime = false;
     }
+
     /**
      * Create a very old date representing start of time.
      *
@@ -849,9 +859,11 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
     public static function startOfTime(): static
     {
         $date = static::parse('0001-01-01')->years(self::getStartOfTimeYear());
-        $date->startOfTime = \true;
+        $date->startOfTime = true;
+
         return $date;
     }
+
     /**
      * Create a very far date representing end of time.
      *
@@ -860,23 +872,24 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
     public static function endOfTime(): static
     {
         $date = static::parse('9999-12-31 23:59:59.999999')->years(self::getEndOfTimeYear());
-        $date->endOfTime = \true;
+        $date->endOfTime = true;
+
         return $date;
     }
+
     /**
      * @codeCoverageIgnore
      */
     private static function getEndOfTimeYear(): int
     {
-        return 1118290769066902787;
-        // PHP_INT_MAX no longer work since PHP 8.1
+        return 1118290769066902787; // PHP_INT_MAX no longer work since PHP 8.1
     }
+
     /**
      * @codeCoverageIgnore
      */
     private static function getStartOfTimeYear(): int
     {
-        return -1118290769066898816;
-        // PHP_INT_MIN no longer work since PHP 8.1
+        return -1118290769066898816; // PHP_INT_MIN no longer work since PHP 8.1
     }
 }

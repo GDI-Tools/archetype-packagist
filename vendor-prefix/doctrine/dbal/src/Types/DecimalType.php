@@ -1,12 +1,20 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\SqlitePlatform;
+
 use function is_float;
 use function is_int;
+
 use const PHP_VERSION_ID;
+
 /**
  * Type that maps an SQL DECIMAL to a PHP string.
  */
@@ -19,6 +27,7 @@ class DecimalType extends Type
     {
         return Types::DECIMAL;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -26,6 +35,7 @@ class DecimalType extends Type
     {
         return $platform->getDecimalTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -36,6 +46,7 @@ class DecimalType extends Type
         if ((PHP_VERSION_ID >= 80100 || $platform instanceof SqlitePlatform) && (is_float($value) || is_int($value))) {
             return (string) $value;
         }
+
         return $value;
     }
 }

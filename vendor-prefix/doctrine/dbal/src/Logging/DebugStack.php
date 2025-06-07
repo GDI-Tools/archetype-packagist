@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Logging;
 
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function microtime;
+
 /**
  * Includes executed SQLs in a Debug Stack.
  *
@@ -17,39 +24,57 @@ class DebugStack implements SQLLogger
      * @var array<int, array<string, mixed>>
      */
     public $queries = [];
+
     /**
      * If Debug Stack is enabled (log queries) or not.
      *
      * @var bool
      */
-    public $enabled = \true;
+    public $enabled = true;
+
     /** @var float|null */
     public $start = null;
+
     /** @var int */
     public $currentQuery = 0;
+
     public function __construct()
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4967', 'DebugStack is deprecated.');
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4967',
+            'DebugStack is deprecated.',
+        );
     }
+
     /**
      * {@inheritDoc}
      */
     public function startQuery($sql, ?array $params = null, ?array $types = null)
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return;
         }
-        $this->start = microtime(\true);
-        $this->queries[++$this->currentQuery] = ['sql' => $sql, 'params' => $params, 'types' => $types, 'executionMS' => 0];
+
+        $this->start = microtime(true);
+
+        $this->queries[++$this->currentQuery] = [
+            'sql' => $sql,
+            'params' => $params,
+            'types' => $types,
+            'executionMS' => 0,
+        ];
     }
+
     /**
      * {@inheritDoc}
      */
     public function stopQuery()
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return;
         }
-        $this->queries[$this->currentQuery]['executionMS'] = microtime(\true) - $this->start;
+
+        $this->queries[$this->currentQuery]['executionMS'] = microtime(true) - $this->start;
     }
 }

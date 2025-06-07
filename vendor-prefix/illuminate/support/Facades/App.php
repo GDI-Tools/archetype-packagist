@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -46,10 +51,10 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static bool hasDebugModeEnabled()
  * @method static void registered(callable $callback)
  * @method static void registerConfiguredProviders()
- * @method static \Illuminate\Support\ServiceProvider register(\Illuminate\Support\ServiceProvider|string $provider, bool $force = false)
- * @method static \Illuminate\Support\ServiceProvider|null getProvider(\Illuminate\Support\ServiceProvider|string $provider)
- * @method static array getProviders(\Illuminate\Support\ServiceProvider|string $provider)
- * @method static \Illuminate\Support\ServiceProvider resolveProvider(string $provider)
+ * @method static \Archetype\Vendor\Illuminate\Support\ServiceProvider register(\Archetype\Vendor\Illuminate\Support\ServiceProvider|string $provider, bool $force = false)
+ * @method static \Archetype\Vendor\Illuminate\Support\ServiceProvider|null getProvider(\Archetype\Vendor\Illuminate\Support\ServiceProvider|string $provider)
+ * @method static array getProviders(\Archetype\Vendor\Illuminate\Support\ServiceProvider|string $provider)
+ * @method static \Archetype\Vendor\Illuminate\Support\ServiceProvider resolveProvider(string $provider)
  * @method static void loadDeferredProviders()
  * @method static void loadDeferredProvider(string $service)
  * @method static void registerDeferredProvider(string $provider, string|null $service = null)
@@ -74,7 +79,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static bool eventsAreCached()
  * @method static string getCachedEventsPath()
  * @method static \Illuminate\Foundation\Application addAbsoluteCachePathPrefix(string $prefix)
- * @method static \Illuminate\Contracts\Foundation\MaintenanceMode maintenanceMode()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Foundation\MaintenanceMode maintenanceMode()
  * @method static bool isDownForMaintenance()
  * @method static never abort(int $code, string $message = '', array $headers = [])
  * @method static \Illuminate\Foundation\Application terminating(callable|string $callback)
@@ -96,7 +101,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void registerCoreContainerAliases()
  * @method static void flush()
  * @method static string getNamespace()
- * @method static \Illuminate\Contracts\Container\ContextualBindingBuilder when(array|string $concrete)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Container\ContextualBindingBuilder when(array|string $concrete)
  * @method static void whenHasAttribute(string $attribute, \Closure $handler)
  * @method static bool has(string $id)
  * @method static bool isShared(string $abstract)
@@ -138,7 +143,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void forgetInstances()
  * @method static void forgetScopedInstances()
  * @method static \Illuminate\Foundation\Application getInstance()
- * @method static \Illuminate\Contracts\Container\Container|\Illuminate\Foundation\Application setInstance(\Illuminate\Contracts\Container\Container|null $container = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Container\Container|\Illuminate\Foundation\Application setInstance(\Archetype\Vendor\Illuminate\Contracts\Container\Container|null $container = null)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)

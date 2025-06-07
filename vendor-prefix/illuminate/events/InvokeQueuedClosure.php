@@ -1,14 +1,20 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Events;
 
 use Archetype\Vendor\Illuminate\Support\Collection;
+
 class InvokeQueuedClosure
 {
     /**
      * Handle the event.
      *
-     * @param  \Laravel\SerializableClosure\SerializableClosure  $closure
+     * @param  \Archetype\Vendor\Laravel\SerializableClosure\SerializableClosure  $closure
      * @param  array  $arguments
      * @return void
      */
@@ -16,10 +22,11 @@ class InvokeQueuedClosure
     {
         call_user_func($closure->getClosure(), ...$arguments);
     }
+
     /**
      * Handle a job failure.
      *
-     * @param  \Laravel\SerializableClosure\SerializableClosure  $closure
+     * @param  \Archetype\Vendor\Laravel\SerializableClosure\SerializableClosure  $closure
      * @param  array  $arguments
      * @param  array  $catchCallbacks
      * @param  \Throwable  $exception
@@ -28,6 +35,7 @@ class InvokeQueuedClosure
     public function failed($closure, array $arguments, array $catchCallbacks, $exception)
     {
         $arguments[] = $exception;
+
         (new Collection($catchCallbacks))->each->__invoke(...$arguments);
     }
 }

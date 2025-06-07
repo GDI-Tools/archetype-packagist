@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Contracts\Auth\Access\Gate as GateContract;
+
 /**
  * @method static bool has(string|array $ability)
  * @method static \Illuminate\Auth\Access\Response allowIf(\Illuminate\Auth\Access\Response|\Closure|bool $condition, string|null $message = null, string|null $code = null)
@@ -23,11 +29,11 @@ use Archetype\Vendor\Illuminate\Contracts\Auth\Access\Gate as GateContract;
  * @method static mixed getPolicyFor(object|string $class)
  * @method static \Illuminate\Auth\Access\Gate guessPolicyNamesUsing(callable $callback)
  * @method static mixed resolvePolicy(object|string $class)
- * @method static \Illuminate\Auth\Access\Gate forUser(\Illuminate\Contracts\Auth\Authenticatable|mixed $user)
+ * @method static \Illuminate\Auth\Access\Gate forUser(\Archetype\Vendor\Illuminate\Contracts\Auth\Authenticatable|mixed $user)
  * @method static array abilities()
  * @method static array policies()
  * @method static \Illuminate\Auth\Access\Gate defaultDenialResponse(\Illuminate\Auth\Access\Response $response)
- * @method static \Illuminate\Auth\Access\Gate setContainer(\Illuminate\Contracts\Container\Container $container)
+ * @method static \Illuminate\Auth\Access\Gate setContainer(\Archetype\Vendor\Illuminate\Contracts\Container\Container $container)
  * @method static \Illuminate\Auth\Access\Response denyWithStatus(int $status, string|null $message = null, int|null $code = null)
  * @method static \Illuminate\Auth\Access\Response denyAsNotFound(string|null $message = null, int|null $code = null)
  *

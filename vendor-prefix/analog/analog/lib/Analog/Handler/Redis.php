@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Analog\Handler;
 
@@ -12,14 +17,12 @@ namespace Archetype\Vendor\Analog\Handler;
  *     $redis = new Redis ();
  *     $redis->connect ('localhost', '6379');
  *     $key = 'logs';
- *     Analog::handler (Analog\Handler\Redis::init ($redis, $key));
+ *     Analog::handler (Archetype\Vendor\Analog\Handler\Redis::init ($redis, $key));
  */
-class Redis
-{
-    public static function init($redis, $key)
-    {
-        return function ($info) use ($redis, $key) {
-            $redis->rpush($key, trim(vsprintf(\Archetype\Vendor\Analog\Analog::$format, $info)));
-        };
-    }
+class Redis {
+	public static function init ($redis, $key) {
+		return function ($info) use ($redis, $key) {
+			$redis->rpush ($key, trim (vsprintf (\Archetype\Vendor\Analog\Analog::$format, $info)));
+		};
+	}
 }

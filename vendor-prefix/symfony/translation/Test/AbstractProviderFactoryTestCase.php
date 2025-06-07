@@ -7,7 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Test;
 
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -15,21 +18,26 @@ use PHPUnit\Framework\TestCase;
 use Archetype\Vendor\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
 use Archetype\Vendor\Symfony\Component\Translation\Provider\Dsn;
 use Archetype\Vendor\Symfony\Component\Translation\Provider\ProviderFactoryInterface;
+
 abstract class AbstractProviderFactoryTestCase extends TestCase
 {
     abstract public function createFactory(): ProviderFactoryInterface;
+
     /**
      * @return iterable<array{0: bool, 1: string}>
      */
     abstract public static function supportsProvider(): iterable;
+
     /**
      * @return iterable<array{0: string, 1: string}>
      */
     abstract public static function createProvider(): iterable;
+
     /**
      * @return iterable<array{0: string, 1?: string|null}>
      */
     abstract public static function unsupportedSchemeProvider(): iterable;
+
     /**
      * @dataProvider supportsProvider
      */
@@ -37,8 +45,10 @@ abstract class AbstractProviderFactoryTestCase extends TestCase
     public function testSupports(bool $expected, string $dsn)
     {
         $factory = $this->createFactory();
+
         $this->assertSame($expected, $factory->supports(new Dsn($dsn)));
     }
+
     /**
      * @dataProvider createProvider
      */
@@ -47,8 +57,10 @@ abstract class AbstractProviderFactoryTestCase extends TestCase
     {
         $factory = $this->createFactory();
         $provider = $factory->create(new Dsn($dsn));
+
         $this->assertSame($expected, (string) $provider);
     }
+
     /**
      * @dataProvider unsupportedSchemeProvider
      */
@@ -56,11 +68,14 @@ abstract class AbstractProviderFactoryTestCase extends TestCase
     public function testUnsupportedSchemeException(string $dsn, ?string $message = null)
     {
         $factory = $this->createFactory();
+
         $dsn = new Dsn($dsn);
+
         $this->expectException(UnsupportedSchemeException::class);
         if (null !== $message) {
             $this->expectExceptionMessage($message);
         }
+
         $factory->create($dsn);
     }
 }

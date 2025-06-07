@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Events;
 
@@ -10,37 +15,42 @@ class QueryExecuted
      * @var string
      */
     public $sql;
+
     /**
      * The array of query bindings.
      *
      * @var array
      */
     public $bindings;
+
     /**
      * The number of milliseconds it took to execute the query.
      *
      * @var float
      */
     public $time;
+
     /**
      * The database connection instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Archetype\Vendor\Illuminate\Database\Connection
      */
     public $connection;
+
     /**
      * The database connection name.
      *
      * @var string
      */
     public $connectionName;
+
     /**
      * Create a new event instance.
      *
      * @param  string  $sql
      * @param  array  $bindings
      * @param  float|null  $time
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Archetype\Vendor\Illuminate\Database\Connection  $connection
      */
     public function __construct($sql, $bindings, $time, $connection)
     {
@@ -50,6 +60,7 @@ class QueryExecuted
         $this->connection = $connection;
         $this->connectionName = $connection->getName();
     }
+
     /**
      * Get the raw SQL representation of the query with embedded bindings.
      *
@@ -57,6 +68,9 @@ class QueryExecuted
      */
     public function toRawSql()
     {
-        return $this->connection->query()->getGrammar()->substituteBindingsIntoRawSql($this->sql, $this->connection->prepareBindings($this->bindings));
+        return $this->connection
+            ->query()
+            ->getGrammar()
+            ->substituteBindingsIntoRawSql($this->sql, $this->connection->prepareBindings($this->bindings));
     }
 }

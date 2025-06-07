@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler;
 use Archetype\Vendor\Illuminate\Support\Arr;
 use Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
+
 /**
  * @method static void register()
  * @method static \Illuminate\Foundation\Exceptions\ReportableHandler reportable(callable $reportUsing)
@@ -23,18 +29,18 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
  * @method static \Illuminate\Foundation\Exceptions\Handler respondUsing(callable $callback)
  * @method static \Illuminate\Foundation\Exceptions\Handler shouldRenderJsonWhen(callable $callback)
  * @method static \Illuminate\Foundation\Exceptions\Handler dontReportDuplicates()
- * @method static \Illuminate\Contracts\Debug\ExceptionHandler handler()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler handler()
  * @method static void assertReported(\Closure|string $exception)
  * @method static void assertReportedCount(int $count)
  * @method static void assertNotReported(\Closure|string $exception)
  * @method static void assertNothingReported()
  * @method static void renderForConsole(\Symfony\Component\Console\Output\OutputInterface $output, \Throwable $e)
- * @method static \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake throwOnReport()
- * @method static \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake throwFirstReported()
- * @method static \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake setHandler(\Illuminate\Contracts\Debug\ExceptionHandler $handler)
+ * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake throwOnReport()
+ * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake throwFirstReported()
+ * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake setHandler(\Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler $handler)
  *
  * @see \Illuminate\Foundation\Exceptions\Handler
- * @see \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake
+ * @see \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake
  */
 class Exceptions extends Facade
 {
@@ -42,15 +48,19 @@ class Exceptions extends Facade
      * Replace the bound instance with a fake.
      *
      * @param  array<int, class-string<\Throwable>>|class-string<\Throwable>  $exceptions
-     * @return \Illuminate\Support\Testing\Fakes\ExceptionHandlerFake
+     * @return \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake
      */
     public static function fake(array|string $exceptions = [])
     {
-        $exceptionHandler = static::isFake() ? static::getFacadeRoot()->handler() : static::getFacadeRoot();
+        $exceptionHandler = static::isFake()
+            ? static::getFacadeRoot()->handler()
+            : static::getFacadeRoot();
+
         return tap(new ExceptionHandlerFake($exceptionHandler, Arr::wrap($exceptions)), function ($fake) {
             static::swap($fake);
         });
     }
+
     /**
      * Get the registered name of the component.
      *

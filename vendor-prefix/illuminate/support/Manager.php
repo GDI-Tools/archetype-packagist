@@ -1,52 +1,64 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use Closure;
 use Archetype\Vendor\Illuminate\Contracts\Container\Container;
 use InvalidArgumentException;
+
 abstract class Manager
 {
     /**
      * The container instance.
      *
-     * @var \Illuminate\Contracts\Container\Container
+     * @var \Archetype\Vendor\Illuminate\Contracts\Container\Container
      */
     protected $container;
+
     /**
      * The configuration repository instance.
      *
-     * @var \Illuminate\Contracts\Config\Repository
+     * @var \Archetype\Vendor\Illuminate\Contracts\Config\Repository
      */
     protected $config;
+
     /**
      * The registered custom driver creators.
      *
      * @var array
      */
     protected $customCreators = [];
+
     /**
      * The array of created "drivers".
      *
      * @var array
      */
     protected $drivers = [];
+
     /**
      * Create a new manager instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container  $container
      */
     public function __construct(Container $container)
     {
         $this->container = $container;
         $this->config = $container->make('config');
     }
+
     /**
      * Get the default driver name.
      *
      * @return string
      */
     abstract public function getDefaultDriver();
+
     /**
      * Get a driver instance.
      *
@@ -58,17 +70,23 @@ abstract class Manager
     public function driver($driver = null)
     {
         $driver = $driver ?: $this->getDefaultDriver();
+
         if (is_null($driver)) {
-            throw new InvalidArgumentException(sprintf('Unable to resolve NULL driver for [%s].', static::class));
+            throw new InvalidArgumentException(sprintf(
+                'Unable to resolve NULL driver for [%s].', static::class
+            ));
         }
+
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
-        if (!isset($this->drivers[$driver])) {
+        if (! isset($this->drivers[$driver])) {
             $this->drivers[$driver] = $this->createDriver($driver);
         }
+
         return $this->drivers[$driver];
     }
+
     /**
      * Create a new driver instance.
      *
@@ -85,12 +103,16 @@ abstract class Manager
         if (isset($this->customCreators[$driver])) {
             return $this->callCustomCreator($driver);
         }
-        $method = 'create' . Str::studly($driver) . 'Driver';
+
+        $method = 'create'.Str::studly($driver).'Driver';
+
         if (method_exists($this, $method)) {
-            return $this->{$method}();
+            return $this->$method();
         }
-        throw new InvalidArgumentException("Driver [{$driver}] not supported.");
+
+        throw new InvalidArgumentException("Driver [$driver] not supported.");
     }
+
     /**
      * Call a custom driver creator.
      *
@@ -101,6 +123,7 @@ abstract class Manager
     {
         return $this->customCreators[$driver]($this->container);
     }
+
     /**
      * Register a custom driver creator Closure.
      *
@@ -111,8 +134,10 @@ abstract class Manager
     public function extend($driver, Closure $callback)
     {
         $this->customCreators[$driver] = $callback;
+
         return $this;
     }
+
     /**
      * Get all of the created "drivers".
      *
@@ -122,26 +147,30 @@ abstract class Manager
     {
         return $this->drivers;
     }
+
     /**
      * Get the container instance used by the manager.
      *
-     * @return \Illuminate\Contracts\Container\Container
+     * @return \Archetype\Vendor\Illuminate\Contracts\Container\Container
      */
     public function getContainer()
     {
         return $this->container;
     }
+
     /**
      * Set the container instance used by the manager.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Container\Container  $container
      * @return $this
      */
     public function setContainer(Container $container)
     {
         $this->container = $container;
+
         return $this;
     }
+
     /**
      * Forget all of the resolved driver instances.
      *
@@ -150,8 +179,10 @@ abstract class Manager
     public function forgetDrivers()
     {
         $this->drivers = [];
+
         return $this;
     }
+
     /**
      * Dynamically call the default driver instance.
      *
@@ -161,6 +192,6 @@ abstract class Manager
      */
     public function __call($method, $parameters)
     {
-        return $this->driver()->{$method}(...$parameters);
+        return $this->driver()->$method(...$parameters);
     }
 }

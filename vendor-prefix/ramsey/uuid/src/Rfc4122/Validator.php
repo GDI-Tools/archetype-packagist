@@ -8,14 +8,20 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
 use Archetype\Vendor\Ramsey\Uuid\Validator\ValidatorInterface;
+
 use function preg_match;
 use function str_replace;
+
 /**
  * Rfc4122\Validator validates strings as UUIDs of the RFC 9562 (formerly RFC 4122) variant
  *
@@ -23,7 +29,9 @@ use function str_replace;
  */
 final class Validator implements ValidatorInterface
 {
-    private const VALID_PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-' . '[1-8][0-9A-Fa-f]{3}-[ABab89][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}\z';
+    private const VALID_PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-'
+        . '[1-8][0-9A-Fa-f]{3}-[ABab89][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}\z';
+
     /**
      * @return non-empty-string
      */
@@ -31,9 +39,11 @@ final class Validator implements ValidatorInterface
     {
         return self::VALID_PATTERN;
     }
+
     public function validate(string $uuid): bool
     {
         $uuid = strtolower(str_replace(['urn:', 'uuid:', 'URN:', 'UUID:', '{', '}'], '', $uuid));
+
         return $uuid === Uuid::NIL || $uuid === Uuid::MAX || preg_match('/' . self::VALID_PATTERN . '/Dms', $uuid);
     }
 }

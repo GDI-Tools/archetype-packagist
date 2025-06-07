@@ -7,11 +7,15 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Extractor\Visitor;
 
-use Archetype\Vendor\PhpParser\Node;
-use Archetype\Vendor\PhpParser\NodeVisitor;
+use PhpParser\Node;
+use PhpParser\NodeVisitor;
+
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
  */
@@ -21,31 +25,41 @@ final class TranslatableMessageVisitor extends AbstractVisitor implements NodeVi
     {
         return null;
     }
+
     public function enterNode(Node $node): ?Node
     {
         return null;
     }
+
     public function leaveNode(Node $node): ?Node
     {
         if (!$node instanceof Node\Expr\New_) {
             return null;
         }
+
         if (!($className = $node->class) instanceof Node\Name) {
             return null;
         }
-        if (!\in_array('TranslatableMessage', $className->getParts(), \true)) {
+
+        if (!\in_array('TranslatableMessage', $className->getParts(), true)) {
             return null;
         }
+
         $firstNamedArgumentIndex = $this->nodeFirstNamedArgumentIndex($node);
+
         if (!$messages = $this->getStringArguments($node, 0 < $firstNamedArgumentIndex ? 0 : 'message')) {
             return null;
         }
+
         $domain = $this->getStringArguments($node, 2 < $firstNamedArgumentIndex ? 2 : 'domain')[0] ?? null;
+
         foreach ($messages as $message) {
             $this->addMessageToCatalogue($message, $domain, $node->getStartLine());
         }
+
         return null;
     }
+
     public function afterTraverse(array $nodes): ?Node
     {
         return null;

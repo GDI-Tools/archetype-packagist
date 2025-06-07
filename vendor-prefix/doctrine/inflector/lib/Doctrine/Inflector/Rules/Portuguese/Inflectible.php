@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\Inflector\Rules\Portuguese;
 
 use Archetype\Vendor\Doctrine\Inflector\Rules\Pattern;
 use Archetype\Vendor\Doctrine\Inflector\Rules\Substitution;
 use Archetype\Vendor\Doctrine\Inflector\Rules\Transformation;
 use Archetype\Vendor\Doctrine\Inflector\Rules\Word;
+
 class Inflectible
 {
     /** @return Transformation[] */
@@ -29,6 +36,7 @@ class Inflectible
         yield new Transformation(new Pattern('/^(á|gá)s$/i'), '\1s');
         yield new Transformation(new Pattern('/([^ê])s$/i'), '\1');
     }
+
     /** @return Transformation[] */
     public static function getPlural(): iterable
     {
@@ -50,6 +58,7 @@ class Inflectible
         yield new Transformation(new Pattern('/(s)$/i'), '\1');
         yield new Transformation(new Pattern('/$/'), 's');
     }
+
     /** @return Substitution[] */
     public static function getIrregular(): iterable
     {

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,10 +15,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
+
 class ParseErrorException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**
@@ -21,18 +29,21 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
      * @var string
      */
     protected $expected;
+
     /**
      * The actual.
      *
      * @var string
      */
     protected $actual;
+
     /**
      * The help message.
      *
      * @var string
      */
     protected $help;
+
     /**
      * Constructor.
      *
@@ -46,9 +57,12 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
         $this->expected = $expected;
         $this->actual = $actual;
         $this->help = $help;
-        $actual = $actual === '' ? 'data is missing' : "get '{$actual}'";
-        parent::__construct(trim("Format expected {$expected} but {$actual}\n{$help}"), $code, $previous);
+
+        $actual = $actual === '' ? 'data is missing' : "get '$actual'";
+
+        parent::__construct(trim("Format expected $expected but $actual\n$help"), $code, $previous);
     }
+
     /**
      * Get the expected.
      *
@@ -58,6 +72,7 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
     {
         return $this->expected;
     }
+
     /**
      * Get the actual.
      *
@@ -67,6 +82,7 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
     {
         return $this->actual;
     }
+
     /**
      * Get the help message.
      *

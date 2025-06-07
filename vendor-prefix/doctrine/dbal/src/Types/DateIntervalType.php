@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -6,13 +11,16 @@ use DateInterval;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use Throwable;
+
 use function substr;
+
 /**
  * Type that maps interval string to a PHP DateInterval Object.
  */
 class DateIntervalType extends Type
 {
     public const FORMAT = '%RP%YY%MM%DDT%HH%IM%SS';
+
     /**
      * {@inheritDoc}
      */
@@ -20,14 +28,17 @@ class DateIntervalType extends Type
     {
         return Types::DATEINTERVAL;
     }
+
     /**
      * {@inheritDoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         $column['length'] = 255;
+
         return $platform->getStringTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -42,11 +53,14 @@ class DateIntervalType extends Type
         if ($value === null) {
             return null;
         }
+
         if ($value instanceof DateInterval) {
             return $value->format(self::FORMAT);
         }
+
         throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', DateInterval::class]);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -61,21 +75,27 @@ class DateIntervalType extends Type
         if ($value === null || $value instanceof DateInterval) {
             return $value;
         }
-        $negative = \false;
+
+        $negative = false;
+
         if (isset($value[0]) && ($value[0] === '+' || $value[0] === '-')) {
             $negative = $value[0] === '-';
-            $value = substr($value, 1);
+            $value    = substr($value, 1);
         }
+
         try {
             $interval = new DateInterval($value);
+
             if ($negative) {
                 $interval->invert = 1;
             }
+
             return $interval;
         } catch (Throwable $exception) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), self::FORMAT, $exception);
         }
     }
+
     /**
      * {@inheritDoc}
      *
@@ -83,7 +103,13 @@ class DateIntervalType extends Type
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return \true;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return true;
     }
 }

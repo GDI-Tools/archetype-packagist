@@ -1,10 +1,17 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 use function is_resource;
 use function stream_get_contents;
+
 /**
  * Type that maps an SQL CLOB to a PHP string.
  */
@@ -17,6 +24,7 @@ class TextType extends Type
     {
         return $platform->getClobTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -24,6 +32,7 @@ class TextType extends Type
     {
         return is_resource($value) ? stream_get_contents($value) : $value;
     }
+
     /**
      * {@inheritDoc}
      */

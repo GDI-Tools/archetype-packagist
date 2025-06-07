@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -11,6 +16,7 @@ use Archetype\Vendor\Illuminate\Database\Schema\MySqlSchemaState;
 use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
 use Archetype\Vendor\Illuminate\Support\Str;
 use PDO;
+
 class MySqlConnection extends Connection
 {
     /**
@@ -19,6 +25,7 @@ class MySqlConnection extends Connection
      * @var string|int|null
      */
     protected $lastInsertId;
+
     /**
      * {@inheritdoc}
      */
@@ -26,6 +33,7 @@ class MySqlConnection extends Connection
     {
         return $this->isMaria() ? 'MariaDB' : 'MySQL';
     }
+
     /**
      * Run an insert statement against the database.
      *
@@ -38,16 +46,23 @@ class MySqlConnection extends Connection
     {
         return $this->run($query, $bindings, function ($query, $bindings) use ($sequence) {
             if ($this->pretending()) {
-                return \true;
+                return true;
             }
+
             $statement = $this->getPdo()->prepare($query);
+
             $this->bindValues($statement, $this->prepareBindings($bindings));
+
             $this->recordsHaveBeenModified();
+
             $result = $statement->execute();
+
             $this->lastInsertId = $this->getPdo()->lastInsertId($sequence);
+
             return $result;
         });
     }
+
     /**
      * Escape a binary value for safe SQL embedding.
      *
@@ -57,8 +72,10 @@ class MySqlConnection extends Connection
     protected function escapeBinary($value)
     {
         $hex = bin2hex($value);
+
         return "x'{$hex}'";
     }
+
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
@@ -69,6 +86,7 @@ class MySqlConnection extends Connection
     {
         return boolval(preg_match('#Integrity constraint violation: 1062#i', $exception->getMessage()));
     }
+
     /**
      * Get the connection's last insert ID.
      *
@@ -78,6 +96,7 @@ class MySqlConnection extends Connection
     {
         return $this->lastInsertId;
     }
+
     /**
      * Determine if the connected database is a MariaDB database.
      *
@@ -87,6 +106,7 @@ class MySqlConnection extends Connection
     {
         return str_contains($this->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION), 'MariaDB');
     }
+
     /**
      * Get the server version for the connection.
      *
@@ -94,56 +114,64 @@ class MySqlConnection extends Connection
      */
     public function getServerVersion(): string
     {
-        return str_contains($version = parent::getServerVersion(), 'MariaDB') ? Str::between($version, '5.5.5-', '-MariaDB') : $version;
+        return str_contains($version = parent::getServerVersion(), 'MariaDB')
+            ? Str::between($version, '5.5.5-', '-MariaDB')
+            : $version;
     }
+
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\MySqlGrammar
+     * @return \Archetype\Vendor\Illuminate\Database\Query\Grammars\MySqlGrammar
      */
     protected function getDefaultQueryGrammar()
     {
         return new QueryGrammar($this);
     }
+
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\MySqlBuilder
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\MySqlBuilder
      */
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
+
         return new MySqlBuilder($this);
     }
+
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\MySqlGrammar
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\Grammars\MySqlGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
         return new SchemaGrammar($this);
     }
+
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
+     * @param  \Archetype\Vendor\Illuminate\Filesystem\Filesystem|null  $files
      * @param  callable|null  $processFactory
-     * @return \Illuminate\Database\Schema\MySqlSchemaState
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\MySqlSchemaState
      */
     public function getSchemaState(?Filesystem $files = null, ?callable $processFactory = null)
     {
         return new MySqlSchemaState($this, $files, $processFactory);
     }
+
     /**
      * Get the default post processor instance.
      *
-     * @return \Illuminate\Database\Query\Processors\MySqlProcessor
+     * @return \Archetype\Vendor\Illuminate\Database\Query\Processors\MySqlProcessor
      */
     protected function getDefaultPostProcessor()
     {
-        return new MySqlProcessor();
+        return new MySqlProcessor;
     }
 }

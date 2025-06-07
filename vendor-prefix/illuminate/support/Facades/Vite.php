@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -21,7 +26,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static \Illuminate\Foundation\Vite useWaterfallPrefetching(int|null $concurrency = null)
  * @method static \Illuminate\Foundation\Vite useAggressivePrefetching()
  * @method static \Illuminate\Foundation\Vite usePrefetchStrategy(string|null $strategy, array $config = [])
- * @method static \Illuminate\Support\HtmlString|void reactRefresh()
+ * @method static \Archetype\Vendor\Illuminate\Support\HtmlString|void reactRefresh()
  * @method static string asset(string $asset, string|null $buildDirectory = null)
  * @method static string content(string $asset, string|null $buildDirectory = null)
  * @method static string|null manifestHash(string|null $buildDirectory = null)
@@ -44,6 +49,6 @@ class Vite extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Archetype\Vendor\Illuminate\Foundation\Vite::class;
+        return \Illuminate\Foundation\Vite::class;
     }
 }

@@ -7,7 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation;
 
 /**
@@ -27,10 +30,12 @@ interface CatalogueMetadataAwareInterface
      * @return mixed The value that was set or an array with the domains/keys or null
      */
     public function getCatalogueMetadata(string $key = '', string $domain = 'messages'): mixed;
+
     /**
      * Adds catalogue metadata to a message domain.
      */
     public function setCatalogueMetadata(string $key, mixed $value, string $domain = 'messages'): void;
+
     /**
      * Deletes catalogue metadata for the given key and domain.
      *

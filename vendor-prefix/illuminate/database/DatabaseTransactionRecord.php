@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -10,36 +15,41 @@ class DatabaseTransactionRecord
      * @var string
      */
     public $connection;
+
     /**
      * The transaction level.
      *
      * @var int
      */
     public $level;
+
     /**
      * The parent instance of this transaction.
      *
-     * @var \Illuminate\Database\DatabaseTransactionRecord
+     * @var \Archetype\Vendor\Illuminate\Database\DatabaseTransactionRecord
      */
     public $parent;
+
     /**
      * The callbacks that should be executed after committing.
      *
      * @var array
      */
     protected $callbacks = [];
+
     /**
      * The callbacks that should be executed after rollback.
      *
      * @var array
      */
     protected $callbacksForRollback = [];
+
     /**
      * Create a new database transaction record instance.
      *
      * @param  string  $connection
      * @param  int  $level
-     * @param  \Illuminate\Database\DatabaseTransactionRecord|null  $parent
+     * @param  \Archetype\Vendor\Illuminate\Database\DatabaseTransactionRecord|null  $parent
      */
     public function __construct($connection, $level, ?DatabaseTransactionRecord $parent = null)
     {
@@ -47,6 +57,7 @@ class DatabaseTransactionRecord
         $this->level = $level;
         $this->parent = $parent;
     }
+
     /**
      * Register a callback to be executed after committing.
      *
@@ -57,6 +68,7 @@ class DatabaseTransactionRecord
     {
         $this->callbacks[] = $callback;
     }
+
     /**
      * Register a callback to be executed after rollback.
      *
@@ -67,6 +79,7 @@ class DatabaseTransactionRecord
     {
         $this->callbacksForRollback[] = $callback;
     }
+
     /**
      * Execute all of the callbacks.
      *
@@ -78,6 +91,7 @@ class DatabaseTransactionRecord
             $callback();
         }
     }
+
     /**
      * Execute all of the callbacks for rollback.
      *
@@ -89,6 +103,7 @@ class DatabaseTransactionRecord
             $callback();
         }
     }
+
     /**
      * Get all of the callbacks.
      *
@@ -98,6 +113,7 @@ class DatabaseTransactionRecord
     {
         return $this->callbacks;
     }
+
     /**
      * Get all of the callbacks for rollback.
      *

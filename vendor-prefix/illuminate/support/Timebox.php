@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use Throwable;
+
 class Timebox
 {
     /**
@@ -10,7 +16,8 @@ class Timebox
      *
      * @var bool
      */
-    public $earlyReturn = \false;
+    public $earlyReturn = false;
+
     /**
      * Invoke the given callback within the specified timebox minimum.
      *
@@ -25,21 +32,28 @@ class Timebox
     public function call(callable $callback, int $microseconds)
     {
         $exception = null;
-        $start = microtime(\true);
+
+        $start = microtime(true);
+
         try {
             $result = $callback($this);
         } catch (Throwable $caught) {
             $exception = $caught;
         }
-        $remainder = intval($microseconds - (microtime(\true) - $start) * 1000000);
-        if (!$this->earlyReturn && $remainder > 0) {
+
+        $remainder = intval($microseconds - ((microtime(true) - $start) * 1000000));
+
+        if (! $this->earlyReturn && $remainder > 0) {
             $this->usleep($remainder);
         }
+
         if ($exception) {
             throw $exception;
         }
+
         return $result;
     }
+
     /**
      * Indicate that the timebox can return early.
      *
@@ -47,9 +61,11 @@ class Timebox
      */
     public function returnEarly()
     {
-        $this->earlyReturn = \true;
+        $this->earlyReturn = true;
+
         return $this;
     }
+
     /**
      * Indicate that the timebox cannot return early.
      *
@@ -57,9 +73,11 @@ class Timebox
      */
     public function dontReturnEarly()
     {
-        $this->earlyReturn = \false;
+        $this->earlyReturn = false;
+
         return $this;
     }
+
     /**
      * Sleep for the specified number of microseconds.
      *

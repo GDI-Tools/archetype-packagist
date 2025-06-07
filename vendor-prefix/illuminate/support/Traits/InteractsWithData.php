@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Traits;
 
@@ -7,6 +12,7 @@ use Archetype\Vendor\Illuminate\Support\Collection;
 use Archetype\Vendor\Illuminate\Support\Facades\Date;
 use Archetype\Vendor\Illuminate\Support\Str;
 use stdClass;
+
 trait InteractsWithData
 {
     /**
@@ -16,6 +22,7 @@ trait InteractsWithData
      * @return array
      */
     abstract public function all($keys = null);
+
     /**
      * Retrieve data from the instance.
      *
@@ -24,6 +31,7 @@ trait InteractsWithData
      * @return mixed
      */
     abstract protected function data($key = null, $default = null);
+
     /**
      * Determine if the data contains a given key.
      *
@@ -34,6 +42,7 @@ trait InteractsWithData
     {
         return $this->has($key);
     }
+
     /**
      * Determine if the data contains a given key.
      *
@@ -43,14 +52,18 @@ trait InteractsWithData
     public function has($key)
     {
         $keys = is_array($key) ? $key : func_get_args();
+
         $data = $this->all();
+
         foreach ($keys as $value) {
-            if (!Arr::has($data, $value)) {
-                return \false;
+            if (! Arr::has($data, $value)) {
+                return false;
             }
         }
-        return \true;
+
+        return true;
     }
+
     /**
      * Determine if the instance contains any of the given keys.
      *
@@ -60,9 +73,12 @@ trait InteractsWithData
     public function hasAny($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
+
         $data = $this->all();
+
         return Arr::hasAny($data, $keys);
     }
+
     /**
      * Apply the callback if the instance contains the given key.
      *
@@ -76,11 +92,14 @@ trait InteractsWithData
         if ($this->has($key)) {
             return $callback(data_get($this->all(), $key)) ?: $this;
         }
+
         if ($default) {
             return $default();
         }
+
         return $this;
     }
+
     /**
      * Determine if the instance contains a non-empty value for the given key.
      *
@@ -90,13 +109,16 @@ trait InteractsWithData
     public function filled($key)
     {
         $keys = is_array($key) ? $key : func_get_args();
+
         foreach ($keys as $value) {
             if ($this->isEmptyString($value)) {
-                return \false;
+                return false;
             }
         }
-        return \true;
+
+        return true;
     }
+
     /**
      * Determine if the instance contains an empty value for the given key.
      *
@@ -106,13 +128,16 @@ trait InteractsWithData
     public function isNotFilled($key)
     {
         $keys = is_array($key) ? $key : func_get_args();
+
         foreach ($keys as $value) {
-            if (!$this->isEmptyString($value)) {
-                return \false;
+            if (! $this->isEmptyString($value)) {
+                return false;
             }
         }
-        return \true;
+
+        return true;
     }
+
     /**
      * Determine if the instance contains a non-empty value for any of the given keys.
      *
@@ -122,13 +147,16 @@ trait InteractsWithData
     public function anyFilled($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
+
         foreach ($keys as $key) {
             if ($this->filled($key)) {
-                return \true;
+                return true;
             }
         }
-        return \false;
+
+        return false;
     }
+
     /**
      * Apply the callback if the instance contains a non-empty value for the given key.
      *
@@ -142,11 +170,14 @@ trait InteractsWithData
         if ($this->filled($key)) {
             return $callback(data_get($this->all(), $key)) ?: $this;
         }
+
         if ($default) {
             return $default();
         }
+
         return $this;
     }
+
     /**
      * Determine if the instance is missing a given key.
      *
@@ -156,8 +187,10 @@ trait InteractsWithData
     public function missing($key)
     {
         $keys = is_array($key) ? $key : func_get_args();
-        return !$this->has($keys);
+
+        return ! $this->has($keys);
     }
+
     /**
      * Apply the callback if the instance is missing the given key.
      *
@@ -171,11 +204,14 @@ trait InteractsWithData
         if ($this->missing($key)) {
             return $callback(data_get($this->all(), $key)) ?: $this;
         }
+
         if ($default) {
             return $default();
         }
+
         return $this;
     }
+
     /**
      * Determine if the given key is an empty string for "filled".
      *
@@ -185,30 +221,34 @@ trait InteractsWithData
     protected function isEmptyString($key)
     {
         $value = $this->data($key);
-        return !is_bool($value) && !is_array($value) && trim((string) $value) === '';
+
+        return ! is_bool($value) && ! is_array($value) && trim((string) $value) === '';
     }
+
     /**
      * Retrieve data from the instance as a Stringable instance.
      *
      * @param  string  $key
      * @param  mixed  $default
-     * @return \Illuminate\Support\Stringable
+     * @return \Archetype\Vendor\Illuminate\Support\Stringable
      */
     public function str($key, $default = null)
     {
         return $this->string($key, $default);
     }
+
     /**
      * Retrieve data from the instance as a Stringable instance.
      *
      * @param  string  $key
      * @param  mixed  $default
-     * @return \Illuminate\Support\Stringable
+     * @return \Archetype\Vendor\Illuminate\Support\Stringable
      */
     public function string($key, $default = null)
     {
         return Str::of($this->data($key, $default));
     }
+
     /**
      * Retrieve data as a boolean value.
      *
@@ -218,10 +258,11 @@ trait InteractsWithData
      * @param  bool  $default
      * @return bool
      */
-    public function boolean($key = null, $default = \false)
+    public function boolean($key = null, $default = false)
     {
-        return filter_var($this->data($key, $default), \FILTER_VALIDATE_BOOLEAN);
+        return filter_var($this->data($key, $default), FILTER_VALIDATE_BOOLEAN);
     }
+
     /**
      * Retrieve data as an integer value.
      *
@@ -233,6 +274,7 @@ trait InteractsWithData
     {
         return intval($this->data($key, $default));
     }
+
     /**
      * Retrieve data as a float value.
      *
@@ -244,26 +286,30 @@ trait InteractsWithData
     {
         return floatval($this->data($key, $default));
     }
+
     /**
      * Retrieve data from the instance as a Carbon instance.
      *
      * @param  string  $key
      * @param  string|null  $format
      * @param  string|null  $tz
-     * @return \Illuminate\Support\Carbon|null
+     * @return \Archetype\Vendor\Illuminate\Support\Carbon|null
      *
-     * @throws \Carbon\Exceptions\InvalidFormatException
+     * @throws \Archetype\Vendor\Carbon\Exceptions\InvalidFormatException
      */
     public function date($key, $format = null, $tz = null)
     {
         if ($this->isNotFilled($key)) {
             return null;
         }
+
         if (is_null($format)) {
             return Date::parse($this->data($key), $tz);
         }
+
         return Date::createFromFormat($format, $this->data($key), $tz);
     }
+
     /**
      * Retrieve data from the instance as an enum.
      *
@@ -276,11 +322,13 @@ trait InteractsWithData
      */
     public function enum($key, $enumClass, $default = null)
     {
-        if ($this->isNotFilled($key) || !$this->isBackedEnum($enumClass)) {
+        if ($this->isNotFilled($key) || ! $this->isBackedEnum($enumClass)) {
             return value($default);
         }
+
         return $enumClass::tryFrom($this->data($key)) ?: value($default);
     }
+
     /**
      * Retrieve data from the instance as an array of enums.
      *
@@ -292,11 +340,16 @@ trait InteractsWithData
      */
     public function enums($key, $enumClass)
     {
-        if ($this->isNotFilled($key) || !$this->isBackedEnum($enumClass)) {
+        if ($this->isNotFilled($key) || ! $this->isBackedEnum($enumClass)) {
             return [];
         }
-        return $this->collect($key)->map(fn($value) => $enumClass::tryFrom($value))->filter()->all();
+
+        return $this->collect($key)
+            ->map(fn ($value) => $enumClass::tryFrom($value))
+            ->filter()
+            ->all();
     }
+
     /**
      * Determine if the given enum class is backed.
      *
@@ -307,6 +360,7 @@ trait InteractsWithData
     {
         return enum_exists($enumClass) && method_exists($enumClass, 'tryFrom');
     }
+
     /**
      * Retrieve data from the instance as an array.
      *
@@ -317,16 +371,18 @@ trait InteractsWithData
     {
         return (array) (is_array($key) ? $this->only($key) : $this->data($key));
     }
+
     /**
      * Retrieve data from the instance as a collection.
      *
      * @param  array|string|null  $key
-     * @return \Illuminate\Support\Collection
+     * @return \Archetype\Vendor\Illuminate\Support\Collection
      */
     public function collect($key = null)
     {
         return new Collection(is_array($key) ? $this->only($key) : $this->data($key));
     }
+
     /**
      * Get a subset containing the provided keys with values from the instance data.
      *
@@ -336,16 +392,22 @@ trait InteractsWithData
     public function only($keys)
     {
         $results = [];
+
         $data = $this->all();
-        $placeholder = new stdClass();
+
+        $placeholder = new stdClass;
+
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
             $value = data_get($data, $key, $placeholder);
+
             if ($value !== $placeholder) {
                 Arr::set($results, $key, $value);
             }
         }
+
         return $results;
     }
+
     /**
      * Get all of the data except for a specified array of items.
      *
@@ -355,8 +417,11 @@ trait InteractsWithData
     public function except($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
+
         $results = $this->all();
+
         Arr::forget($results, $keys);
+
         return $results;
     }
 }

@@ -1,20 +1,29 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\PDO;
 
 use Archetype\Vendor\Doctrine\DBAL\Driver\Result as ResultInterface;
 use PDO;
 use PDOException;
 use PDOStatement;
+
 final class Result implements ResultInterface
 {
     private PDOStatement $statement;
+
     /** @internal The result can be only instantiated by its driver connection or statement. */
     public function __construct(PDOStatement $statement)
     {
         $this->statement = $statement;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -22,6 +31,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(PDO::FETCH_NUM);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -29,6 +39,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(PDO::FETCH_ASSOC);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -36,6 +47,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(PDO::FETCH_COLUMN);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -43,6 +55,7 @@ final class Result implements ResultInterface
     {
         return $this->fetchAll(PDO::FETCH_NUM);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -50,6 +63,7 @@ final class Result implements ResultInterface
     {
         return $this->fetchAll(PDO::FETCH_ASSOC);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -57,6 +71,7 @@ final class Result implements ResultInterface
     {
         return $this->fetchAll(PDO::FETCH_COLUMN);
     }
+
     public function rowCount(): int
     {
         try {
@@ -65,6 +80,7 @@ final class Result implements ResultInterface
             throw Exception::new($exception);
         }
     }
+
     public function columnCount(): int
     {
         try {
@@ -73,10 +89,12 @@ final class Result implements ResultInterface
             throw Exception::new($exception);
         }
     }
+
     public function free(): void
     {
         $this->statement->closeCursor();
     }
+
     /**
      * @phpstan-param PDO::FETCH_* $mode
      *
@@ -92,6 +110,7 @@ final class Result implements ResultInterface
             throw Exception::new($exception);
         }
     }
+
     /**
      * @phpstan-param PDO::FETCH_* $mode
      *

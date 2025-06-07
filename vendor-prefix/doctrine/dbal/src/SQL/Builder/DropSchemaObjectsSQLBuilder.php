@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\SQL\Builder;
 
@@ -7,14 +12,18 @@ use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Schema\Schema;
 use Archetype\Vendor\Doctrine\DBAL\Schema\Sequence;
 use Archetype\Vendor\Doctrine\DBAL\Schema\Table;
+
 use function array_merge;
+
 final class DropSchemaObjectsSQLBuilder
 {
     private AbstractPlatform $platform;
+
     public function __construct(AbstractPlatform $platform)
     {
         $this->platform = $platform;
     }
+
     /**
      * @return list<string>
      *
@@ -22,8 +31,12 @@ final class DropSchemaObjectsSQLBuilder
      */
     public function buildSQL(Schema $schema): array
     {
-        return array_merge($this->buildSequenceStatements($schema->getSequences()), $this->buildTableStatements($schema->getTables()));
+        return array_merge(
+            $this->buildSequenceStatements($schema->getSequences()),
+            $this->buildTableStatements($schema->getTables()),
+        );
     }
+
     /**
      * @param list<Table> $tables
      *
@@ -33,6 +46,7 @@ final class DropSchemaObjectsSQLBuilder
     {
         return $this->platform->getDropTablesSQL($tables);
     }
+
     /**
      * @param list<Sequence> $sequences
      *
@@ -43,9 +57,11 @@ final class DropSchemaObjectsSQLBuilder
     private function buildSequenceStatements(array $sequences): array
     {
         $statements = [];
+
         foreach ($sequences as $sequence) {
             $statements[] = $this->platform->getDropSequenceSQL($sequence);
         }
+
         return $statements;
     }
 }

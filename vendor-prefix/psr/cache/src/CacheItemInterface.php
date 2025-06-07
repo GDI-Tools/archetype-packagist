@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Psr\Cache;
 
@@ -33,6 +38,7 @@ interface CacheItemInterface
      *   The key string for this cache item.
      */
     public function getKey(): string;
+
     /**
      * Retrieves the value of the item from the cache associated with this object's key.
      *
@@ -46,6 +52,7 @@ interface CacheItemInterface
      *   The value corresponding to this cache item's key, or null if not found.
      */
     public function get(): mixed;
+
     /**
      * Confirms if the cache item lookup resulted in a cache hit.
      *
@@ -56,6 +63,7 @@ interface CacheItemInterface
      *   True if the request resulted in a cache hit. False otherwise.
      */
     public function isHit(): bool;
+
     /**
      * Sets the value represented by this cache item.
      *
@@ -70,6 +78,7 @@ interface CacheItemInterface
      *   The invoked object.
      */
     public function set(mixed $value): static;
+
     /**
      * Sets the expiration time for this cache item.
      *
@@ -83,6 +92,7 @@ interface CacheItemInterface
      *   The called object.
      */
     public function expiresAt(?\DateTimeInterface $expiration): static;
+
     /**
      * Sets the expiration time for this cache item.
      *

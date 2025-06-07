@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -43,14 +48,14 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static string[]|null getCurrentSchemaListing()
  * @method static string|null getCurrentSchemaName()
  * @method static array parseSchemaAndTable(string $reference, string|bool|null $withDefaultSchema = null)
- * @method static \Illuminate\Database\Connection getConnection()
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection getConnection()
  * @method static void blueprintResolver(\Closure|null $resolver)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
  *
- * @see \Illuminate\Database\Schema\Builder
+ * @see \Archetype\Vendor\Illuminate\Database\Schema\Builder
  */
 class Schema extends Facade
 {
@@ -59,17 +64,19 @@ class Schema extends Facade
      *
      * @var bool
      */
-    protected static $cached = \false;
+    protected static $cached = false;
+
     /**
      * Get a schema builder instance for a connection.
      *
      * @param  string|null  $name
-     * @return \Illuminate\Database\Schema\Builder
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\Builder
      */
     public static function connection($name)
     {
         return static::$app['db']->connection($name)->getSchemaBuilder();
     }
+
     /**
      * Get the registered name of the component.
      *

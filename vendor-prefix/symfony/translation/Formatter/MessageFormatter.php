@@ -7,13 +7,18 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Formatter;
 
 use Archetype\Vendor\Symfony\Component\Translation\IdentityTranslator;
 use Archetype\Vendor\Symfony\Contracts\Translation\TranslatorInterface;
+
 // Help opcache.preload discover always-needed symbols
 class_exists(IntlFormatter::class);
+
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
@@ -21,6 +26,7 @@ class MessageFormatter implements MessageFormatterInterface, IntlFormatterInterf
 {
     private TranslatorInterface $translator;
     private IntlFormatterInterface $intlFormatter;
+
     /**
      * @param TranslatorInterface|null $translator An identity translator to use as selector for pluralization
      */
@@ -29,10 +35,12 @@ class MessageFormatter implements MessageFormatterInterface, IntlFormatterInterf
         $this->translator = $translator ?? new IdentityTranslator();
         $this->intlFormatter = $intlFormatter ?? new IntlFormatter();
     }
+
     public function format(string $message, string $locale, array $parameters = []): string
     {
         return $this->translator->trans($message, $parameters, null, $locale);
     }
+
     public function formatIntl(string $message, string $locale, array $parameters = []): string
     {
         return $this->intlFormatter->formatIntl($message, $locale, $parameters);

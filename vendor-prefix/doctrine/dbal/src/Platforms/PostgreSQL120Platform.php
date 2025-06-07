@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
 
 /**
@@ -16,14 +22,14 @@ class PostgreSQL120Platform extends PostgreSQL100Platform
         // so in that case we force it to NULL as DBAL will use that column only for the
         // 'default' value
         return <<<'SQL'
-    SELECT
-        CASE
-            WHEN a.attgenerated = 's' THEN NULL
-            ELSE pg_get_expr(adbin, adrelid)
-        END
-     FROM pg_attrdef
-     WHERE c.oid = pg_attrdef.adrelid
-        AND pg_attrdef.adnum=a.attnum
-SQL;
+            SELECT
+                CASE
+                    WHEN a.attgenerated = 's' THEN NULL
+                    ELSE pg_get_expr(adbin, adrelid)
+                END
+             FROM pg_attrdef
+             WHERE c.oid = pg_attrdef.adrelid
+                AND pg_attrdef.adnum=a.attnum
+        SQL;
     }
 }

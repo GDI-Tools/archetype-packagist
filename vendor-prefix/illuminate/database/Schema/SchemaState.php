@@ -1,68 +1,84 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Schema;
 
 use Archetype\Vendor\Illuminate\Database\Connection;
 use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
-use Archetype\Vendor\Symfony\Component\Process\Process;
+use Symfony\Component\Process\Process;
+
 abstract class SchemaState
 {
     /**
      * The connection instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Archetype\Vendor\Illuminate\Database\Connection
      */
     protected $connection;
+
     /**
      * The filesystem instance.
      *
-     * @var \Illuminate\Filesystem\Filesystem
+     * @var \Archetype\Vendor\Illuminate\Filesystem\Filesystem
      */
     protected $files;
+
     /**
      * The name of the application's migration table.
      *
      * @var string
      */
     protected $migrationTable = 'migrations';
+
     /**
      * The process factory callback.
      *
      * @var callable
      */
     protected $processFactory;
+
     /**
      * The output callable instance.
      *
      * @var callable
      */
     protected $output;
+
     /**
      * Create a new dumper instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
+     * @param  \Archetype\Vendor\Illuminate\Database\Connection  $connection
+     * @param  \Archetype\Vendor\Illuminate\Filesystem\Filesystem|null  $files
      * @param  callable|null  $processFactory
      */
     public function __construct(Connection $connection, ?Filesystem $files = null, ?callable $processFactory = null)
     {
         $this->connection = $connection;
-        $this->files = $files ?: new Filesystem();
+
+        $this->files = $files ?: new Filesystem;
+
         $this->processFactory = $processFactory ?: function (...$arguments) {
             return Process::fromShellCommandline(...$arguments)->setTimeout(null);
         };
+
         $this->handleOutputUsing(function () {
             //
         });
     }
+
     /**
      * Dump the database's schema into a file.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Archetype\Vendor\Illuminate\Database\Connection  $connection
      * @param  string  $path
      * @return void
      */
     abstract public function dump(Connection $connection, $path);
+
     /**
      * Load the given schema file into the database.
      *
@@ -70,6 +86,7 @@ abstract class SchemaState
      * @return void
      */
     abstract public function load($path);
+
     /**
      * Create a new process instance.
      *
@@ -80,6 +97,7 @@ abstract class SchemaState
     {
         return call_user_func($this->processFactory, ...$arguments);
     }
+
     /**
      * Determine if the current connection has a migration table.
      *
@@ -89,6 +107,7 @@ abstract class SchemaState
     {
         return $this->connection->getSchemaBuilder()->hasTable($this->migrationTable);
     }
+
     /**
      * Get the name of the application's migration table.
      *
@@ -96,8 +115,9 @@ abstract class SchemaState
      */
     protected function getMigrationTable(): string
     {
-        return $this->connection->getTablePrefix() . $this->migrationTable;
+        return $this->connection->getTablePrefix().$this->migrationTable;
     }
+
     /**
      * Specify the name of the application's migration table.
      *
@@ -107,8 +127,10 @@ abstract class SchemaState
     public function withMigrationTable(string $table)
     {
         $this->migrationTable = $table;
+
         return $this;
     }
+
     /**
      * Specify the callback that should be used to handle process output.
      *
@@ -118,6 +140,7 @@ abstract class SchemaState
     public function handleOutputUsing(callable $output)
     {
         $this->output = $output;
+
         return $this;
     }
 }

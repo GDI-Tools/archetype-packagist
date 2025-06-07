@@ -1,14 +1,21 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 use function array_keys;
 use function array_map;
 use function strrpos;
 use function strtolower;
 use function strtoupper;
 use function substr;
+
 /**
  * An abstraction class for a foreign key constraint.
  */
@@ -20,6 +27,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      * @var Table
      */
     protected $_localTable;
+
     /**
      * Asset identifier instances of the referencing table column names the foreign key constraint is associated with.
      * array($columnName => Identifier)
@@ -27,12 +35,14 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      * @var Identifier[]
      */
     protected $_localColumnNames;
+
     /**
      * Table or asset identifier instance of the referenced table name the foreign key constraint is associated with.
      *
      * @var Table|Identifier
      */
     protected $_foreignTableName;
+
     /**
      * Asset identifier instances of the referenced table column names the foreign key constraint is associated with.
      * array($columnName => Identifier)
@@ -40,12 +50,14 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      * @var Identifier[]
      */
     protected $_foreignColumnNames;
+
     /**
      * Options associated with the foreign key constraint.
      *
      * @var mixed[]
      */
     protected $_options;
+
     /**
      * Initializes the foreign key constraint.
      *
@@ -55,20 +67,29 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      * @param string|null  $name               Name of the foreign key constraint.
      * @param mixed[]      $options            Options associated with the foreign key constraint.
      */
-    public function __construct(array $localColumnNames, $foreignTableName, array $foreignColumnNames, $name = null, array $options = [])
-    {
+    public function __construct(
+        array $localColumnNames,
+        $foreignTableName,
+        array $foreignColumnNames,
+        $name = null,
+        array $options = []
+    ) {
         if ($name !== null) {
             $this->_setName($name);
         }
+
         $this->_localColumnNames = $this->createIdentifierMap($localColumnNames);
+
         if ($foreignTableName instanceof Table) {
             $this->_foreignTableName = $foreignTableName;
         } else {
             $this->_foreignTableName = new Identifier($foreignTableName);
         }
+
         $this->_foreignColumnNames = $this->createIdentifierMap($foreignColumnNames);
-        $this->_options = $options;
+        $this->_options            = $options;
     }
+
     /**
      * @param string[] $names
      *
@@ -77,11 +98,14 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     private function createIdentifierMap(array $names): array
     {
         $identifiers = [];
+
         foreach ($names as $name) {
             $identifiers[$name] = new Identifier($name);
         }
+
         return $identifiers;
     }
+
     /**
      * Returns the name of the referencing table
      * the foreign key constraint is associated with.
@@ -94,6 +118,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->_localTable->getName();
     }
+
     /**
      * Sets the Table instance of the referencing table
      * the foreign key constraint is associated with.
@@ -108,6 +133,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         $this->_localTable = $table;
     }
+
     /**
      * @deprecated Use the table that contains the foreign key as part of its {@see Table::$_fkConstraints} instead.
      *
@@ -117,6 +143,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->_localTable;
     }
+
     /**
      * Returns the names of the referencing table columns
      * the foreign key constraint is associated with.
@@ -127,6 +154,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return array_keys($this->_localColumnNames);
     }
+
     /**
      * Returns the quoted representation of the referencing table column names
      * the foreign key constraint is associated with.
@@ -142,11 +170,14 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     public function getQuotedLocalColumns(AbstractPlatform $platform)
     {
         $columns = [];
+
         foreach ($this->_localColumnNames as $column) {
             $columns[] = $column->getQuotedName($platform);
         }
+
         return $columns;
     }
+
     /**
      * Returns unquoted representation of local table column names for comparison with other FK
      *
@@ -156,6 +187,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return array_map([$this, 'trimQuotes'], $this->getLocalColumns());
     }
+
     /**
      * Returns unquoted representation of foreign table column names for comparison with other FK
      *
@@ -165,6 +197,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return array_map([$this, 'trimQuotes'], $this->getForeignColumns());
     }
+
     /**
      * {@inheritDoc}
      *
@@ -176,6 +209,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->getLocalColumns();
     }
+
     /**
      * Returns the quoted representation of the referencing table column names
      * the foreign key constraint is associated with.
@@ -196,6 +230,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->getQuotedLocalColumns($platform);
     }
+
     /**
      * Returns the name of the referenced table
      * the foreign key constraint is associated with.
@@ -206,6 +241,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->_foreignTableName->getName();
     }
+
     /**
      * Returns the non-schema qualified foreign table name.
      *
@@ -213,13 +249,16 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      */
     public function getUnqualifiedForeignTableName()
     {
-        $name = $this->_foreignTableName->getName();
+        $name     = $this->_foreignTableName->getName();
         $position = strrpos($name, '.');
-        if ($position !== \false) {
+
+        if ($position !== false) {
             $name = substr($name, $position + 1);
         }
+
         return strtolower($name);
     }
+
     /**
      * Returns the quoted representation of the referenced table name
      * the foreign key constraint is associated with.
@@ -236,6 +275,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->_foreignTableName->getQuotedName($platform);
     }
+
     /**
      * Returns the names of the referenced table columns
      * the foreign key constraint is associated with.
@@ -246,6 +286,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return array_keys($this->_foreignColumnNames);
     }
+
     /**
      * Returns the quoted representation of the referenced table column names
      * the foreign key constraint is associated with.
@@ -261,11 +302,14 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     public function getQuotedForeignColumns(AbstractPlatform $platform)
     {
         $columns = [];
+
         foreach ($this->_foreignColumnNames as $column) {
             $columns[] = $column->getQuotedName($platform);
         }
+
         return $columns;
     }
+
     /**
      * Returns whether or not a given option
      * is associated with the foreign key constraint.
@@ -278,6 +322,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return isset($this->_options[$name]);
     }
+
     /**
      * Returns an option associated with the foreign key constraint.
      *
@@ -289,6 +334,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->_options[$name];
     }
+
     /**
      * Returns the options associated with the foreign key constraint.
      *
@@ -298,6 +344,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->_options;
     }
+
     /**
      * Returns the referential action for UPDATE operations
      * on the referenced table the foreign key constraint is associated with.
@@ -308,6 +355,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->onEvent('onUpdate');
     }
+
     /**
      * Returns the referential action for DELETE operations
      * on the referenced table the foreign key constraint is associated with.
@@ -318,6 +366,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         return $this->onEvent('onDelete');
     }
+
     /**
      * Returns the referential action for a given database operation
      * on the referenced table the foreign key constraint is associated with.
@@ -328,12 +377,15 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
     {
         if (isset($this->_options[$event])) {
             $onEvent = strtoupper($this->_options[$event]);
+
             if ($onEvent !== 'NO ACTION' && $onEvent !== 'RESTRICT') {
                 return $onEvent;
             }
         }
+
         return null;
     }
+
     /**
      * Checks whether this foreign key constraint intersects the given index columns.
      *
@@ -349,10 +401,11 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
         foreach ($index->getColumns() as $indexColumn) {
             foreach ($this->_localColumnNames as $localColumn) {
                 if (strtolower($indexColumn) === strtolower($localColumn->getName())) {
-                    return \true;
+                    return true;
                 }
             }
         }
-        return \false;
+
+        return false;
     }
 }

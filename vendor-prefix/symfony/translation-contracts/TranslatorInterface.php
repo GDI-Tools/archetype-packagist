@@ -7,7 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Contracts\Translation;
 
 /**
@@ -59,6 +62,7 @@ interface TranslatorInterface
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string;
+
     /**
      * Returns the default locale.
      */

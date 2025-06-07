@@ -1,16 +1,22 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Relations;
 
 use Archetype\Vendor\Illuminate\Database\Eloquent\Builder;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
 use Archetype\Vendor\Illuminate\Support\Str;
+
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  * @template TResult
  *
- * @extends \Illuminate\Database\Eloquent\Relations\HasOneOrMany<TRelatedModel, TDeclaringModel, TResult>
+ * @extends \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasOneOrMany<TRelatedModel, TDeclaringModel, TResult>
  */
 abstract class MorphOneOrMany extends HasOneOrMany
 {
@@ -20,16 +26,18 @@ abstract class MorphOneOrMany extends HasOneOrMany
      * @var string
      */
     protected $morphType;
+
     /**
      * The class name of the parent model.
      *
      * @var class-string<TRelatedModel>
      */
     protected $morphClass;
+
     /**
      * Create a new morph one or many relationship instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<TRelatedModel>  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Builder<TRelatedModel>  $query
      * @param  TDeclaringModel  $parent
      * @param  string  $type
      * @param  string  $id
@@ -38,9 +46,12 @@ abstract class MorphOneOrMany extends HasOneOrMany
     public function __construct(Builder $query, Model $parent, $type, $id, $localKey)
     {
         $this->morphType = $type;
+
         $this->morphClass = $parent->getMorphClass();
+
         parent::__construct($query, $parent, $id, $localKey);
     }
+
     /**
      * Set the base constraints on the relation query.
      *
@@ -50,15 +61,19 @@ abstract class MorphOneOrMany extends HasOneOrMany
     {
         if (static::$constraints) {
             $this->getRelationQuery()->where($this->morphType, $this->morphClass);
+
             parent::addConstraints();
         }
     }
+
     /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
         parent::addEagerConstraints($models);
+
         $this->getRelationQuery()->where($this->morphType, $this->morphClass);
     }
+
     /**
      * Create a new instance of the related model. Allow mass-assignment.
      *
@@ -69,8 +84,10 @@ abstract class MorphOneOrMany extends HasOneOrMany
     {
         $attributes[$this->getForeignKeyName()] = $this->getParentKey();
         $attributes[$this->getMorphType()] = $this->morphClass;
+
         return $this->applyInverseRelationToModel($this->related->forceCreate($attributes));
     }
+
     /**
      * Set the foreign ID and type for creating a related model.
      *
@@ -80,15 +97,20 @@ abstract class MorphOneOrMany extends HasOneOrMany
     protected function setForeignAttributesForCreate(Model $model)
     {
         $model->{$this->getForeignKeyName()} = $this->getParentKey();
+
         $model->{$this->getMorphType()} = $this->morphClass;
+
         foreach ($this->getQuery()->pendingAttributes as $key => $value) {
             $attributes ??= $model->getAttributes();
-            if (!array_key_exists($key, $attributes)) {
+
+            if (! array_key_exists($key, $attributes)) {
                 $model->setAttribute($key, $value);
             }
         }
+
         $this->applyInverseRelationToModel($model);
     }
+
     /**
      * Insert new records or update the existing ones.
      *
@@ -99,19 +121,25 @@ abstract class MorphOneOrMany extends HasOneOrMany
      */
     public function upsert(array $values, $uniqueBy, $update = null)
     {
-        if (!empty($values) && !is_array(reset($values))) {
+        if (! empty($values) && ! is_array(reset($values))) {
             $values = [$values];
         }
+
         foreach ($values as $key => $value) {
             $values[$key][$this->getMorphType()] = $this->getMorphClass();
         }
+
         return parent::upsert($values, $uniqueBy, $update);
     }
+
     /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
-        return parent::getRelationExistenceQuery($query, $parentQuery, $columns)->where($query->qualifyColumn($this->getMorphType()), $this->morphClass);
+        return parent::getRelationExistenceQuery($query, $parentQuery, $columns)->where(
+            $query->qualifyColumn($this->getMorphType()), $this->morphClass
+        );
     }
+
     /**
      * Get the foreign key "type" name.
      *
@@ -121,6 +149,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     {
         return $this->morphType;
     }
+
     /**
      * Get the plain morph type name without the table.
      *
@@ -130,6 +159,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     {
         return last(explode('.', $this->morphType));
     }
+
     /**
      * Get the class name of the parent model.
      *
@@ -139,6 +169,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     {
         return $this->morphClass;
     }
+
     /**
      * Get the possible inverse relations for the parent model.
      *
@@ -146,6 +177,9 @@ abstract class MorphOneOrMany extends HasOneOrMany
      */
     protected function getPossibleInverseRelations(): array
     {
-        return array_unique([Str::beforeLast($this->getMorphType(), '_type'), ...parent::getPossibleInverseRelations()]);
+        return array_unique([
+            Str::beforeLast($this->getMorphType(), '_type'),
+            ...parent::getPossibleInverseRelations(),
+        ]);
     }
 }

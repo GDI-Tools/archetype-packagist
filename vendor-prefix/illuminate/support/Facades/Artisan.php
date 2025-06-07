@@ -1,13 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+
 /**
  * @method static int handle(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface|null $output = null)
  * @method static void terminate(\Symfony\Component\Console\Input\InputInterface $input, int $status)
- * @method static void whenCommandLifecycleIsLongerThan(\DateTimeInterface|\Carbon\CarbonInterval|float|int $threshold, callable $handler)
- * @method static \Illuminate\Support\Carbon|null commandStartedAt()
+ * @method static void whenCommandLifecycleIsLongerThan(\DateTimeInterface|\Archetype\Vendor\Carbon\CarbonInterval|float|int $threshold, callable $handler)
+ * @method static \Archetype\Vendor\Illuminate\Support\Carbon|null commandStartedAt()
  * @method static \Illuminate\Console\Scheduling\Schedule resolveConsoleSchedule()
  * @method static \Illuminate\Foundation\Console\ClosureCommand command(string $signature, \Closure $callback)
  * @method static void registerCommand(\Symfony\Component\Console\Command\Command $command)

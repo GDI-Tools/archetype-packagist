@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Validation;
 
@@ -11,9 +16,10 @@ interface Factory
      * @param  array  $rules
      * @param  array  $messages
      * @param  array  $attributes
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Archetype\Vendor\Illuminate\Contracts\Validation\Validator
      */
     public function make(array $data, array $rules, array $messages = [], array $attributes = []);
+
     /**
      * Register a custom validator extension.
      *
@@ -23,6 +29,7 @@ interface Factory
      * @return void
      */
     public function extend($rule, $extension, $message = null);
+
     /**
      * Register a custom implicit validator extension.
      *
@@ -32,6 +39,7 @@ interface Factory
      * @return void
      */
     public function extendImplicit($rule, $extension, $message = null);
+
     /**
      * Register a custom implicit validator message replacer.
      *

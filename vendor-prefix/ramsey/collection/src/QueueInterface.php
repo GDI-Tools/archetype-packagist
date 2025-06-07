@@ -8,12 +8,17 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection;
 
 use Archetype\Vendor\Ramsey\Collection\Exception\NoSuchElementException;
 use RuntimeException;
+
 /**
  * A queue is a collection in which the entities in the collection are kept in
  * order.
@@ -127,6 +132,7 @@ interface QueueInterface extends ArrayInterface
      *     `\RuntimeException`.
      */
     public function add(mixed $element): bool;
+
     /**
      * Retrieves, but does not remove, the head of this queue.
      *
@@ -140,6 +146,7 @@ interface QueueInterface extends ArrayInterface
      * @throws NoSuchElementException if this queue is empty.
      */
     public function element(): mixed;
+
     /**
      * Inserts the specified element into this queue if it is possible to do so
      * immediately without violating capacity restrictions.
@@ -155,6 +162,7 @@ interface QueueInterface extends ArrayInterface
      * @return bool `true` if the element was added to this queue, else `false`.
      */
     public function offer(mixed $element): bool;
+
     /**
      * Retrieves, but does not remove, the head of this queue, or returns `null`
      * if this queue is empty.
@@ -164,6 +172,7 @@ interface QueueInterface extends ArrayInterface
      * @return T | null the head of this queue, or `null` if this queue is empty.
      */
     public function peek(): mixed;
+
     /**
      * Retrieves and removes the head of this queue, or returns `null`
      * if this queue is empty.
@@ -173,6 +182,7 @@ interface QueueInterface extends ArrayInterface
      * @return T | null the head of this queue, or `null` if this queue is empty.
      */
     public function poll(): mixed;
+
     /**
      * Retrieves and removes the head of this queue.
      *
@@ -186,6 +196,7 @@ interface QueueInterface extends ArrayInterface
      * @throws NoSuchElementException if this queue is empty.
      */
     public function remove(): mixed;
+
     /**
      * Returns the type associated with this queue.
      */

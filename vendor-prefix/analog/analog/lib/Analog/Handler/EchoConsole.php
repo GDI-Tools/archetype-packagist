@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Analog\Handler;
 
@@ -7,18 +12,16 @@ namespace Archetype\Vendor\Analog\Handler;
  *
  * Usage:
  *
- *     Analog::handler (Analog\Handler\EchoConsole::init ());
+ *     Analog::handler (Archetype\Vendor\Analog\Handler\EchoConsole::init ());
  *     
  *     Analog::log ('Log me');
  *
  * Note: Uses Analog::$format for the output format.
  */
-class EchoConsole
-{
-    public static function init()
-    {
-        return function ($info) {
-            vprintf(\Archetype\Vendor\Analog\Analog::$format, $info);
-        };
-    }
+class EchoConsole {
+	public static function init () {
+		return function ($info) {
+			vprintf (\Archetype\Vendor\Analog\Analog::$format, $info);
+		};
+	}
 }

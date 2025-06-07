@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Parser;
 
 use Archetype\Vendor\Dotenv\Util\Str;
+
 final class Value
 {
     /**
@@ -12,12 +19,14 @@ final class Value
      * @var string
      */
     private $chars;
+
     /**
      * The locations of the variables in the value.
      *
      * @var int[]
      */
     private $vars;
+
     /**
      * Internal constructor for a value.
      *
@@ -31,27 +40,33 @@ final class Value
         $this->chars = $chars;
         $this->vars = $vars;
     }
+
     /**
      * Create an empty value instance.
      *
-     * @return \Dotenv\Parser\Value
+     * @return \Archetype\Vendor\Dotenv\Parser\Value
      */
     public static function blank()
     {
         return new self('', []);
     }
+
     /**
      * Create a new value instance, appending the characters.
      *
      * @param string $chars
      * @param bool   $var
      *
-     * @return \Dotenv\Parser\Value
+     * @return \Archetype\Vendor\Dotenv\Parser\Value
      */
     public function append(string $chars, bool $var)
     {
-        return new self($this->chars . $chars, $var ? \array_merge($this->vars, [Str::len($this->chars)]) : $this->vars);
+        return new self(
+            $this->chars.$chars,
+            $var ? \array_merge($this->vars, [Str::len($this->chars)]) : $this->vars
+        );
     }
+
     /**
      * Get the string representation of the parsed value.
      *
@@ -61,6 +76,7 @@ final class Value
     {
         return $this->chars;
     }
+
     /**
      * Get the locations of the variables in the value.
      *
@@ -69,7 +85,9 @@ final class Value
     public function getVars()
     {
         $vars = $this->vars;
+
         \rsort($vars);
+
         return $vars;
     }
 }

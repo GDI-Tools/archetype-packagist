@@ -8,14 +8,19 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Guid;
 
 use Archetype\Vendor\Ramsey\Uuid\Codec\CodecInterface;
 use Archetype\Vendor\Ramsey\Uuid\Converter\NumberConverterInterface;
 use Archetype\Vendor\Ramsey\Uuid\Converter\TimeConverterInterface;
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
+
 /**
  * Guid represents a UUID with "native" (little-endian) byte order
  *
@@ -43,8 +48,12 @@ use Archetype\Vendor\Ramsey\Uuid\Uuid;
  */
 final class Guid extends Uuid
 {
-    public function __construct(Fields $fields, NumberConverterInterface $numberConverter, CodecInterface $codec, TimeConverterInterface $timeConverter)
-    {
+    public function __construct(
+        Fields $fields,
+        NumberConverterInterface $numberConverter,
+        CodecInterface $codec,
+        TimeConverterInterface $timeConverter,
+    ) {
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
 }

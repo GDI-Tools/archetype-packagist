@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,10 +15,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Traits;
 
 use Archetype\Vendor\Carbon\CarbonInterface;
 use Archetype\Vendor\Carbon\CarbonInterval;
+
 trait DeprecatedPeriodProperties
 {
     /**
@@ -23,6 +31,7 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period start.
      */
     public $start;
+
     /**
      * Period end in PHP < 8.2.
      *
@@ -31,6 +40,7 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period end.
      */
     public $end;
+
     /**
      * Period current iterated date in PHP < 8.2.
      *
@@ -39,6 +49,7 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period current iterated date.
      */
     public $current;
+
     /**
      * Period interval in PHP < 8.2.
      *
@@ -47,6 +58,7 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period interval.
      */
     public $interval;
+
     /**
      * Period recurrences in PHP < 8.2.
      *
@@ -55,6 +67,7 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period recurrences.
      */
     public $recurrences;
+
     /**
      * Period start included option in PHP < 8.2.
      *
@@ -63,6 +76,7 @@ trait DeprecatedPeriodProperties
      * @deprecated PHP 8.2 this property is no longer in sync with the actual period start included option.
      */
     public $include_start_date;
+
     /**
      * Period end included option in PHP < 8.2.
      *

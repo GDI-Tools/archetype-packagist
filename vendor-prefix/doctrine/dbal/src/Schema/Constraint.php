@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 /**
  * Marker interface for constraints.
  *
@@ -12,8 +18,10 @@ interface Constraint
 {
     /** @return string */
     public function getName();
+
     /** @return string */
     public function getQuotedName(AbstractPlatform $platform);
+
     /**
      * Returns the names of the referencing table columns
      * the constraint is associated with.
@@ -21,6 +29,7 @@ interface Constraint
      * @return string[]
      */
     public function getColumns();
+
     /**
      * Returns the quoted representation of the column names
      * the constraint is associated with.

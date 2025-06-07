@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -6,6 +11,7 @@ use DateTimeImmutable;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use Exception;
+
 /**
  * Immutable type of {@see DateTimeType}.
  */
@@ -18,6 +24,7 @@ class DateTimeImmutableType extends DateTimeType
     {
         return Types::DATETIME_IMMUTABLE;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -32,11 +39,18 @@ class DateTimeImmutableType extends DateTimeType
         if ($value === null) {
             return $value;
         }
+
         if ($value instanceof DateTimeImmutable) {
             return $value->format($platform->getDateTimeFormatString());
         }
-        throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', DateTimeImmutable::class]);
+
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getName(),
+            ['null', DateTimeImmutable::class],
+        );
     }
+
     /**
      * {@inheritDoc}
      *
@@ -51,16 +65,25 @@ class DateTimeImmutableType extends DateTimeType
         if ($value === null || $value instanceof DateTimeImmutable) {
             return $value;
         }
+
         $dateTime = DateTimeImmutable::createFromFormat($platform->getDateTimeFormatString(), $value);
-        if ($dateTime !== \false) {
+
+        if ($dateTime !== false) {
             return $dateTime;
         }
+
         try {
             return new DateTimeImmutable($value);
         } catch (Exception $e) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString(), $e);
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getDateTimeFormatString(),
+                $e,
+            );
         }
     }
+
     /**
      * {@inheritDoc}
      *
@@ -68,7 +91,13 @@ class DateTimeImmutableType extends DateTimeType
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return \true;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return true;
     }
 }

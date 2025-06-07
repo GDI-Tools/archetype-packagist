@@ -1,21 +1,29 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use ArrayAccess;
 use ArrayObject;
 use Archetype\Vendor\Illuminate\Support\Traits\Macroable;
+
 class Optional implements ArrayAccess
 {
     use Macroable {
         __call as macroCall;
     }
+
     /**
      * The underlying object.
      *
      * @var mixed
      */
     protected $value;
+
     /**
      * Create a new optional instance.
      *
@@ -25,6 +33,7 @@ class Optional implements ArrayAccess
     {
         $this->value = $value;
     }
+
     /**
      * Dynamically access a property on the underlying object.
      *
@@ -37,6 +46,7 @@ class Optional implements ArrayAccess
             return $this->value->{$key} ?? null;
         }
     }
+
     /**
      * Dynamically check a property exists on the underlying object.
      *
@@ -48,11 +58,14 @@ class Optional implements ArrayAccess
         if (is_object($this->value)) {
             return isset($this->value->{$name});
         }
+
         if (is_array($this->value) || $this->value instanceof ArrayObject) {
             return isset($this->value[$name]);
         }
-        return \false;
+
+        return false;
     }
+
     /**
      * Determine if an item exists at an offset.
      *
@@ -63,6 +76,7 @@ class Optional implements ArrayAccess
     {
         return Arr::accessible($this->value) && Arr::exists($this->value, $key);
     }
+
     /**
      * Get an item at a given offset.
      *
@@ -73,6 +87,7 @@ class Optional implements ArrayAccess
     {
         return Arr::get($this->value, $key);
     }
+
     /**
      * Set the item at a given offset.
      *
@@ -86,6 +101,7 @@ class Optional implements ArrayAccess
             $this->value[$key] = $value;
         }
     }
+
     /**
      * Unset the item at a given offset.
      *
@@ -98,6 +114,7 @@ class Optional implements ArrayAccess
             unset($this->value[$key]);
         }
     }
+
     /**
      * Dynamically pass a method to the underlying object.
      *
@@ -110,6 +127,7 @@ class Optional implements ArrayAccess
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
+
         if (is_object($this->value)) {
             return $this->value->{$method}(...$parameters);
         }

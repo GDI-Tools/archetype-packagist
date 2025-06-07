@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Repository\Adapter;
 
 interface WriterInterface
@@ -14,6 +20,7 @@ interface WriterInterface
      * @return bool
      */
     public function write(string $name, string $value);
+
     /**
      * Delete an environment variable, if possible.
      *

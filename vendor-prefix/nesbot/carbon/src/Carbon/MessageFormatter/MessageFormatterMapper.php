@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,15 +15,21 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\MessageFormatter;
 
 use ReflectionMethod;
 use Archetype\Vendor\Symfony\Component\Translation\Formatter\MessageFormatter;
 use Archetype\Vendor\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+
 // @codeCoverageIgnoreStart
 $transMethod = new ReflectionMethod(MessageFormatterInterface::class, 'format');
-require $transMethod->getParameters()[0]->hasType() ? __DIR__ . '/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php' : __DIR__ . '/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperWeakType.php';
+
+require $transMethod->getParameters()[0]->hasType()
+    ? __DIR__.'/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php'
+    : __DIR__.'/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperWeakType.php';
 // @codeCoverageIgnoreEnd
+
 final class MessageFormatterMapper extends LazyMessageFormatter
 {
     /**
@@ -26,10 +38,12 @@ final class MessageFormatterMapper extends LazyMessageFormatter
      * @var MessageFormatterInterface
      */
     protected $formatter;
+
     public function __construct(?MessageFormatterInterface $formatter = null)
     {
         $this->formatter = $formatter ?? new MessageFormatter();
     }
+
     protected function transformLocale(?string $locale): ?string
     {
         return $locale ? preg_replace('/[_@][A-Za-z][a-z]{2,}/', '', $locale) : $locale;

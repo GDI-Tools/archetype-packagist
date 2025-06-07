@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Console\Seeds;
 
-use Archetype\Vendor\Illuminate\Console\GeneratorCommand;
+use Illuminate\Console\GeneratorCommand;
 use Archetype\Vendor\Illuminate\Support\Str;
-use Archetype\Vendor\Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
+
 #[AsCommand(name: 'make:seeder')]
 class SeederMakeCommand extends GeneratorCommand
 {
@@ -14,18 +20,21 @@ class SeederMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $name = 'make:seeder';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Create a new seeder class';
+
     /**
      * The type of class being generated.
      *
      * @var string
      */
     protected $type = 'Seeder';
+
     /**
      * Execute the console command.
      *
@@ -35,6 +44,7 @@ class SeederMakeCommand extends GeneratorCommand
     {
         parent::handle();
     }
+
     /**
      * Get the stub file for the generator.
      *
@@ -44,6 +54,7 @@ class SeederMakeCommand extends GeneratorCommand
     {
         return $this->resolveStubPath('/stubs/seeder.stub');
     }
+
     /**
      * Resolve the fully-qualified path to the stub.
      *
@@ -52,8 +63,11 @@ class SeederMakeCommand extends GeneratorCommand
      */
     protected function resolveStubPath($stub)
     {
-        return is_file($customPath = $this->laravel->basePath(trim($stub, '/'))) ? $customPath : __DIR__ . $stub;
+        return is_file($customPath = $this->laravel->basePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__.$stub;
     }
+
     /**
      * Get the destination class path.
      *
@@ -63,11 +77,14 @@ class SeederMakeCommand extends GeneratorCommand
     protected function getPath($name)
     {
         $name = str_replace('\\', '/', Str::replaceFirst($this->rootNamespace(), '', $name));
-        if (is_dir($this->laravel->databasePath() . '/seeds')) {
-            return $this->laravel->databasePath() . '/seeds/' . $name . '.php';
+
+        if (is_dir($this->laravel->databasePath().'/seeds')) {
+            return $this->laravel->databasePath().'/seeds/'.$name.'.php';
         }
-        return $this->laravel->databasePath() . '/seeders/' . $name . '.php';
+
+        return $this->laravel->databasePath().'/seeders/'.$name.'.php';
     }
+
     /**
      * Get the root namespace for the class.
      *

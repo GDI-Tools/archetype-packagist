@@ -8,13 +8,19 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Generator;
 
 use function uuid_create;
 use function uuid_parse;
+
 use const UUID_TYPE_RANDOM;
+
 /**
  * PeclUuidRandomGenerator generates strings of random binary data using ext-uuid
  *
@@ -25,6 +31,7 @@ class PeclUuidRandomGenerator implements RandomGeneratorInterface
     public function generate(int $length): string
     {
         $uuid = uuid_create(UUID_TYPE_RANDOM);
+
         return (string) uuid_parse($uuid);
     }
 }

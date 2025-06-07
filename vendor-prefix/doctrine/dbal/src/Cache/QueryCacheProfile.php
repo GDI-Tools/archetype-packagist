@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Cache;
 
@@ -9,11 +14,13 @@ use Archetype\Vendor\Doctrine\DBAL\Types\Type;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use Archetype\Vendor\Psr\Cache\CacheItemPoolInterface;
 use TypeError;
+
 use function get_class;
 use function hash;
 use function serialize;
 use function sha1;
 use function sprintf;
+
 /**
  * Query Cache Profile handles the data relevant for query caching.
  *
@@ -22,10 +29,13 @@ use function sprintf;
 class QueryCacheProfile
 {
     private ?CacheItemPoolInterface $resultCache = null;
+
     /** @var int */
     private $lifetime;
+
     /** @var string|null */
     private $cacheKey;
+
     /**
      * @param int                               $lifetime
      * @param string|null                       $cacheKey
@@ -38,16 +48,31 @@ class QueryCacheProfile
         if ($resultCache instanceof CacheItemPoolInterface) {
             $this->resultCache = $resultCache;
         } elseif ($resultCache instanceof Cache) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4620', 'Passing an instance of %s to %s as $resultCache is deprecated. Pass an instance of %s instead.', Cache::class, __METHOD__, CacheItemPoolInterface::class);
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/4620',
+                'Passing an instance of %s to %s as $resultCache is deprecated. Pass an instance of %s instead.',
+                Cache::class,
+                __METHOD__,
+                CacheItemPoolInterface::class,
+            );
+
             $this->resultCache = CacheAdapter::wrap($resultCache);
         } elseif ($resultCache !== null) {
-            throw new TypeError(sprintf('$resultCache: Expected either null or an instance of %s or %s, got %s.', CacheItemPoolInterface::class, Cache::class, get_class($resultCache)));
+            throw new TypeError(sprintf(
+                '$resultCache: Expected either null or an instance of %s or %s, got %s.',
+                CacheItemPoolInterface::class,
+                Cache::class,
+                get_class($resultCache),
+            ));
         }
     }
+
     public function getResultCache(): ?CacheItemPoolInterface
     {
         return $this->resultCache;
     }
+
     /**
      * @deprecated Use {@see getResultCache()} instead.
      *
@@ -55,14 +80,22 @@ class QueryCacheProfile
      */
     public function getResultCacheDriver()
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4620', '%s is deprecated, call getResultCache() instead.', __METHOD__);
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4620',
+            '%s is deprecated, call getResultCache() instead.',
+            __METHOD__,
+        );
+
         return $this->resultCache !== null ? DoctrineProvider::wrap($this->resultCache) : null;
     }
+
     /** @return int */
     public function getLifetime()
     {
         return $this->lifetime;
     }
+
     /**
      * @return string
      *
@@ -73,8 +106,10 @@ class QueryCacheProfile
         if ($this->cacheKey === null) {
             throw CacheException::noCacheKey();
         }
+
         return $this->cacheKey;
     }
+
     /**
      * Generates the real cache key from query, params, types and connection parameters.
      *
@@ -90,15 +125,23 @@ class QueryCacheProfile
         if (isset($connectionParams['password'])) {
             unset($connectionParams['password']);
         }
-        $realCacheKey = 'query=' . $sql . '&params=' . serialize($params) . '&types=' . serialize($types) . '&connectionParams=' . hash('sha256', serialize($connectionParams));
+
+        $realCacheKey = 'query=' . $sql .
+            '&params=' . serialize($params) .
+            '&types=' . serialize($types) .
+            '&connectionParams=' . hash('sha256', serialize($connectionParams));
+
         // should the key be automatically generated using the inputs or is the cache key set?
         $cacheKey = $this->cacheKey ?? sha1($realCacheKey);
+
         return [$cacheKey, $realCacheKey];
     }
+
     public function setResultCache(CacheItemPoolInterface $cache): QueryCacheProfile
     {
         return new QueryCacheProfile($this->lifetime, $this->cacheKey, $cache);
     }
+
     /**
      * @deprecated Use {@see setResultCache()} instead.
      *
@@ -106,9 +149,16 @@ class QueryCacheProfile
      */
     public function setResultCacheDriver(Cache $cache)
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4620', '%s is deprecated, call setResultCache() instead.', __METHOD__);
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4620',
+            '%s is deprecated, call setResultCache() instead.',
+            __METHOD__,
+        );
+
         return new QueryCacheProfile($this->lifetime, $this->cacheKey, CacheAdapter::wrap($cache));
     }
+
     /**
      * @param string|null $cacheKey
      *
@@ -118,6 +168,7 @@ class QueryCacheProfile
     {
         return new QueryCacheProfile($this->lifetime, $cacheKey, $this->resultCache);
     }
+
     /**
      * @param int $lifetime
      *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Defer;
 
@@ -6,6 +11,7 @@ use ArrayAccess;
 use Closure;
 use Countable;
 use Archetype\Vendor\Illuminate\Support\Collection;
+
 class DeferredCallbackCollection implements ArrayAccess, Countable
 {
     /**
@@ -14,6 +20,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      * @var array
      */
     protected array $callbacks = [];
+
     /**
      * Get the first callback in the collection.
      *
@@ -23,6 +30,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     {
         return array_values($this->callbacks)[0];
     }
+
     /**
      * Invoke the deferred callbacks.
      *
@@ -30,8 +38,9 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      */
     public function invoke(): void
     {
-        $this->invokeWhen(fn() => \true);
+        $this->invokeWhen(fn () => true);
     }
+
     /**
      * Invoke the deferred callbacks if the given truth test evaluates to true.
      *
@@ -40,15 +49,19 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      */
     public function invokeWhen(?Closure $when = null): void
     {
-        $when ??= fn() => \true;
+        $when ??= fn () => true;
+
         $this->forgetDuplicates();
+
         foreach ($this->callbacks as $index => $callback) {
             if ($when($callback)) {
                 rescue($callback);
             }
+
             unset($this->callbacks[$index]);
         }
     }
+
     /**
      * Remove any deferred callbacks with the given name.
      *
@@ -57,8 +70,12 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      */
     public function forget(string $name): void
     {
-        $this->callbacks = (new Collection($this->callbacks))->reject(fn($callback) => $callback->name === $name)->values()->all();
+        $this->callbacks = (new Collection($this->callbacks))
+            ->reject(fn ($callback) => $callback->name === $name)
+            ->values()
+            ->all();
     }
+
     /**
      * Remove any duplicate callbacks.
      *
@@ -66,9 +83,16 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      */
     protected function forgetDuplicates(): self
     {
-        $this->callbacks = (new Collection($this->callbacks))->reverse()->unique(fn($c) => $c->name)->reverse()->values()->all();
+        $this->callbacks = (new Collection($this->callbacks))
+            ->reverse()
+            ->unique(fn ($c) => $c->name)
+            ->reverse()
+            ->values()
+            ->all();
+
         return $this;
     }
+
     /**
      * Determine if the collection has a callback with the given key.
      *
@@ -78,8 +102,10 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     public function offsetExists(mixed $offset): bool
     {
         $this->forgetDuplicates();
+
         return isset($this->callbacks[$offset]);
     }
+
     /**
      * Get the callback with the given key.
      *
@@ -89,8 +115,10 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     public function offsetGet(mixed $offset): mixed
     {
         $this->forgetDuplicates();
+
         return $this->callbacks[$offset];
     }
+
     /**
      * Set the callback with the given key.
      *
@@ -106,6 +134,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
             $this->callbacks[$offset] = $value;
         }
     }
+
     /**
      * Remove the callback with the given key from the collection.
      *
@@ -115,8 +144,10 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     public function offsetUnset(mixed $offset): void
     {
         $this->forgetDuplicates();
+
         unset($this->callbacks[$offset]);
     }
+
     /**
      * Determine how many callbacks are in the collection.
      *
@@ -125,6 +156,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     public function count(): int
     {
         $this->forgetDuplicates();
+
         return count($this->callbacks);
     }
 }

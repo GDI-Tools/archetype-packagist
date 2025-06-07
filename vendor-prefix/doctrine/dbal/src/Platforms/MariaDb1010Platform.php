@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
 
 use Archetype\Vendor\Doctrine\DBAL\SQL\Builder\SelectSQLBuilder;
+
 use function implode;
+
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB 10.10 database platform.
  */
@@ -13,6 +20,7 @@ class MariaDb1010Platform extends MariaDb1060Platform
     {
         return AbstractPlatform::createSelectSQLBuilder();
     }
+
     public function fetchTableOptionsByTable(bool $includeTableName): string
     {
         // MariaDB-10.10.1 added FULL_COLLATION_NAME to the information_schema.COLLATION_CHARACTER_SET_APPLICABILITY.
@@ -30,11 +38,15 @@ class MariaDb1010Platform extends MariaDb1060Platform
         INNER JOIN information_schema.COLLATION_CHARACTER_SET_APPLICABILITY ccsa
           ON ccsa.FULL_COLLATION_NAME = t.TABLE_COLLATION
 SQL;
+
         $conditions = ['t.TABLE_SCHEMA = ?'];
+
         if ($includeTableName) {
             $conditions[] = 't.TABLE_NAME = ?';
         }
+
         $conditions[] = "t.TABLE_TYPE = 'BASE TABLE'";
+
         return $sql . ' WHERE ' . implode(' AND ', $conditions);
     }
 }

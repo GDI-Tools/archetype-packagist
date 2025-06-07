@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Events;
 
 use Archetype\Vendor\Illuminate\Contracts\Queue\Factory as QueueFactoryContract;
 use Archetype\Vendor\Illuminate\Support\ServiceProvider;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -17,7 +23,9 @@ class EventServiceProvider extends ServiceProvider
             return (new Dispatcher($app))->setQueueResolver(function () use ($app) {
                 return $app->make(QueueFactoryContract::class);
             })->setTransactionManagerResolver(function () use ($app) {
-                return $app->bound('db.transactions') ? $app->make('db.transactions') : null;
+                return $app->bound('db.transactions')
+                    ? $app->make('db.transactions')
+                    : null;
             });
         });
     }

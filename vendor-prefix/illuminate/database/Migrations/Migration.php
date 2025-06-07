@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Migrations;
 
@@ -10,12 +15,14 @@ abstract class Migration
      * @var string|null
      */
     protected $connection;
+
     /**
      * Enables, if supported, wrapping the migration within a transaction.
      *
      * @var bool
      */
-    public $withinTransaction = \true;
+    public $withinTransaction = true;
+
     /**
      * Get the migration connection name.
      *
@@ -25,6 +32,7 @@ abstract class Migration
     {
         return $this->connection;
     }
+
     /**
      * Determine if this migration should run.
      *
@@ -32,6 +40,6 @@ abstract class Migration
      */
     public function shouldRun(): bool
     {
-        return \true;
+        return true;
     }
 }

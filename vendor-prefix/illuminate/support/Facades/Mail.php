@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Support\Testing\Fakes\MailFake;
+
 /**
- * @method static \Illuminate\Contracts\Mail\Mailer mailer(string|null $name = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Mail\Mailer mailer(string|null $name = null)
  * @method static \Illuminate\Mail\Mailer driver(string|null $driver = null)
  * @method static \Illuminate\Mail\Mailer build(array $config)
  * @method static \Symfony\Component\Mailer\Transport\TransportInterface createSymfonyTransport(array $config)
@@ -12,8 +18,8 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\MailFake;
  * @method static void setDefaultDriver(string $name)
  * @method static void purge(string|null $name = null)
  * @method static \Illuminate\Mail\MailManager extend(string $driver, \Closure $callback)
- * @method static \Illuminate\Contracts\Foundation\Application getApplication()
- * @method static \Illuminate\Mail\MailManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Foundation\Application getApplication()
+ * @method static \Illuminate\Mail\MailManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static \Illuminate\Mail\MailManager forgetMailers()
  * @method static void alwaysFrom(string $address, string|null $name = null)
  * @method static void alwaysReplyTo(string $address, string|null $name = null)
@@ -26,17 +32,17 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\MailFake;
  * @method static \Illuminate\Mail\SentMessage|null raw(string $text, mixed $callback)
  * @method static \Illuminate\Mail\SentMessage|null plain(string $view, array $data, mixed $callback)
  * @method static string render(string|array $view, array $data = [])
- * @method static \Illuminate\Mail\SentMessage|null send(\Illuminate\Contracts\Mail\Mailable|string|array $view, array $data = [], \Closure|string|null $callback = null)
- * @method static \Illuminate\Mail\SentMessage|null sendNow(\Illuminate\Contracts\Mail\Mailable|string|array $mailable, array $data = [], \Closure|string|null $callback = null)
- * @method static mixed queue(\Illuminate\Contracts\Mail\Mailable|string|array $view, \BackedEnum|string|null $queue = null)
- * @method static mixed onQueue(\BackedEnum|string|null $queue, \Illuminate\Contracts\Mail\Mailable $view)
- * @method static mixed queueOn(string $queue, \Illuminate\Contracts\Mail\Mailable $view)
- * @method static mixed later(\DateTimeInterface|\DateInterval|int $delay, \Illuminate\Contracts\Mail\Mailable $view, string|null $queue = null)
- * @method static mixed laterOn(string $queue, \DateTimeInterface|\DateInterval|int $delay, \Illuminate\Contracts\Mail\Mailable $view)
+ * @method static \Illuminate\Mail\SentMessage|null send(\Archetype\Vendor\Illuminate\Contracts\Mail\Mailable|string|array $view, array $data = [], \Closure|string|null $callback = null)
+ * @method static \Illuminate\Mail\SentMessage|null sendNow(\Archetype\Vendor\Illuminate\Contracts\Mail\Mailable|string|array $mailable, array $data = [], \Closure|string|null $callback = null)
+ * @method static mixed queue(\Archetype\Vendor\Illuminate\Contracts\Mail\Mailable|string|array $view, \BackedEnum|string|null $queue = null)
+ * @method static mixed onQueue(\BackedEnum|string|null $queue, \Archetype\Vendor\Illuminate\Contracts\Mail\Mailable $view)
+ * @method static mixed queueOn(string $queue, \Archetype\Vendor\Illuminate\Contracts\Mail\Mailable $view)
+ * @method static mixed later(\DateTimeInterface|\DateInterval|int $delay, \Archetype\Vendor\Illuminate\Contracts\Mail\Mailable $view, string|null $queue = null)
+ * @method static mixed laterOn(string $queue, \DateTimeInterface|\DateInterval|int $delay, \Archetype\Vendor\Illuminate\Contracts\Mail\Mailable $view)
  * @method static \Symfony\Component\Mailer\Transport\TransportInterface getSymfonyTransport()
- * @method static \Illuminate\Contracts\View\Factory getViewFactory()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\View\Factory getViewFactory()
  * @method static void setSymfonyTransport(\Symfony\Component\Mailer\Transport\TransportInterface $transport)
- * @method static \Illuminate\Mail\Mailer setQueue(\Illuminate\Contracts\Queue\Factory $queue)
+ * @method static \Illuminate\Mail\Mailer setQueue(\Archetype\Vendor\Illuminate\Contracts\Queue\Factory $queue)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
@@ -52,28 +58,32 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\MailFake;
  * @method static void assertSentCount(int $count)
  * @method static void assertQueuedCount(int $count)
  * @method static void assertOutgoingCount(int $count)
- * @method static \Illuminate\Support\Collection sent(string|\Closure $mailable, callable|null $callback = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection sent(string|\Closure $mailable, callable|null $callback = null)
  * @method static bool hasSent(string $mailable)
- * @method static \Illuminate\Support\Collection queued(string|\Closure $mailable, callable|null $callback = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection queued(string|\Closure $mailable, callable|null $callback = null)
  * @method static bool hasQueued(string $mailable)
  *
  * @see \Illuminate\Mail\MailManager
- * @see \Illuminate\Support\Testing\Fakes\MailFake
+ * @see \Archetype\Vendor\Illuminate\Support\Testing\Fakes\MailFake
  */
 class Mail extends Facade
 {
     /**
      * Replace the bound instance with a fake.
      *
-     * @return \Illuminate\Support\Testing\Fakes\MailFake
+     * @return \Archetype\Vendor\Illuminate\Support\Testing\Fakes\MailFake
      */
     public static function fake()
     {
-        $actualMailManager = static::isFake() ? static::getFacadeRoot()->manager : static::getFacadeRoot();
+        $actualMailManager = static::isFake()
+            ? static::getFacadeRoot()->manager
+            : static::getFacadeRoot();
+
         return tap(new MailFake($actualMailManager), function ($fake) {
             static::swap($fake);
         });
     }
+
     /**
      * Get the registered name of the component.
      *

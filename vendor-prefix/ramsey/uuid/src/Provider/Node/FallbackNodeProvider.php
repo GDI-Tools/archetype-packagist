@@ -8,13 +8,18 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Provider\Node;
 
 use Archetype\Vendor\Ramsey\Uuid\Exception\NodeException;
 use Archetype\Vendor\Ramsey\Uuid\Provider\NodeProviderInterface;
 use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
+
 /**
  * FallbackNodeProvider retrieves the system node ID by stepping through a list of providers until a node ID can be obtained
  */
@@ -26,17 +31,21 @@ class FallbackNodeProvider implements NodeProviderInterface
     public function __construct(private iterable $providers)
     {
     }
+
     public function getNode(): Hexadecimal
     {
         $lastProviderException = null;
+
         foreach ($this->providers as $provider) {
             try {
                 return $provider->getNode();
             } catch (NodeException $exception) {
                 $lastProviderException = $exception;
+
                 continue;
             }
         }
+
         throw new NodeException(message: 'Unable to find a suitable node provider', previous: $lastProviderException);
     }
 }

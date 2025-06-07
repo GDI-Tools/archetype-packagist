@@ -1,14 +1,21 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Tools\Console;
 
-use Archetype\Vendor\Composer\InstalledVersions;
+use Composer\InstalledVersions;
 use Archetype\Vendor\Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
 use Archetype\Vendor\Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Exception;
-use Archetype\Vendor\Symfony\Component\Console\Application;
-use Archetype\Vendor\Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+
 use function assert;
+
 /**
  * Handles running the Console Tools inside Symfony Console context.
  *
@@ -29,17 +36,24 @@ class ConsoleRunner
     {
         $version = InstalledVersions::getVersion('doctrine/dbal');
         assert($version !== null);
+
         $cli = new Application('Doctrine Command Line Interface', $version);
-        $cli->setCatchExceptions(\true);
+
+        $cli->setCatchExceptions(true);
         self::addCommands($cli, $connectionProvider);
         $cli->addCommands($commands);
         $cli->run();
     }
+
     /** @return void */
     public static function addCommands(Application $cli, ConnectionProvider $connectionProvider)
     {
-        $cli->addCommands([new RunSqlCommand($connectionProvider), new ReservedWordsCommand($connectionProvider)]);
+        $cli->addCommands([
+            new RunSqlCommand($connectionProvider),
+            new ReservedWordsCommand($connectionProvider),
+        ]);
     }
+
     /**
      * Prints the instructions to create a configuration file
      *
@@ -55,7 +69,7 @@ project, which is required to get the Doctrine-DBAL Console working. You can use
 following sample as a template:
 
 <?php
-use Doctrine\DBAL\Tools\Console\ConnectionProvider\SingleConnectionProvider;
+use Archetype\Vendor\Doctrine\DBAL\Tools\Console\ConnectionProvider\SingleConnectionProvider;
 
 // You can append new commands to $commands array, if needed
 

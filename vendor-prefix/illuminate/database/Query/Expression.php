@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Query;
 
 use Archetype\Vendor\Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
 use Archetype\Vendor\Illuminate\Database\Grammar;
+
 /**
  * @template TValue of string|int|float
  */
@@ -14,13 +20,15 @@ class Expression implements ExpressionContract
      *
      * @param  TValue  $value
      */
-    public function __construct(protected $value)
-    {
+    public function __construct(
+        protected $value
+    ) {
     }
+
     /**
      * Get the value of the expression.
      *
-     * @param  \Illuminate\Database\Grammar  $grammar
+     * @param  \Archetype\Vendor\Illuminate\Database\Grammar  $grammar
      * @return TValue
      */
     public function getValue(Grammar $grammar)

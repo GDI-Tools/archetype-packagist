@@ -8,11 +8,16 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
+
 /**
  * The max UUID is a special form of UUID that has all 128 bits set to one (`1`)
  *

@@ -8,16 +8,23 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use DateTimeImmutable;
 use DateTimeInterface;
 use Archetype\Vendor\Ramsey\Uuid\Exception\DateTimeException;
 use Throwable;
+
 use function str_pad;
+
 use const STR_PAD_LEFT;
+
 /**
  * Provides common functionality for getting the time from a time-based UUID
  *
@@ -33,8 +40,14 @@ trait TimeTrait
     public function getDateTime(): DateTimeInterface
     {
         $time = $this->timeConverter->convertTime($this->fields->getTimestamp());
+
         try {
-            return new DateTimeImmutable('@' . $time->getSeconds()->toString() . '.' . str_pad($time->getMicroseconds()->toString(), 6, '0', STR_PAD_LEFT));
+            return new DateTimeImmutable(
+                '@'
+                . $time->getSeconds()->toString()
+                . '.'
+                . str_pad($time->getMicroseconds()->toString(), 6, '0', STR_PAD_LEFT)
+            );
         } catch (Throwable $e) {
             throw new DateTimeException($e->getMessage(), (int) $e->getCode(), $e);
         }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Queue;
 
@@ -11,6 +16,7 @@ interface Monitor
      * @return void
      */
     public function looping($callback);
+
     /**
      * Register a callback to be executed when a job fails after the maximum number of retries.
      *
@@ -18,6 +24,7 @@ interface Monitor
      * @return void
      */
     public function failing($callback);
+
     /**
      * Register a callback to be executed when a daemon queue is stopping.
      *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Analog\Handler;
 
@@ -7,7 +12,7 @@ namespace Archetype\Vendor\Analog\Handler;
  *
  * Usage:
  *
- *     Analog::handler (Analog\Handler\PDO::init (
+ *     Analog::handler (Archetype\Vendor\Analog\Handler\PDO::init (
  *         $pdo,  // PDO connection object
  *         'logs' // database table name
  *     ));
@@ -21,7 +26,7 @@ namespace Archetype\Vendor\Analog\Handler;
  *         'password'
  *     ];
  *
- *     Analog::handler (Analog\Handler\PDO::init (
+ *     Analog::handler (Archetype\Vendor\Analog\Handler\PDO::init (
  *         $conn, // connection info
  *         'logs' // database table name
  *     ));
@@ -46,28 +51,44 @@ namespace Archetype\Vendor\Analog\Handler;
  * source, as it is not escaped for SQL injection prevention. The other
  * fields are properly protected, however.
  */
-class PDO
-{
-    public static function init($pdo, $table)
-    {
-        if (is_array($pdo)) {
-            $pdo = new \PDO($pdo[0], $pdo[1], $pdo[2], [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-        }
-        $stmt = $pdo->prepare('insert into `' . $table . '` (`machine`, `date`, `level`, `message`) values (:machine, :date, :level, :message)');
-        return function ($info) use ($stmt, $table) {
-            $stmt->execute($info);
-        };
-    }
-    public static function createTable($pdo, $table)
-    {
-        if (is_array($pdo)) {
-            $pdo = new \PDO($pdo[0], $pdo[1], $pdo[2]);
-        }
-        $pdo->beginTransaction();
-        $pdo->prepare('create table `' . $table . '` (`machine` varchar(48), `date` datetime, `level` int, `message` text)')->execute();
-        $pdo->prepare('create index `' . $table . '_message` on `' . $table . '` (`machine`)')->execute();
-        $pdo->prepare('create index `' . $table . '_date` on `' . $table . '` (`date`)')->execute();
-        $pdo->prepare('create index `' . $table . '_level` on `' . $table . '` (`level`)')->execute();
-        $pdo->commit();
-    }
+class PDO {
+	public static function init ($pdo, $table) {
+		if (is_array ($pdo)) {
+			$pdo = new \PDO ($pdo[0], $pdo[1], $pdo[2], [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+		}
+		
+		$stmt = $pdo->prepare (
+			'insert into `' . $table . '` (`machine`, `date`, `level`, `message`) values (:machine, :date, :level, :message)'
+		);
+		
+		return function ($info) use ($stmt, $table) {
+			$stmt->execute ($info);
+		};
+	}
+	
+	public static function createTable ($pdo, $table) {
+		if (is_array ($pdo)) {
+			$pdo = new \PDO ($pdo[0], $pdo[1], $pdo[2]);
+		}
+		
+		$pdo->beginTransaction ();
+		
+		$pdo->prepare (
+			'create table `' . $table . '` (`machine` varchar(48), `date` datetime, `level` int, `message` text)'
+		)->execute ();
+	
+		$pdo->prepare (
+			'create index `' . $table . '_message` on `' . $table . '` (`machine`)'
+		)->execute ();
+	
+		$pdo->prepare (
+			'create index `' . $table . '_date` on `' . $table . '` (`date`)'
+		)->execute ();
+	
+		$pdo->prepare (
+			'create index `' . $table . '_level` on `' . $table . '` (`level`)'
+		)->execute ();
+		
+		$pdo->commit ();
+	}
 }

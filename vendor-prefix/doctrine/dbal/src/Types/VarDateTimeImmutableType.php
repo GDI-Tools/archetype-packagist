@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -6,6 +11,7 @@ use DateTimeImmutable;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use Exception;
+
 /**
  * Immutable type of {@see VarDateTimeType}.
  */
@@ -18,6 +24,7 @@ class VarDateTimeImmutableType extends VarDateTimeType
     {
         return Types::DATETIME_IMMUTABLE;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -32,11 +39,18 @@ class VarDateTimeImmutableType extends VarDateTimeType
         if ($value === null) {
             return $value;
         }
+
         if ($value instanceof DateTimeImmutable) {
             return $value->format($platform->getDateTimeFormatString());
         }
-        throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', DateTimeImmutable::class]);
+
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getName(),
+            ['null', DateTimeImmutable::class],
+        );
     }
+
     /**
      * {@inheritDoc}
      *
@@ -51,13 +65,16 @@ class VarDateTimeImmutableType extends VarDateTimeType
         if ($value === null || $value instanceof DateTimeImmutable) {
             return $value;
         }
+
         try {
             $dateTime = new DateTimeImmutable($value);
         } catch (Exception $e) {
             throw ConversionException::conversionFailed($value, $this->getName(), $e);
         }
+
         return $dateTime;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -65,7 +82,13 @@ class VarDateTimeImmutableType extends VarDateTimeType
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return \true;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return true;
     }
 }

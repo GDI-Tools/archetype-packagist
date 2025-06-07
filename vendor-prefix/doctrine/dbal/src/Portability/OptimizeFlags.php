@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Portability;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -9,6 +15,7 @@ use Archetype\Vendor\Doctrine\DBAL\Platforms\OraclePlatform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\SqlitePlatform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\SQLServerPlatform;
+
 final class OptimizeFlags
 {
     /**
@@ -17,15 +24,24 @@ final class OptimizeFlags
      *
      * @var array<class-string, int>
      */
-    private static array $platforms = [DB2Platform::class => 0, OraclePlatform::class => Connection::PORTABILITY_EMPTY_TO_NULL, PostgreSQLPlatform::class => 0, SqlitePlatform::class => 0, SQLServerPlatform::class => 0];
+    private static array $platforms = [
+        DB2Platform::class        => 0,
+        OraclePlatform::class     => Connection::PORTABILITY_EMPTY_TO_NULL,
+        PostgreSQLPlatform::class => 0,
+        SqlitePlatform::class     => 0,
+        SQLServerPlatform::class  => 0,
+    ];
+
     public function __invoke(AbstractPlatform $platform, int $flags): int
     {
         foreach (self::$platforms as $class => $mask) {
             if ($platform instanceof $class) {
                 $flags &= ~$mask;
+
                 break;
             }
         }
+
         return $flags;
     }
 }

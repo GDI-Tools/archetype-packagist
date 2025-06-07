@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Casts;
 
@@ -6,6 +11,7 @@ use ArrayObject as BaseArrayObject;
 use Archetype\Vendor\Illuminate\Contracts\Support\Arrayable;
 use Archetype\Vendor\Illuminate\Support\Collection;
 use JsonSerializable;
+
 /**
  * @template TKey of array-key
  * @template TItem
@@ -17,12 +23,13 @@ class ArrayObject extends BaseArrayObject implements Arrayable, JsonSerializable
     /**
      * Get a collection containing the underlying array.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Archetype\Vendor\Illuminate\Support\Collection
      */
     public function collect()
     {
         return new Collection($this->getArrayCopy());
     }
+
     /**
      * Get the instance as an array.
      *
@@ -32,6 +39,7 @@ class ArrayObject extends BaseArrayObject implements Arrayable, JsonSerializable
     {
         return $this->getArrayCopy();
     }
+
     /**
      * Get the array that should be JSON serialized.
      *

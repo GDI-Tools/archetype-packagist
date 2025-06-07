@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -8,7 +13,9 @@ use DateTimeInterface;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use Exception;
+
 use function get_class;
+
 /**
  * Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object.
  */
@@ -21,6 +28,7 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
     {
         return Types::DATETIME_MUTABLE;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -28,6 +36,7 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
     {
         return $platform->getDateTimeTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -42,14 +51,29 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
         if ($value === null) {
             return $value;
         }
+
         if ($value instanceof DateTimeImmutable) {
-            Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6017', 'Passing an instance of %s is deprecated, use %s::%s() instead.', get_class($value), DateTimeImmutableType::class, __FUNCTION__);
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/6017',
+                'Passing an instance of %s is deprecated, use %s::%s() instead.',
+                get_class($value),
+                DateTimeImmutableType::class,
+                __FUNCTION__,
+            );
         }
+
         if ($value instanceof DateTimeInterface) {
             return $value->format($platform->getDateTimeFormatString());
         }
-        throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', DateTime::class, DateTimeImmutable::class]);
+
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getName(),
+            ['null', DateTime::class, DateTimeImmutable::class],
+        );
     }
+
     /**
      * {@inheritDoc}
      *
@@ -62,19 +86,35 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value instanceof DateTimeImmutable) {
-            Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6017', 'Passing an instance of %s is deprecated, use %s::%s() instead.', get_class($value), DateTimeImmutableType::class, __FUNCTION__);
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/6017',
+                'Passing an instance of %s is deprecated, use %s::%s() instead.',
+                get_class($value),
+                DateTimeImmutableType::class,
+                __FUNCTION__,
+            );
         }
+
         if ($value === null || $value instanceof DateTimeInterface) {
             return $value;
         }
+
         $dateTime = DateTime::createFromFormat($platform->getDateTimeFormatString(), $value);
-        if ($dateTime !== \false) {
+
+        if ($dateTime !== false) {
             return $dateTime;
         }
+
         try {
             return new DateTime($value);
         } catch (Exception $e) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString(), $e);
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getDateTimeFormatString(),
+                $e,
+            );
         }
     }
 }

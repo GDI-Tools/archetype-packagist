@@ -8,13 +8,19 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Validator;
 
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
+
 use function preg_match;
 use function str_replace;
+
 /**
  * GenericValidator validates strings as UUIDs of any variant
  *
@@ -26,6 +32,7 @@ final class GenericValidator implements ValidatorInterface
      * Regular expression pattern for matching a UUID of any variant.
      */
     private const VALID_PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\z';
+
     /**
      * @return non-empty-string
      */
@@ -33,9 +40,11 @@ final class GenericValidator implements ValidatorInterface
     {
         return self::VALID_PATTERN;
     }
+
     public function validate(string $uuid): bool
     {
         $uuid = str_replace(['urn:', 'uuid:', 'URN:', 'UUID:', '{', '}'], '', $uuid);
+
         return $uuid === Uuid::NIL || preg_match('/' . self::VALID_PATTERN . '/Dms', $uuid);
     }
 }

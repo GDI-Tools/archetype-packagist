@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -43,7 +48,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
- * @method static \Illuminate\Database\Eloquent\Model restoreModel(\Illuminate\Contracts\Database\ModelIdentifier $value)
+ * @method static \Archetype\Vendor\Illuminate\Database\Eloquent\Model restoreModel(\Archetype\Vendor\Illuminate\Contracts\Database\ModelIdentifier $value)
  *
  * @see \Illuminate\Log\Context\Repository
  */
@@ -56,6 +61,6 @@ class Context extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Archetype\Vendor\Illuminate\Log\Context\Repository::class;
+        return \Illuminate\Log\Context\Repository::class;
     }
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -7,14 +12,15 @@ use Archetype\Vendor\Illuminate\Database\Console\Migrations\RefreshCommand;
 use Archetype\Vendor\Illuminate\Database\Console\Migrations\ResetCommand;
 use Archetype\Vendor\Illuminate\Database\Console\Migrations\RollbackCommand;
 use Archetype\Vendor\Illuminate\Database\Console\WipeCommand;
+
 /**
- * @method static \Illuminate\Database\Connection connection(string|null $name = null)
- * @method static \Illuminate\Database\ConnectionInterface build(array $config)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection connection(string|null $name = null)
+ * @method static \Archetype\Vendor\Illuminate\Database\ConnectionInterface build(array $config)
  * @method static string calculateDynamicConnectionName(array $config)
- * @method static \Illuminate\Database\ConnectionInterface connectUsing(string $name, array $config, bool $force = false)
+ * @method static \Archetype\Vendor\Illuminate\Database\ConnectionInterface connectUsing(string $name, array $config, bool $force = false)
  * @method static void purge(string|null $name = null)
  * @method static void disconnect(string|null $name = null)
- * @method static \Illuminate\Database\Connection reconnect(string|null $name = null)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection reconnect(string|null $name = null)
  * @method static mixed usingConnection(string $name, callable $callback)
  * @method static string getDefaultConnection()
  * @method static void setDefaultConnection(string $name)
@@ -24,7 +30,7 @@ use Archetype\Vendor\Illuminate\Database\Console\WipeCommand;
  * @method static void forgetExtension(string $name)
  * @method static array getConnections()
  * @method static void setReconnector(callable $reconnector)
- * @method static \Illuminate\Database\DatabaseManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Archetype\Vendor\Illuminate\Database\DatabaseManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
@@ -33,9 +39,9 @@ use Archetype\Vendor\Illuminate\Database\Console\WipeCommand;
  * @method static void useDefaultQueryGrammar()
  * @method static void useDefaultSchemaGrammar()
  * @method static void useDefaultPostProcessor()
- * @method static \Illuminate\Database\Schema\Builder getSchemaBuilder()
- * @method static \Illuminate\Database\Query\Builder table(\Closure|\Illuminate\Database\Query\Builder|\Illuminate\Contracts\Database\Query\Expression|string $table, string|null $as = null)
- * @method static \Illuminate\Database\Query\Builder query()
+ * @method static \Archetype\Vendor\Illuminate\Database\Schema\Builder getSchemaBuilder()
+ * @method static \Archetype\Vendor\Illuminate\Database\Query\Builder table(\Closure|\Archetype\Vendor\Illuminate\Database\Query\Builder|\Archetype\Vendor\Illuminate\Contracts\Database\Query\Expression|string $table, string|null $as = null)
+ * @method static \Archetype\Vendor\Illuminate\Database\Query\Builder query()
  * @method static mixed selectOne(string $query, array $bindings = [], bool $useReadPdo = true)
  * @method static mixed scalar(string $query, array $bindings = [], bool $useReadPdo = true)
  * @method static array selectFromWriteConnection(string $query, array $bindings = [])
@@ -54,42 +60,42 @@ use Archetype\Vendor\Illuminate\Database\Console\WipeCommand;
  * @method static void bindValues(\PDOStatement $statement, array $bindings)
  * @method static array prepareBindings(array $bindings)
  * @method static void logQuery(string $query, array $bindings, float|null $time = null)
- * @method static void whenQueryingForLongerThan(\DateTimeInterface|\Carbon\CarbonInterval|float|int $threshold, callable $handler)
+ * @method static void whenQueryingForLongerThan(\DateTimeInterface|\Archetype\Vendor\Carbon\CarbonInterval|float|int $threshold, callable $handler)
  * @method static void allowQueryDurationHandlersToRunAgain()
  * @method static float totalQueryDuration()
  * @method static void resetTotalQueryDuration()
  * @method static void reconnectIfMissingConnection()
- * @method static \Illuminate\Database\Connection beforeStartingTransaction(\Closure $callback)
- * @method static \Illuminate\Database\Connection beforeExecuting(\Closure $callback)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection beforeStartingTransaction(\Closure $callback)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection beforeExecuting(\Closure $callback)
  * @method static void listen(\Closure $callback)
- * @method static \Illuminate\Contracts\Database\Query\Expression raw(mixed $value)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Database\Query\Expression raw(mixed $value)
  * @method static string escape(string|float|int|bool|null $value, bool $binary = false)
  * @method static bool hasModifiedRecords()
  * @method static void recordsHaveBeenModified(bool $value = true)
- * @method static \Illuminate\Database\Connection setRecordModificationState(bool $value)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setRecordModificationState(bool $value)
  * @method static void forgetRecordModificationState()
- * @method static \Illuminate\Database\Connection useWriteConnectionWhenReading(bool $value = true)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection useWriteConnectionWhenReading(bool $value = true)
  * @method static \PDO getPdo()
  * @method static \PDO|\Closure|null getRawPdo()
  * @method static \PDO getReadPdo()
  * @method static \PDO|\Closure|null getRawReadPdo()
- * @method static \Illuminate\Database\Connection setPdo(\PDO|\Closure|null $pdo)
- * @method static \Illuminate\Database\Connection setReadPdo(\PDO|\Closure|null $pdo)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setPdo(\PDO|\Closure|null $pdo)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setReadPdo(\PDO|\Closure|null $pdo)
  * @method static string|null getName()
  * @method static string|null getNameWithReadWriteType()
  * @method static mixed getConfig(string|null $option = null)
  * @method static string getDriverName()
  * @method static string getDriverTitle()
- * @method static \Illuminate\Database\Query\Grammars\Grammar getQueryGrammar()
- * @method static \Illuminate\Database\Connection setQueryGrammar(\Illuminate\Database\Query\Grammars\Grammar $grammar)
- * @method static \Illuminate\Database\Schema\Grammars\Grammar getSchemaGrammar()
- * @method static \Illuminate\Database\Connection setSchemaGrammar(\Illuminate\Database\Schema\Grammars\Grammar $grammar)
- * @method static \Illuminate\Database\Query\Processors\Processor getPostProcessor()
- * @method static \Illuminate\Database\Connection setPostProcessor(\Illuminate\Database\Query\Processors\Processor $processor)
- * @method static \Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
- * @method static \Illuminate\Database\Connection setEventDispatcher(\Illuminate\Contracts\Events\Dispatcher $events)
+ * @method static \Archetype\Vendor\Illuminate\Database\Query\Grammars\Grammar getQueryGrammar()
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setQueryGrammar(\Archetype\Vendor\Illuminate\Database\Query\Grammars\Grammar $grammar)
+ * @method static \Archetype\Vendor\Illuminate\Database\Schema\Grammars\Grammar getSchemaGrammar()
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setSchemaGrammar(\Archetype\Vendor\Illuminate\Database\Schema\Grammars\Grammar $grammar)
+ * @method static \Archetype\Vendor\Illuminate\Database\Query\Processors\Processor getPostProcessor()
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setPostProcessor(\Archetype\Vendor\Illuminate\Database\Query\Processors\Processor $processor)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setEventDispatcher(\Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher $events)
  * @method static void unsetEventDispatcher()
- * @method static \Illuminate\Database\Connection setTransactionManager(\Illuminate\Database\DatabaseTransactionsManager $manager)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setTransactionManager(\Archetype\Vendor\Illuminate\Database\DatabaseTransactionsManager $manager)
  * @method static void unsetTransactionManager()
  * @method static bool pretending()
  * @method static array getQueryLog()
@@ -99,10 +105,10 @@ use Archetype\Vendor\Illuminate\Database\Console\WipeCommand;
  * @method static void disableQueryLog()
  * @method static bool logging()
  * @method static string getDatabaseName()
- * @method static \Illuminate\Database\Connection setDatabaseName(string $database)
- * @method static \Illuminate\Database\Connection setReadWriteType(string|null $readWriteType)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setDatabaseName(string $database)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setReadWriteType(string|null $readWriteType)
  * @method static string getTablePrefix()
- * @method static \Illuminate\Database\Connection setTablePrefix(string $prefix)
+ * @method static \Archetype\Vendor\Illuminate\Database\Connection setTablePrefix(string $prefix)
  * @method static mixed withoutTablePrefix(\Closure $callback)
  * @method static string getServerVersion()
  * @method static void resolverFor(string $driver, \Closure $callback)
@@ -114,7 +120,7 @@ use Archetype\Vendor\Illuminate\Database\Console\WipeCommand;
  * @method static int transactionLevel()
  * @method static void afterCommit(callable $callback)
  *
- * @see \Illuminate\Database\DatabaseManager
+ * @see \Archetype\Vendor\Illuminate\Database\DatabaseManager
  */
 class DB extends Facade
 {
@@ -126,7 +132,7 @@ class DB extends Facade
      * @param  bool  $prohibit
      * @return void
      */
-    public static function prohibitDestructiveCommands(bool $prohibit = \true)
+    public static function prohibitDestructiveCommands(bool $prohibit = true)
     {
         FreshCommand::prohibit($prohibit);
         RefreshCommand::prohibit($prohibit);
@@ -134,6 +140,7 @@ class DB extends Facade
         RollbackCommand::prohibit($prohibit);
         WipeCommand::prohibit($prohibit);
     }
+
     /**
      * Get the registered name of the component.
      *

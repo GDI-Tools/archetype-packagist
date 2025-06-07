@@ -1,10 +1,17 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\OCI8;
 
 use Archetype\Vendor\Doctrine\DBAL\SQL\Parser\Visitor;
+
 use function count;
 use function implode;
+
 /**
  * Converts positional (?) into named placeholders (:param<num>).
  *
@@ -17,27 +24,35 @@ final class ConvertPositionalToNamedPlaceholders implements Visitor
 {
     /** @var list<string> */
     private array $buffer = [];
+
     /** @var array<int,string> */
     private array $parameterMap = [];
+
     public function acceptOther(string $sql): void
     {
         $this->buffer[] = $sql;
     }
+
     public function acceptPositionalParameter(string $sql): void
     {
         $position = count($this->parameterMap) + 1;
-        $param = ':param' . $position;
+        $param    = ':param' . $position;
+
         $this->parameterMap[$position] = $param;
+
         $this->buffer[] = $param;
     }
+
     public function acceptNamedParameter(string $sql): void
     {
         $this->buffer[] = $sql;
     }
+
     public function getSQL(): string
     {
         return implode('', $this->buffer);
     }
+
     /** @return array<int,string> */
     public function getParameterMap(): array
     {

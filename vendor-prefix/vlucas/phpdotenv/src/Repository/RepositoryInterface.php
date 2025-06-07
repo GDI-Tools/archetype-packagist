@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Repository;
 
 interface RepositoryInterface
@@ -13,6 +19,7 @@ interface RepositoryInterface
      * @return bool
      */
     public function has(string $name);
+
     /**
      * Get an environment variable.
      *
@@ -23,6 +30,7 @@ interface RepositoryInterface
      * @return string|null
      */
     public function get(string $name);
+
     /**
      * Set an environment variable.
      *
@@ -34,6 +42,7 @@ interface RepositoryInterface
      * @return bool
      */
     public function set(string $name, string $value);
+
     /**
      * Clear an environment variable.
      *

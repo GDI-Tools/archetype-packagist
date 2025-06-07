@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Redis;
 
 use Closure;
+
 interface Connection
 {
     /**
@@ -13,6 +19,7 @@ interface Connection
      * @return void
      */
     public function subscribe($channels, Closure $callback);
+
     /**
      * Subscribe to a set of given channels with wildcards.
      *
@@ -21,6 +28,7 @@ interface Connection
      * @return void
      */
     public function psubscribe($channels, Closure $callback);
+
     /**
      * Run a command against the Redis database.
      *

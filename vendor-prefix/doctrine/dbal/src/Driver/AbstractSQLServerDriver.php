@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver;
 
@@ -11,7 +16,9 @@ use Archetype\Vendor\Doctrine\DBAL\Platforms\SQLServer2012Platform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\SQLServerPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Schema\SQLServerSchemaManager;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function assert;
+
 /**
  * Abstract base implementation of the {@see Driver} interface for Microsoft SQL Server based drivers.
  */
@@ -24,6 +31,7 @@ abstract class AbstractSQLServerDriver implements Driver
     {
         return new SQLServer2012Platform();
     }
+
     /**
      * {@inheritDoc}
      *
@@ -31,10 +39,18 @@ abstract class AbstractSQLServerDriver implements Driver
      */
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5458', 'AbstractSQLServerDriver::getSchemaManager() is deprecated.' . ' Use SQLServerPlatform::createSchemaManager() instead.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5458',
+            'AbstractSQLServerDriver::getSchemaManager() is deprecated.'
+                . ' Use SQLServerPlatform::createSchemaManager() instead.',
+        );
+
         assert($platform instanceof SQLServerPlatform);
+
         return new SQLServerSchemaManager($conn, $platform);
     }
+
     public function getExceptionConverter(): ExceptionConverterInterface
     {
         return new ExceptionConverter();

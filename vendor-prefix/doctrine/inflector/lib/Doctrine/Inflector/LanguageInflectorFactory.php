@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\Inflector;
 
 use Archetype\Vendor\Doctrine\Inflector\Rules\Ruleset;
+
 interface LanguageInflectorFactory
 {
     /**
@@ -13,7 +20,8 @@ interface LanguageInflectorFactory
      *
      * @return $this
      */
-    public function withSingularRules(?Ruleset $singularRules, bool $reset = \false): self;
+    public function withSingularRules(?Ruleset $singularRules, bool $reset = false): self;
+
     /**
      * Applies custom rules for pluralisation
      *
@@ -21,7 +29,8 @@ interface LanguageInflectorFactory
      *
      * @return $this
      */
-    public function withPluralRules(?Ruleset $pluralRules, bool $reset = \false): self;
+    public function withPluralRules(?Ruleset $pluralRules, bool $reset = false): self;
+
     /**
      * Builds the inflector instance with all applicable rules
      */

@@ -7,7 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Clock;
 
 /**
@@ -18,6 +21,7 @@ namespace Archetype\Vendor\Symfony\Component\Clock;
 final class NativeClock implements ClockInterface
 {
     private \DateTimeZone $timezone;
+
     /**
      * @throws \DateInvalidTimeZoneException When $timezone is invalid
      */
@@ -25,19 +29,23 @@ final class NativeClock implements ClockInterface
     {
         $this->timezone = \is_string($timezone ??= date_default_timezone_get()) ? $this->withTimeZone($timezone)->timezone : $timezone;
     }
+
     public function now(): DatePoint
     {
         return DatePoint::createFromInterface(new \DateTimeImmutable('now', $this->timezone));
     }
+
     public function sleep(float|int $seconds): void
     {
         if (0 < $s = (int) $seconds) {
             sleep($s);
         }
+
         if (0 < $us = $seconds - $s) {
-            usleep((int) ($us * 1000000.0));
+            usleep((int) ($us * 1E6));
         }
     }
+
     /**
      * @throws \DateInvalidTimeZoneException When $timezone is invalid
      */
@@ -52,8 +60,10 @@ final class NativeClock implements ClockInterface
                 throw new \DateInvalidTimeZoneException($e->getMessage(), $e->getCode(), $e);
             }
         }
+
         $clone = clone $this;
         $clone->timezone = $timezone;
+
         return $clone;
     }
 }

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,10 +15,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
+
 class UnknownGetterException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**
@@ -21,6 +29,7 @@ class UnknownGetterException extends BaseInvalidArgumentException implements Inv
      * @var string
      */
     protected $getter;
+
     /**
      * Constructor.
      *
@@ -31,8 +40,10 @@ class UnknownGetterException extends BaseInvalidArgumentException implements Inv
     public function __construct($getter, $code = 0, ?Throwable $previous = null)
     {
         $this->getter = $getter;
-        parent::__construct("Unknown getter '{$getter}'", $code, $previous);
+
+        parent::__construct("Unknown getter '$getter'", $code, $previous);
     }
+
     /**
      * Get the getter.
      *

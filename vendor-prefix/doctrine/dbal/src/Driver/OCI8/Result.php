@@ -1,28 +1,38 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\OCI8;
 
 use Archetype\Vendor\Doctrine\DBAL\Driver\Exception;
 use Archetype\Vendor\Doctrine\DBAL\Driver\FetchUtils;
 use Archetype\Vendor\Doctrine\DBAL\Driver\OCI8\Exception\Error;
 use Archetype\Vendor\Doctrine\DBAL\Driver\Result as ResultInterface;
+
 use function oci_cancel;
 use function oci_error;
 use function oci_fetch_all;
 use function oci_fetch_array;
 use function oci_num_fields;
 use function oci_num_rows;
+
 use const OCI_ASSOC;
 use const OCI_FETCHSTATEMENT_BY_COLUMN;
 use const OCI_FETCHSTATEMENT_BY_ROW;
 use const OCI_NUM;
 use const OCI_RETURN_LOBS;
 use const OCI_RETURN_NULLS;
+
 final class Result implements ResultInterface
 {
     /** @var resource */
     private $statement;
+
     /**
      * @internal The result can be only instantiated by its driver connection or statement.
      *
@@ -32,6 +42,7 @@ final class Result implements ResultInterface
     {
         $this->statement = $statement;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -39,6 +50,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(OCI_NUM);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -46,6 +58,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(OCI_ASSOC);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -53,6 +66,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchOne($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -60,6 +74,7 @@ final class Result implements ResultInterface
     {
         return $this->fetchAll(OCI_NUM, OCI_FETCHSTATEMENT_BY_ROW);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -67,6 +82,7 @@ final class Result implements ResultInterface
     {
         return $this->fetchAll(OCI_ASSOC, OCI_FETCHSTATEMENT_BY_ROW);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -74,26 +90,34 @@ final class Result implements ResultInterface
     {
         return $this->fetchAll(OCI_NUM, OCI_FETCHSTATEMENT_BY_COLUMN)[0];
     }
+
     public function rowCount(): int
     {
         $count = oci_num_rows($this->statement);
-        if ($count !== \false) {
+
+        if ($count !== false) {
             return $count;
         }
+
         return 0;
     }
+
     public function columnCount(): int
     {
         $count = oci_num_fields($this->statement);
-        if ($count !== \false) {
+
+        if ($count !== false) {
             return $count;
         }
+
         return 0;
     }
+
     public function free(): void
     {
         oci_cancel($this->statement);
     }
+
     /**
      * @return mixed|false
      *
@@ -102,15 +126,25 @@ final class Result implements ResultInterface
     private function fetch(int $mode)
     {
         $result = oci_fetch_array($this->statement, $mode | OCI_RETURN_NULLS | OCI_RETURN_LOBS);
-        if ($result === \false && oci_error($this->statement) !== \false) {
+
+        if ($result === false && oci_error($this->statement) !== false) {
             throw Error::new($this->statement);
         }
+
         return $result;
     }
+
     /** @return array<mixed> */
     private function fetchAll(int $mode, int $fetchStructure): array
     {
-        oci_fetch_all($this->statement, $result, 0, -1, $mode | OCI_RETURN_NULLS | $fetchStructure | OCI_RETURN_LOBS);
+        oci_fetch_all(
+            $this->statement,
+            $result,
+            0,
+            -1,
+            $mode | OCI_RETURN_NULLS | $fetchStructure | OCI_RETURN_LOBS,
+        );
+
         return $result;
     }
 }

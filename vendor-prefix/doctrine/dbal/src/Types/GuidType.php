@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 /**
  * Represents a GUID/UUID datatype (both are actually synonyms) in the database.
  */
@@ -16,6 +22,7 @@ class GuidType extends StringType
     {
         return $platform->getGuidTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -23,6 +30,7 @@ class GuidType extends StringType
     {
         return Types::GUID;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -30,7 +38,13 @@ class GuidType extends StringType
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return !$platform->hasNativeGuidType();
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return ! $platform->hasNativeGuidType();
     }
 }

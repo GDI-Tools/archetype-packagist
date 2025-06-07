@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Events;
 
 use Archetype\Vendor\Illuminate\Contracts\Database\Events\MigrationEvent;
+
 class NoPendingMigrations implements MigrationEvent
 {
     /**
@@ -10,7 +16,8 @@ class NoPendingMigrations implements MigrationEvent
      *
      * @param  string  $method  The migration method that was called.
      */
-    public function __construct(public $method)
-    {
+    public function __construct(
+        public $method,
+    ) {
     }
 }

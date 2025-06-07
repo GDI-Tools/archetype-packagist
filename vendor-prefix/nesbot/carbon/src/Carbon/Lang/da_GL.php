@@ -1,7 +1,5 @@
 <?php
 
-namespace Archetype\Vendor;
-
 /**
  * This file is part of the Carbon package.
  *
@@ -10,4 +8,12 @@ namespace Archetype\Vendor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-return \array_replace_recursive(require __DIR__ . '/da.php', ['formats' => ['L' => 'DD/MM/YYYY', 'LL' => 'D. MMM YYYY', 'LLL' => 'D. MMMM YYYY HH.mm', 'LLLL' => 'dddd [den] D. MMMM YYYY HH.mm']]);
+
+return array_replace_recursive(require __DIR__.'/da.php', [
+    'formats' => [
+        'L' => 'DD/MM/YYYY',
+        'LL' => 'D. MMM YYYY',
+        'LLL' => 'D. MMMM YYYY HH.mm',
+        'LLLL' => 'dddd [den] D. MMMM YYYY HH.mm',
+    ],
+]);

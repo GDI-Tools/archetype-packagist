@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Builder;
 
 use Archetype\Vendor\Ramsey\Uuid\Codec\CodecInterface;
@@ -19,6 +23,7 @@ use Archetype\Vendor\Ramsey\Uuid\Converter\TimeConverterInterface;
 use Archetype\Vendor\Ramsey\Uuid\DegradedUuid;
 use Archetype\Vendor\Ramsey\Uuid\Rfc4122\Fields as Rfc4122Fields;
 use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
+
 /**
  * @deprecated DegradedUuid instances are no longer necessary to support 32-bit systems. Please transition to {@see DefaultUuidBuilder}.
  *
@@ -27,15 +32,19 @@ use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
 class DegradedUuidBuilder implements UuidBuilderInterface
 {
     private TimeConverterInterface $timeConverter;
+
     /**
      * @param NumberConverterInterface $numberConverter The number converter to use when constructing the DegradedUuid
      * @param TimeConverterInterface|null $timeConverter The time converter to use for converting timestamps extracted
      *     from a UUID to Unix timestamps
      */
-    public function __construct(private NumberConverterInterface $numberConverter, ?TimeConverterInterface $timeConverter = null)
-    {
+    public function __construct(
+        private NumberConverterInterface $numberConverter,
+        ?TimeConverterInterface $timeConverter = null
+    ) {
         $this->timeConverter = $timeConverter ?: new DegradedTimeConverter();
     }
+
     /**
      * Builds and returns a DegradedUuid
      *

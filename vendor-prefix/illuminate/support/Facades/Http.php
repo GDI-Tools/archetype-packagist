@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
-use Archetype\Vendor\Illuminate\Http\Client\Factory;
+use Illuminate\Http\Client\Factory;
+
 /**
  * @method static \Illuminate\Http\Client\Factory globalMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalRequestMiddleware(callable $middleware)
@@ -23,9 +29,9 @@ use Archetype\Vendor\Illuminate\Http\Client\Factory;
  * @method static void assertNothingSent()
  * @method static void assertSentCount(int $count)
  * @method static void assertSequencesAreEmpty()
- * @method static \Illuminate\Support\Collection recorded(\Closure|callable $callback = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection recorded(\Closure|callable $callback = null)
  * @method static \Illuminate\Http\Client\PendingRequest createPendingRequest()
- * @method static \Illuminate\Contracts\Events\Dispatcher|null getDispatcher()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher|null getDispatcher()
  * @method static array getGlobalMiddleware()
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
@@ -71,10 +77,10 @@ use Archetype\Vendor\Illuminate\Http\Client\Factory;
  * @method static \Illuminate\Http\Client\PendingRequest dd()
  * @method static \Illuminate\Http\Client\Response get(string $url, array|string|null $query = null)
  * @method static \Illuminate\Http\Client\Response head(string $url, array|string|null $query = null)
- * @method static \Illuminate\Http\Client\Response post(string $url, array|\JsonSerializable|\Illuminate\Contracts\Support\Arrayable $data = [])
- * @method static \Illuminate\Http\Client\Response patch(string $url, array|\JsonSerializable|\Illuminate\Contracts\Support\Arrayable $data = [])
- * @method static \Illuminate\Http\Client\Response put(string $url, array|\JsonSerializable|\Illuminate\Contracts\Support\Arrayable $data = [])
- * @method static \Illuminate\Http\Client\Response delete(string $url, array|\JsonSerializable|\Illuminate\Contracts\Support\Arrayable $data = [])
+ * @method static \Illuminate\Http\Client\Response post(string $url, array|\JsonSerializable|\Archetype\Vendor\Illuminate\Contracts\Support\Arrayable $data = [])
+ * @method static \Illuminate\Http\Client\Response patch(string $url, array|\JsonSerializable|\Archetype\Vendor\Illuminate\Contracts\Support\Arrayable $data = [])
+ * @method static \Illuminate\Http\Client\Response put(string $url, array|\JsonSerializable|\Archetype\Vendor\Illuminate\Contracts\Support\Arrayable $data = [])
+ * @method static \Illuminate\Http\Client\Response delete(string $url, array|\JsonSerializable|\Archetype\Vendor\Illuminate\Contracts\Support\Arrayable $data = [])
  * @method static array pool(callable $callback)
  * @method static \Illuminate\Http\Client\Response send(string $method, string $url, array $options = [])
  * @method static \GuzzleHttp\Client buildClient()
@@ -108,6 +114,7 @@ class Http extends Facade
     {
         return Factory::class;
     }
+
     /**
      * Register a stub callable that will intercept requests and be able to return stub responses.
      *
@@ -120,6 +127,7 @@ class Http extends Facade
             static::swap($fake->fake($callback));
         });
     }
+
     /**
      * Register a response sequence for the given URL pattern.
      *
@@ -131,20 +139,23 @@ class Http extends Facade
         $fake = tap(static::getFacadeRoot(), function ($fake) {
             static::swap($fake);
         });
+
         return $fake->fakeSequence($urlPattern);
     }
+
     /**
      * Indicate that an exception should be thrown if any request is not faked.
      *
      * @param  bool  $prevent
      * @return \Illuminate\Http\Client\Factory
      */
-    public static function preventStrayRequests($prevent = \true)
+    public static function preventStrayRequests($prevent = true)
     {
         return tap(static::getFacadeRoot(), function ($fake) use ($prevent) {
             static::swap($fake->preventStrayRequests($prevent));
         });
     }
+
     /**
      * Stub the given URL using the given callback.
      *

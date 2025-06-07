@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Psr\Log;
 
@@ -19,6 +24,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
+
     /**
      * Action must be taken immediately.
      *
@@ -29,6 +35,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
+
     /**
      * Critical conditions.
      *
@@ -38,6 +45,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
+
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
@@ -46,6 +54,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
+
     /**
      * Exceptional occurrences that are not errors.
      *
@@ -56,6 +65,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
+
     /**
      * Normal but significant events.
      */
@@ -63,6 +73,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
+
     /**
      * Interesting events.
      *
@@ -72,6 +83,7 @@ trait LoggerTrait
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
+
     /**
      * Detailed debug information.
      */
@@ -79,12 +91,13 @@ trait LoggerTrait
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
+
     /**
      * Logs with an arbitrary level.
      *
      * @param mixed $level
      *
-     * @throws \Psr\Log\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\Log\InvalidArgumentException
      */
     abstract public function log($level, string|\Stringable $message, array $context = []): void;
 }

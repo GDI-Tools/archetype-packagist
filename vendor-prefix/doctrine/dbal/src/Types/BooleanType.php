@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -6,6 +11,7 @@ use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\DB2Platform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 /**
  * Type that maps an SQL boolean to a PHP boolean.
  */
@@ -18,6 +24,7 @@ class BooleanType extends Type
     {
         return $platform->getBooleanTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -25,6 +32,7 @@ class BooleanType extends Type
     {
         return $platform->convertBooleansToDatabaseValue($value);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -38,6 +46,7 @@ class BooleanType extends Type
     {
         return $platform->convertFromBoolean($value);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -45,6 +54,7 @@ class BooleanType extends Type
     {
         return Types::BOOLEAN;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -52,6 +62,7 @@ class BooleanType extends Type
     {
         return ParameterType::BOOLEAN;
     }
+
     /**
      * @deprecated
      *
@@ -59,7 +70,13 @@ class BooleanType extends Type
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
         // We require a commented boolean type in order to distinguish between
         // boolean and smallint as both (have to) map to the same native type.
         return $platform instanceof DB2Platform;

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver;
 
@@ -12,9 +17,11 @@ use Archetype\Vendor\Doctrine\DBAL\Platforms\DB2Platform;
 use Archetype\Vendor\Doctrine\DBAL\Schema\DB2SchemaManager;
 use Archetype\Vendor\Doctrine\DBAL\VersionAwarePlatformDriver;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function assert;
 use function preg_match;
 use function version_compare;
+
 /**
  * Abstract base implementation of the {@see Driver} interface for IBM DB2 based drivers.
  */
@@ -27,6 +34,7 @@ abstract class AbstractDB2Driver implements VersionAwarePlatformDriver
     {
         return new DB2Platform();
     }
+
     /**
      * {@inheritDoc}
      *
@@ -34,14 +42,23 @@ abstract class AbstractDB2Driver implements VersionAwarePlatformDriver
      */
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5458', 'AbstractDB2Driver::getSchemaManager() is deprecated.' . ' Use DB2Platform::createSchemaManager() instead.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5458',
+            'AbstractDB2Driver::getSchemaManager() is deprecated.'
+                . ' Use DB2Platform::createSchemaManager() instead.',
+        );
+
         assert($platform instanceof DB2Platform);
+
         return new DB2SchemaManager($conn, $platform);
     }
+
     public function getExceptionConverter(): ExceptionConverterInterface
     {
         return new ExceptionConverter();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -50,9 +67,17 @@ abstract class AbstractDB2Driver implements VersionAwarePlatformDriver
         if (version_compare($this->getVersionNumber($version), '11.1', '>=')) {
             return new DB2111Platform();
         }
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5156', 'IBM DB2 < 11.1 support is deprecated and will be removed in DBAL 4.' . ' Consider upgrading to IBM DB2 11.1 or later.');
+
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5156',
+            'IBM DB2 < 11.1 support is deprecated and will be removed in DBAL 4.'
+                . ' Consider upgrading to IBM DB2 11.1 or later.',
+        );
+
         return $this->getDatabasePlatform();
     }
+
     /**
      * Detects IBM DB2 server version
      *
@@ -62,9 +87,19 @@ abstract class AbstractDB2Driver implements VersionAwarePlatformDriver
      */
     private function getVersionNumber(string $versionString): string
     {
-        if (preg_match('/^(?:[^\s]+\s)?(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)/i', $versionString, $versionParts) !== 1) {
-            throw DBALException::invalidPlatformVersionSpecified($versionString, '^(?:[^\s]+\s)?<major_version>.<minor_version>.<patch_version>');
+        if (
+            preg_match(
+                '/^(?:[^\s]+\s)?(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)/i',
+                $versionString,
+                $versionParts,
+            ) !== 1
+        ) {
+            throw DBALException::invalidPlatformVersionSpecified(
+                $versionString,
+                '^(?:[^\s]+\s)?<major_version>.<minor_version>.<patch_version>',
+            );
         }
+
         return $versionParts['major'] . '.' . $versionParts['minor'] . '.' . $versionParts['patch'];
     }
 }

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,9 +15,11 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Traits;
 
 use Archetype\Vendor\Carbon\FactoryImmutable;
+
 /**
  * Options related to a static variable.
  */
@@ -20,27 +28,32 @@ trait StaticOptions
     ///////////////////////////////////////////////////////////////////
     ///////////// Behavior customization for sub-classes //////////////
     ///////////////////////////////////////////////////////////////////
+
     /**
      * Function to call instead of format.
      *
      * @var string|callable|null
      */
     protected static $formatFunction;
+
     /**
      * Function to call instead of createFromFormat.
      *
      * @var string|callable|null
      */
     protected static $createFromFormatFunction;
+
     /**
      * Function to call instead of parse.
      *
      * @var string|callable|null
      */
     protected static $parseFunction;
+
     ///////////////////////////////////////////////////////////////////
     ///////////// Use default factory for static options //////////////
     ///////////////////////////////////////////////////////////////////
+
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -50,10 +63,11 @@ trait StaticOptions
      *
      * @param bool $strictModeEnabled
      */
-    public static function useStrictMode(bool $strictModeEnabled = \true): void
+    public static function useStrictMode(bool $strictModeEnabled = true): void
     {
         FactoryImmutable::getDefaultInstance()->useStrictMode($strictModeEnabled);
     }
+
     /**
      * Returns true if the strict mode is globally in use, false else.
      * (It can be overridden in specific instances.)
@@ -64,6 +78,7 @@ trait StaticOptions
     {
         return FactoryImmutable::getInstance()->isStrictModeEnabled();
     }
+
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -77,10 +92,11 @@ trait StaticOptions
      *
      * @return void
      */
-    public static function useMonthsOverflow(bool $monthsOverflow = \true): void
+    public static function useMonthsOverflow(bool $monthsOverflow = true): void
     {
         FactoryImmutable::getDefaultInstance()->useMonthsOverflow($monthsOverflow);
     }
+
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -96,6 +112,7 @@ trait StaticOptions
     {
         FactoryImmutable::getDefaultInstance()->resetMonthsOverflow();
     }
+
     /**
      * Get the month overflow global behavior (can be overridden in specific instances).
      *
@@ -105,6 +122,7 @@ trait StaticOptions
     {
         return FactoryImmutable::getInstance()->shouldOverflowMonths();
     }
+
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -118,10 +136,11 @@ trait StaticOptions
      *
      * @return void
      */
-    public static function useYearsOverflow(bool $yearsOverflow = \true): void
+    public static function useYearsOverflow(bool $yearsOverflow = true): void
     {
         FactoryImmutable::getDefaultInstance()->useYearsOverflow($yearsOverflow);
     }
+
     /**
      * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
      *             You should rather use the ->settings() method.
@@ -137,6 +156,7 @@ trait StaticOptions
     {
         FactoryImmutable::getDefaultInstance()->resetYearsOverflow();
     }
+
     /**
      * Get the month overflow global behavior (can be overridden in specific instances).
      *

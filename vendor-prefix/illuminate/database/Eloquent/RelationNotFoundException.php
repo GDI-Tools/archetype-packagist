@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent;
 
 use RuntimeException;
+
 class RelationNotFoundException extends RuntimeException
 {
     /**
@@ -11,12 +17,14 @@ class RelationNotFoundException extends RuntimeException
      * @var string
      */
     public $model;
+
     /**
      * The name of the relation.
      *
      * @var string
      */
     public $relation;
+
     /**
      * Create a new exception instance.
      *
@@ -28,9 +36,16 @@ class RelationNotFoundException extends RuntimeException
     public static function make($model, $relation, $type = null)
     {
         $class = get_class($model);
-        $instance = new static(is_null($type) ? "Call to undefined relationship [{$relation}] on model [{$class}]." : "Call to undefined relationship [{$relation}] on model [{$class}] of type [{$type}].");
+
+        $instance = new static(
+            is_null($type)
+                ? "Call to undefined relationship [{$relation}] on model [{$class}]."
+                : "Call to undefined relationship [{$relation}] on model [{$class}] of type [{$type}].",
+        );
+
         $instance->model = $class;
         $instance->relation = $relation;
+
         return $instance;
     }
 }

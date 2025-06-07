@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Routing;
 
@@ -10,13 +15,15 @@ interface UrlGenerator
      * @return string
      */
     public function current();
+
     /**
      * Get the URL for the previous request.
      *
      * @param  mixed  $fallback
      * @return string
      */
-    public function previous($fallback = \false);
+    public function previous($fallback = false);
+
     /**
      * Generate an absolute URL to the given path.
      *
@@ -26,6 +33,7 @@ interface UrlGenerator
      * @return string
      */
     public function to($path, $extra = [], $secure = null);
+
     /**
      * Generate a secure, absolute URL to the given path.
      *
@@ -34,6 +42,7 @@ interface UrlGenerator
      * @return string
      */
     public function secure($path, $parameters = []);
+
     /**
      * Generate the URL to an application asset.
      *
@@ -42,6 +51,7 @@ interface UrlGenerator
      * @return string
      */
     public function asset($path, $secure = null);
+
     /**
      * Get the URL to a named route.
      *
@@ -52,7 +62,8 @@ interface UrlGenerator
      *
      * @throws \InvalidArgumentException
      */
-    public function route($name, $parameters = [], $absolute = \true);
+    public function route($name, $parameters = [], $absolute = true);
+
     /**
      * Create a signed route URL for a named route.
      *
@@ -64,7 +75,8 @@ interface UrlGenerator
      *
      * @throws \InvalidArgumentException
      */
-    public function signedRoute($name, $parameters = [], $expiration = null, $absolute = \true);
+    public function signedRoute($name, $parameters = [], $expiration = null, $absolute = true);
+
     /**
      * Create a temporary signed route URL for a named route.
      *
@@ -74,7 +86,8 @@ interface UrlGenerator
      * @param  bool  $absolute
      * @return string
      */
-    public function temporarySignedRoute($name, $expiration, $parameters = [], $absolute = \true);
+    public function temporarySignedRoute($name, $expiration, $parameters = [], $absolute = true);
+
     /**
      * Generate an absolute URL with the given query parameters.
      *
@@ -85,6 +98,7 @@ interface UrlGenerator
      * @return string
      */
     public function query($path, $query = [], $extra = [], $secure = null);
+
     /**
      * Get the URL to a controller action.
      *
@@ -93,13 +107,15 @@ interface UrlGenerator
      * @param  bool  $absolute
      * @return string
      */
-    public function action($action, $parameters = [], $absolute = \true);
+    public function action($action, $parameters = [], $absolute = true);
+
     /**
      * Get the root controller namespace.
      *
      * @return string
      */
     public function getRootControllerNamespace();
+
     /**
      * Set the root controller namespace.
      *

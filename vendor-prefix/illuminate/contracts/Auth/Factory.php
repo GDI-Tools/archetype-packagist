@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Auth;
 
@@ -8,9 +13,10 @@ interface Factory
      * Get a guard instance by name.
      *
      * @param  string|null  $name
-     * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+     * @return \Archetype\Vendor\Illuminate\Contracts\Auth\Guard|\Archetype\Vendor\Illuminate\Contracts\Auth\StatefulGuard
      */
     public function guard($name = null);
+
     /**
      * Set the default guard the factory should serve.
      *

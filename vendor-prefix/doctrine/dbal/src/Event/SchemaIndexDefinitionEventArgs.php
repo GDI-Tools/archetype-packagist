@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Event;
 
 use Archetype\Vendor\Doctrine\DBAL\Connection;
 use Archetype\Vendor\Doctrine\DBAL\Schema\Index;
+
 /**
  * Event Arguments used when the portable index definition is generated inside {@see AbstractSchemaManager}.
  *
@@ -12,15 +18,19 @@ use Archetype\Vendor\Doctrine\DBAL\Schema\Index;
 class SchemaIndexDefinitionEventArgs extends SchemaEventArgs
 {
     private ?Index $index = null;
+
     /**
      * Raw index data as fetched from the database.
      *
      * @var mixed[]
      */
     private array $tableIndex;
+
     /** @var string */
     private $table;
+
     private Connection $connection;
+
     /**
      * @param mixed[] $tableIndex
      * @param string  $table
@@ -28,9 +38,10 @@ class SchemaIndexDefinitionEventArgs extends SchemaEventArgs
     public function __construct(array $tableIndex, $table, Connection $connection)
     {
         $this->tableIndex = $tableIndex;
-        $this->table = $table;
+        $this->table      = $table;
         $this->connection = $connection;
     }
+
     /**
      * Allows to clear the index which means the index will be excluded from tables index list.
      *
@@ -39,23 +50,28 @@ class SchemaIndexDefinitionEventArgs extends SchemaEventArgs
     public function setIndex(?Index $index = null)
     {
         $this->index = $index;
+
         return $this;
     }
+
     /** @return Index|null */
     public function getIndex()
     {
         return $this->index;
     }
+
     /** @return mixed[] */
     public function getTableIndex()
     {
         return $this->tableIndex;
     }
+
     /** @return string */
     public function getTable()
     {
         return $this->table;
     }
+
     /** @return Connection */
     public function getConnection()
     {

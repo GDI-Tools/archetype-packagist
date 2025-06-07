@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
-use Archetype\Vendor\Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
+use Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
+
 /**
  * @method static \Illuminate\Console\Scheduling\CallbackEvent call(string|callable $callback, array $parameters = [])
  * @method static \Illuminate\Console\Scheduling\Event command(string $command, array $parameters = [])
@@ -11,7 +17,7 @@ use Archetype\Vendor\Illuminate\Console\Scheduling\Schedule as ConsoleSchedule;
  * @method static void group(\Closure $events)
  * @method static string compileArrayInput(string|int $key, array $value)
  * @method static bool serverShouldRun(\Illuminate\Console\Scheduling\Event $event, \DateTimeInterface $time)
- * @method static \Illuminate\Support\Collection dueEvents(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection dueEvents(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static \Illuminate\Console\Scheduling\Event[] events()
  * @method static \Illuminate\Console\Scheduling\Schedule useCache(string $store)
  * @method static void macro(string $name, object|callable $macro)

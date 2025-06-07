@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\OCI8;
 
@@ -6,10 +11,13 @@ use Archetype\Vendor\Doctrine\DBAL\Driver\AbstractOracleDriver;
 use Archetype\Vendor\Doctrine\DBAL\Driver\OCI8\Exception\ConnectionFailed;
 use Archetype\Vendor\Doctrine\DBAL\Driver\OCI8\Exception\InvalidConfiguration;
 use SensitiveParameter;
+
 use function oci_connect;
 use function oci_new_connect;
 use function oci_pconnect;
+
 use const OCI_NO_AUTO_COMMIT;
+
 /**
  * A Doctrine DBAL driver for the Oracle OCI8 PHP extensions.
  */
@@ -23,18 +31,21 @@ final class Driver extends AbstractOracleDriver
     public function connect(
         #[SensitiveParameter]
         array $params
-    )
-    {
-        $username = $params['user'] ?? '';
-        $password = $params['password'] ?? '';
-        $charset = $params['charset'] ?? '';
+    ) {
+        $username    = $params['user'] ?? '';
+        $password    = $params['password'] ?? '';
+        $charset     = $params['charset'] ?? '';
         $sessionMode = $params['sessionMode'] ?? OCI_NO_AUTO_COMMIT;
+
         $connectionString = $this->getEasyConnectString($params);
-        $persistent = !empty($params['persistent']);
-        $exclusive = !empty($params['driverOptions']['exclusive']);
+
+        $persistent = ! empty($params['persistent']);
+        $exclusive  = ! empty($params['driverOptions']['exclusive']);
+
         if ($persistent && $exclusive) {
             throw InvalidConfiguration::forPersistentAndExclusive();
         }
+
         if ($persistent) {
             $connection = @oci_pconnect($username, $password, $connectionString, $charset, $sessionMode);
         } elseif ($exclusive) {
@@ -42,9 +53,11 @@ final class Driver extends AbstractOracleDriver
         } else {
             $connection = @oci_connect($username, $password, $connectionString, $charset, $sessionMode);
         }
-        if ($connection === \false) {
+
+        if ($connection === false) {
             throw ConnectionFailed::new();
         }
+
         return new Connection($connection);
     }
 }

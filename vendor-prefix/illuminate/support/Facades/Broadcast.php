@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Contracts\Broadcasting\Factory as BroadcastingFactoryContract;
+
 /**
  * @method static void routes(array|null $attributes = null)
  * @method static void userRoutes(array|null $attributes = null)
@@ -21,16 +27,16 @@ use Archetype\Vendor\Illuminate\Contracts\Broadcasting\Factory as BroadcastingFa
  * @method static void setDefaultDriver(string $name)
  * @method static void purge(string|null $name = null)
  * @method static \Illuminate\Broadcasting\BroadcastManager extend(string $driver, \Closure $callback)
- * @method static \Illuminate\Contracts\Foundation\Application getApplication()
- * @method static \Illuminate\Broadcasting\BroadcastManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Foundation\Application getApplication()
+ * @method static \Illuminate\Broadcasting\BroadcastManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static \Illuminate\Broadcasting\BroadcastManager forgetDrivers()
  * @method static mixed auth(\Illuminate\Http\Request $request)
  * @method static mixed validAuthenticationResponse(\Illuminate\Http\Request $request, mixed $result)
  * @method static void broadcast(array $channels, string $event, array $payload = [])
  * @method static array|null resolveAuthenticatedUser(\Illuminate\Http\Request $request)
  * @method static void resolveAuthenticatedUserUsing(\Closure $callback)
- * @method static \Illuminate\Broadcasting\Broadcasters\Broadcaster channel(\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|string $channel, callable|string $callback, array $options = [])
- * @method static \Illuminate\Support\Collection getChannels()
+ * @method static \Illuminate\Broadcasting\Broadcasters\Broadcaster channel(\Archetype\Vendor\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|string $channel, callable|string $callback, array $options = [])
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection getChannels()
  *
  * @see \Illuminate\Broadcasting\BroadcastManager
  * @see \Illuminate\Broadcasting\Broadcasters\Broadcaster

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Psr\Log;
 
@@ -17,7 +22,7 @@ class NullLogger extends AbstractLogger
      *
      * @param mixed[] $context
      *
-     * @throws \Psr\Log\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\Log\InvalidArgumentException
      */
     public function log($level, string|\Stringable $message, array $context = []): void
     {

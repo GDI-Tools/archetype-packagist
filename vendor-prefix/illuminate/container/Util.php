@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Container;
 
@@ -6,6 +11,7 @@ use Closure;
 use Archetype\Vendor\Illuminate\Contracts\Container\ContextualAttribute;
 use ReflectionAttribute;
 use ReflectionNamedType;
+
 /**
  * @internal
  */
@@ -24,8 +30,10 @@ class Util
         if (is_null($value)) {
             return [];
         }
+
         return is_array($value) ? $value : [$value];
     }
+
     /**
      * Return the default value of the given value.
      *
@@ -39,6 +47,7 @@ class Util
     {
         return $value instanceof Closure ? $value(...$args) : $value;
     }
+
     /**
      * Get the class name of the given parameter's type, if possible.
      *
@@ -50,20 +59,26 @@ class Util
     public static function getParameterClassName($parameter)
     {
         $type = $parameter->getType();
-        if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
+
+        if (! $type instanceof ReflectionNamedType || $type->isBuiltin()) {
             return null;
         }
+
         $name = $type->getName();
-        if (!is_null($class = $parameter->getDeclaringClass())) {
+
+        if (! is_null($class = $parameter->getDeclaringClass())) {
             if ($name === 'self') {
                 return $class->getName();
             }
+
             if ($name === 'parent' && $parent = $class->getParentClass()) {
                 return $parent->getName();
             }
         }
+
         return $name;
     }
+
     /**
      * Get a contextual attribute from a dependency.
      *

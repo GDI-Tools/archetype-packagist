@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection;
 
 /**
@@ -23,7 +27,7 @@ namespace Archetype\Vendor\Ramsey\Collection;
  * Example usage:
  *
  * ```
- * $collection = new \Ramsey\Collection\Collection('My\\Foo');
+ * $collection = new \Archetype\Vendor\Ramsey\Collection\Collection('My\\Foo');
  * $collection->add(new \My\Foo());
  * $collection->add(new \My\Foo());
  *
@@ -38,7 +42,7 @@ namespace Archetype\Vendor\Ramsey\Collection;
  * ```
  * namespace My\Foo;
  *
- * class FooCollection extends \Ramsey\Collection\AbstractCollection
+ * class FooCollection extends \Archetype\Vendor\Ramsey\Collection\AbstractCollection
  * {
  *     public function getType()
  *     {
@@ -85,6 +89,7 @@ class Collection extends AbstractCollection
     {
         parent::__construct($data);
     }
+
     public function getType(): string
     {
         return $this->collectionType;

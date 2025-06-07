@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use Archetype\Vendor\Ramsey\Uuid\Codec\CodecInterface;
@@ -18,6 +22,7 @@ use Archetype\Vendor\Ramsey\Uuid\Converter\TimeConverterInterface;
 use Archetype\Vendor\Ramsey\Uuid\Exception\InvalidArgumentException;
 use Archetype\Vendor\Ramsey\Uuid\Rfc4122\FieldsInterface as Rfc4122FieldsInterface;
 use Archetype\Vendor\Ramsey\Uuid\Uuid;
+
 /**
  * Custom format, or version 8, UUIDs provide an RFC-compatible format for experimental or vendor-specific uses
  *
@@ -40,11 +45,18 @@ final class UuidV8 extends Uuid implements UuidInterface
      * @param TimeConverterInterface $timeConverter The time converter to use for converting timestamps extracted from a
      *     UUID to unix timestamps
      */
-    public function __construct(Rfc4122FieldsInterface $fields, NumberConverterInterface $numberConverter, CodecInterface $codec, TimeConverterInterface $timeConverter)
-    {
+    public function __construct(
+        Rfc4122FieldsInterface $fields,
+        NumberConverterInterface $numberConverter,
+        CodecInterface $codec,
+        TimeConverterInterface $timeConverter,
+    ) {
         if ($fields->getVersion() !== Uuid::UUID_TYPE_CUSTOM) {
-            throw new InvalidArgumentException('Fields used to create a UuidV8 must represent a version 8 (custom format) UUID');
+            throw new InvalidArgumentException(
+                'Fields used to create a UuidV8 must represent a version 8 (custom format) UUID',
+            );
         }
+
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
 }

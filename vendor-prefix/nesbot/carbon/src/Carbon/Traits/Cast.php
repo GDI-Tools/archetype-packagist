@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,10 +15,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Traits;
 
 use Archetype\Vendor\Carbon\Exceptions\InvalidCastException;
 use DateTimeInterface;
+
 /**
  * Trait Cast.
  *
@@ -32,11 +40,14 @@ trait Cast
     public function cast(string $className): mixed
     {
         if (!method_exists($className, 'instance')) {
-            if (is_a($className, DateTimeInterface::class, \true)) {
-                return $className::createFromFormat('U.u', $this->rawFormat('U.u'))->setTimezone($this->getTimezone());
+            if (is_a($className, DateTimeInterface::class, true)) {
+                return $className::createFromFormat('U.u', $this->rawFormat('U.u'))
+                    ->setTimezone($this->getTimezone());
             }
-            throw new InvalidCastException("{$className} has not the instance() method needed to cast the date.");
+
+            throw new InvalidCastException("$className has not the instance() method needed to cast the date.");
         }
+
         return $className::instance($this);
     }
 }

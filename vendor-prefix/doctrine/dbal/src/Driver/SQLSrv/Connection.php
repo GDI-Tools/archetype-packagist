@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\SQLSrv;
 
@@ -8,6 +13,7 @@ use Archetype\Vendor\Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
 use Archetype\Vendor\Doctrine\DBAL\Driver\Statement as DriverStatement;
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function is_float;
 use function is_int;
 use function sprintf;
@@ -18,10 +24,12 @@ use function sqlsrv_rollback;
 use function sqlsrv_rows_affected;
 use function sqlsrv_server_info;
 use function str_replace;
+
 final class Connection implements ServerInfoAwareConnection
 {
     /** @var resource */
     private $connection;
+
     /**
      * @internal The connection can be only instantiated by its driver.
      *
@@ -31,22 +39,27 @@ final class Connection implements ServerInfoAwareConnection
     {
         $this->connection = $connection;
     }
+
     /**
      * {@inheritDoc}
      */
     public function getServerVersion()
     {
         $serverInfo = sqlsrv_server_info($this->connection);
+
         return $serverInfo['SQLServerVersion'];
     }
+
     public function prepare(string $sql): DriverStatement
     {
         return new Statement($this->connection, $sql);
     }
+
     public function query(string $sql): ResultInterface
     {
         return $this->prepare($sql)->execute();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -55,57 +68,79 @@ final class Connection implements ServerInfoAwareConnection
         if (is_int($value)) {
             return $value;
         }
+
         if (is_float($value)) {
             return sprintf('%F', $value);
         }
+
         return "'" . str_replace("'", "''", $value) . "'";
     }
+
     public function exec(string $sql): int
     {
         $stmt = sqlsrv_query($this->connection, $sql);
-        if ($stmt === \false) {
+
+        if ($stmt === false) {
             throw Error::new();
         }
+
         $rowsAffected = sqlsrv_rows_affected($stmt);
-        if ($rowsAffected === \false) {
+
+        if ($rowsAffected === false) {
             throw Error::new();
         }
+
         return $rowsAffected;
     }
+
     /**
      * {@inheritDoc}
      */
     public function lastInsertId($name = null)
     {
         if ($name !== null) {
-            Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/issues/4687', 'The usage of Connection::lastInsertId() with a sequence name is deprecated.');
-            $result = $this->prepare('SELECT CONVERT(VARCHAR(MAX), current_value) FROM sys.sequences WHERE name = ?')->execute([$name]);
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/issues/4687',
+                'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
+            );
+
+            $result = $this->prepare('SELECT CONVERT(VARCHAR(MAX), current_value) FROM sys.sequences WHERE name = ?')
+                ->execute([$name]);
         } else {
             $result = $this->query('SELECT @@IDENTITY');
         }
+
         return $result->fetchOne();
     }
+
     public function beginTransaction(): bool
     {
-        if (!sqlsrv_begin_transaction($this->connection)) {
+        if (! sqlsrv_begin_transaction($this->connection)) {
             throw Error::new();
         }
-        return \true;
+
+        return true;
     }
+
     public function commit(): bool
     {
-        if (!sqlsrv_commit($this->connection)) {
+        if (! sqlsrv_commit($this->connection)) {
             throw Error::new();
         }
-        return \true;
+
+        return true;
     }
+
     public function rollBack(): bool
     {
-        if (!sqlsrv_rollback($this->connection)) {
+        if (! sqlsrv_rollback($this->connection)) {
             throw Error::new();
         }
-        return \true;
+
+        return true;
     }
+
     /** @return resource */
     public function getNativeConnection()
     {

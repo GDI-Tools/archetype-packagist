@@ -1,7 +1,5 @@
 <?php
 
-namespace Archetype\Vendor;
-
 /**
  * This file is part of the Carbon package.
  *
@@ -10,6 +8,7 @@ namespace Archetype\Vendor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 /*
  * Authors:
  * - Guo Xiang Tan
@@ -17,4 +16,4 @@ namespace Archetype\Vendor;
  * - Ash
  * - harpreetkhalsagtbit
  */
-return require __DIR__ . '/pa.php';
+return require __DIR__.'/pa.php';

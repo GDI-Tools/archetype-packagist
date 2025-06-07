@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Builder;
 
 use Archetype\Vendor\Ramsey\Collection\AbstractCollection;
@@ -21,6 +25,7 @@ use Archetype\Vendor\Ramsey\Uuid\Math\BrickMathCalculator;
 use Archetype\Vendor\Ramsey\Uuid\Nonstandard\UuidBuilder as NonstandardUuidBuilder;
 use Archetype\Vendor\Ramsey\Uuid\Rfc4122\UuidBuilder as Rfc4122UuidBuilder;
 use Traversable;
+
 /**
  * A collection of UuidBuilderInterface objects
  *
@@ -37,10 +42,12 @@ class BuilderCollection extends AbstractCollection
     {
         return UuidBuilderInterface::class;
     }
+
     public function getIterator(): Traversable
     {
         return parent::getIterator();
     }
+
     /**
      * Re-constructs the object from its serialized form
      *
@@ -49,10 +56,24 @@ class BuilderCollection extends AbstractCollection
     public function unserialize($serialized): void
     {
         /** @var array<array-key, UuidBuilderInterface> $data */
-        $data = unserialize($serialized, ['allowed_classes' => [BrickMathCalculator::class, GenericNumberConverter::class, GenericTimeConverter::class, GuidBuilder::class, NonstandardUuidBuilder::class, PhpTimeConverter::class, Rfc4122UuidBuilder::class]]);
-        $this->data = array_filter($data, function ($unserialized): bool {
-            /** @phpstan-ignore instanceof.alwaysTrue */
-            return $unserialized instanceof UuidBuilderInterface;
-        });
+        $data = unserialize($serialized, [
+            'allowed_classes' => [
+                BrickMathCalculator::class,
+                GenericNumberConverter::class,
+                GenericTimeConverter::class,
+                GuidBuilder::class,
+                NonstandardUuidBuilder::class,
+                PhpTimeConverter::class,
+                Rfc4122UuidBuilder::class,
+            ],
+        ]);
+
+        $this->data = array_filter(
+            $data,
+            function ($unserialized): bool {
+                /** @phpstan-ignore instanceof.alwaysTrue */
+                return $unserialized instanceof UuidBuilderInterface;
+            },
+        );
     }
 }

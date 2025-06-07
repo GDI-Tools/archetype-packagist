@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -9,6 +14,7 @@ use Archetype\Vendor\Illuminate\Database\Schema\Grammars\SQLiteGrammar as Schema
 use Archetype\Vendor\Illuminate\Database\Schema\SQLiteBuilder;
 use Archetype\Vendor\Illuminate\Database\Schema\SqliteSchemaState;
 use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
+
 class SQLiteConnection extends Connection
 {
     /**
@@ -18,6 +24,7 @@ class SQLiteConnection extends Connection
     {
         return 'SQLite';
     }
+
     /**
      * Escape a binary value for safe SQL embedding.
      *
@@ -27,8 +34,10 @@ class SQLiteConnection extends Connection
     protected function escapeBinary($value)
     {
         $hex = bin2hex($value);
+
         return "x'{$hex}'";
     }
+
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
@@ -39,40 +48,45 @@ class SQLiteConnection extends Connection
     {
         return boolval(preg_match('#(column(s)? .* (is|are) not unique|UNIQUE constraint failed: .*)#i', $exception->getMessage()));
     }
+
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\SQLiteGrammar
+     * @return \Archetype\Vendor\Illuminate\Database\Query\Grammars\SQLiteGrammar
      */
     protected function getDefaultQueryGrammar()
     {
         return new QueryGrammar($this);
     }
+
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\SQLiteBuilder
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\SQLiteBuilder
      */
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
+
         return new SQLiteBuilder($this);
     }
+
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\SQLiteGrammar
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\Grammars\SQLiteGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
         return new SchemaGrammar($this);
     }
+
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
+     * @param  \Archetype\Vendor\Illuminate\Filesystem\Filesystem|null  $files
      * @param  callable|null  $processFactory
      *
      * @throws \RuntimeException
@@ -81,13 +95,14 @@ class SQLiteConnection extends Connection
     {
         return new SqliteSchemaState($this, $files, $processFactory);
     }
+
     /**
      * Get the default post processor instance.
      *
-     * @return \Illuminate\Database\Query\Processors\SQLiteProcessor
+     * @return \Archetype\Vendor\Illuminate\Database\Query\Processors\SQLiteProcessor
      */
     protected function getDefaultPostProcessor()
     {
-        return new SQLiteProcessor();
+        return new SQLiteProcessor;
     }
 }

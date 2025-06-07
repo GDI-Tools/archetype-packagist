@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Debug;
 
 use Throwable;
+
 interface ExceptionHandler
 {
     /**
@@ -14,6 +20,7 @@ interface ExceptionHandler
      * @throws \Throwable
      */
     public function report(Throwable $e);
+
     /**
      * Determine if the exception should be reported.
      *
@@ -21,6 +28,7 @@ interface ExceptionHandler
      * @return bool
      */
     public function shouldReport(Throwable $e);
+
     /**
      * Render an exception into an HTTP response.
      *
@@ -31,6 +39,7 @@ interface ExceptionHandler
      * @throws \Throwable
      */
     public function render($request, Throwable $e);
+
     /**
      * Render an exception to the console.
      *

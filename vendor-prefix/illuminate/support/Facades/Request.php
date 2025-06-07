@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -6,7 +11,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static \Illuminate\Http\Request capture()
  * @method static \Illuminate\Http\Request instance()
  * @method static string method()
- * @method static \Illuminate\Support\Uri uri()
+ * @method static \Archetype\Vendor\Illuminate\Support\Uri uri()
  * @method static string root()
  * @method static string url()
  * @method static string fullUrl()
@@ -39,8 +44,8 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static \Illuminate\Http\Request duplicate(array|null $query = null, array|null $request = null, array|null $attributes = null, array|null $cookies = null, array|null $files = null, array|null $server = null)
  * @method static bool hasSession(bool $skipIfUninitialized = false)
  * @method static \Symfony\Component\HttpFoundation\Session\SessionInterface getSession()
- * @method static \Illuminate\Contracts\Session\Session session()
- * @method static void setLaravelSession(\Illuminate\Contracts\Session\Session $session)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Session\Session session()
+ * @method static void setLaravelSession(\Archetype\Vendor\Illuminate\Contracts\Session\Session $session)
  * @method static void setRequestLocale(string $locale)
  * @method static void setDefaultRequestLocale(string $locale)
  * @method static mixed user(string|null $guard = null)
@@ -132,7 +137,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static bool acceptsHtml()
  * @method static bool matchesType(string $actual, string $type)
  * @method static string format(string $default = 'html')
- * @method static string|array|null old(string|null $key = null, \Illuminate\Database\Eloquent\Model|string|array|null $default = null)
+ * @method static string|array|null old(string|null $key = null, \Archetype\Vendor\Illuminate\Database\Eloquent\Model|string|array|null $default = null)
  * @method static void flash()
  * @method static void flashOnly(array|mixed $keys)
  * @method static void flashExcept(array|mixed $keys)
@@ -144,7 +149,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static array keys()
  * @method static array all(array|mixed|null $keys = null)
  * @method static mixed input(string|null $key = null, mixed $default = null)
- * @method static \Illuminate\Support\Fluent fluent(array|string|null $key = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Fluent fluent(array|string|null $key = null)
  * @method static string|array|null query(string|null $key = null, string|array|null $default = null)
  * @method static string|array|null post(string|null $key = null, string|array|null $default = null)
  * @method static bool hasCookie(string $key)
@@ -164,16 +169,16 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static \Illuminate\Http\Request|mixed whenFilled(string $key, callable $callback, callable|null $default = null)
  * @method static bool missing(string|array $key)
  * @method static \Illuminate\Http\Request|mixed whenMissing(string $key, callable $callback, callable|null $default = null)
- * @method static \Illuminate\Support\Stringable str(string $key, mixed $default = null)
- * @method static \Illuminate\Support\Stringable string(string $key, mixed $default = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Stringable str(string $key, mixed $default = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Stringable string(string $key, mixed $default = null)
  * @method static bool boolean(string|null $key = null, bool $default = false)
  * @method static int integer(string $key, int $default = 0)
  * @method static float float(string $key, float $default = 0)
- * @method static \Illuminate\Support\Carbon|null date(string $key, string|null $format = null, string|null $tz = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Carbon|null date(string $key, string|null $format = null, string|null $tz = null)
  * @method static \BackedEnum|null enum(string $key, string $enumClass, \BackedEnum|null $default = null)
  * @method static \BackedEnum[] enums(string $key, string $enumClass)
  * @method static array array(array|string|null $key = null)
- * @method static \Illuminate\Support\Collection collect(array|string|null $key = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection collect(array|string|null $key = null)
  * @method static array only(array|mixed $keys)
  * @method static array except(array|mixed $keys)
  * @method static \Illuminate\Http\Request|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)

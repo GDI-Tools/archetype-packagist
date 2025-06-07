@@ -1,15 +1,22 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
+
 use function assert;
 use function fopen;
 use function fseek;
 use function fwrite;
 use function is_resource;
 use function is_string;
+
 /**
  * Type that maps an SQL BLOB to a PHP resource stream.
  */
@@ -22,6 +29,7 @@ class BlobType extends Type
     {
         return $platform->getBlobTypeDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -30,6 +38,7 @@ class BlobType extends Type
         if ($value === null) {
             return null;
         }
+
         if (is_string($value)) {
             $fp = fopen('php://temp', 'rb+');
             assert(is_resource($fp));
@@ -37,11 +46,14 @@ class BlobType extends Type
             fseek($fp, 0);
             $value = $fp;
         }
-        if (!is_resource($value)) {
+
+        if (! is_resource($value)) {
             throw ConversionException::conversionFailed($value, Types::BLOB);
         }
+
         return $value;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -49,6 +61,7 @@ class BlobType extends Type
     {
         return Types::BLOB;
     }
+
     /**
      * {@inheritDoc}
      */

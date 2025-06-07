@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -6,6 +11,7 @@ use Archetype\Vendor\Illuminate\Support\Facades\DB;
 use Archetype\Vendor\Illuminate\Support\Str;
 use PDOException;
 use Throwable;
+
 class QueryException extends PDOException
 {
     /**
@@ -14,18 +20,21 @@ class QueryException extends PDOException
      * @var string
      */
     public $connectionName;
+
     /**
      * The SQL for the query.
      *
      * @var string
      */
     protected $sql;
+
     /**
      * The bindings for the query.
      *
      * @var array
      */
     protected $bindings;
+
     /**
      * Create a new query exception instance.
      *
@@ -37,15 +46,18 @@ class QueryException extends PDOException
     public function __construct($connectionName, $sql, array $bindings, Throwable $previous)
     {
         parent::__construct('', 0, $previous);
+
         $this->connectionName = $connectionName;
         $this->sql = $sql;
         $this->bindings = $bindings;
         $this->code = $previous->getCode();
         $this->message = $this->formatMessage($connectionName, $sql, $bindings, $previous);
+
         if ($previous instanceof PDOException) {
             $this->errorInfo = $previous->errorInfo;
         }
     }
+
     /**
      * Format the SQL error message.
      *
@@ -57,8 +69,9 @@ class QueryException extends PDOException
      */
     protected function formatMessage($connectionName, $sql, $bindings, Throwable $previous)
     {
-        return $previous->getMessage() . ' (Connection: ' . $connectionName . ', SQL: ' . Str::replaceArray('?', $bindings, $sql) . ')';
+        return $previous->getMessage().' (Connection: '.$connectionName.', SQL: '.Str::replaceArray('?', $bindings, $sql).')';
     }
+
     /**
      * Get the connection name for the query.
      *
@@ -68,6 +81,7 @@ class QueryException extends PDOException
     {
         return $this->connectionName;
     }
+
     /**
      * Get the SQL for the query.
      *
@@ -77,13 +91,17 @@ class QueryException extends PDOException
     {
         return $this->sql;
     }
+
     /**
      * Get the raw SQL representation of the query with embedded bindings.
      */
     public function getRawSql(): string
     {
-        return DB::connection($this->getConnectionName())->getQueryGrammar()->substituteBindingsIntoRawSql($this->getSql(), $this->getBindings());
+        return DB::connection($this->getConnectionName())
+            ->getQueryGrammar()
+            ->substituteBindingsIntoRawSql($this->getSql(), $this->getBindings());
     }
+
     /**
      * Get the bindings for the query.
      *

@@ -7,16 +7,20 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Test;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Archetype\Vendor\Psr\Log\LoggerInterface;
-use Archetype\Vendor\Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\MockHttpClient;
 use Archetype\Vendor\Symfony\Component\Translation\Dumper\XliffFileDumper;
 use Archetype\Vendor\Symfony\Component\Translation\Loader\LoaderInterface;
 use Archetype\Vendor\Symfony\Component\Translation\TranslatorBagInterface;
-use Archetype\Vendor\Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 /**
  * A test case to ease testing a translation provider factory.
  *
@@ -27,12 +31,14 @@ use Archetype\Vendor\Symfony\Contracts\HttpClient\HttpClientInterface;
 abstract class ProviderFactoryTestCase extends AbstractProviderFactoryTestCase
 {
     use IncompleteDsnTestTrait;
+
     protected HttpClientInterface $client;
     protected LoggerInterface|MockObject $logger;
     protected string $defaultLocale;
     protected LoaderInterface|MockObject $loader;
     protected XliffFileDumper|MockObject $xliffFileDumper;
     protected TranslatorBagInterface|MockObject $translatorBag;
+
     /**
      * @return iterable<array{0: string, 1?: string|null}>
      */
@@ -40,6 +46,7 @@ abstract class ProviderFactoryTestCase extends AbstractProviderFactoryTestCase
     {
         return [];
     }
+
     /**
      * @return iterable<array{0: string, 1?: string|null}>
      */
@@ -47,26 +54,32 @@ abstract class ProviderFactoryTestCase extends AbstractProviderFactoryTestCase
     {
         return [];
     }
+
     protected function getClient(): HttpClientInterface
     {
         return $this->client ??= new MockHttpClient();
     }
+
     protected function getLogger(): LoggerInterface
     {
         return $this->logger ??= $this->createMock(LoggerInterface::class);
     }
+
     protected function getDefaultLocale(): string
     {
         return $this->defaultLocale ??= 'en';
     }
+
     protected function getLoader(): LoaderInterface
     {
         return $this->loader ??= $this->createMock(LoaderInterface::class);
     }
+
     protected function getXliffFileDumper(): XliffFileDumper
     {
         return $this->xliffFileDumper ??= $this->createMock(XliffFileDumper::class);
     }
+
     protected function getTranslatorBag(): TranslatorBagInterface
     {
         return $this->translatorBag ??= $this->createMock(TranslatorBagInterface::class);

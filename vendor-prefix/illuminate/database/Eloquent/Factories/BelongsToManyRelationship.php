@@ -1,33 +1,42 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Factories;
 
 use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
 use Archetype\Vendor\Illuminate\Support\Collection;
+
 class BelongsToManyRelationship
 {
     /**
      * The related factory instance.
      *
-     * @var \Illuminate\Database\Eloquent\Factories\Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array
+     * @var \Archetype\Vendor\Illuminate\Database\Eloquent\Factories\Factory|\Archetype\Vendor\Illuminate\Support\Collection|\Archetype\Vendor\Illuminate\Database\Eloquent\Model|array
      */
     protected $factory;
+
     /**
      * The pivot attributes / attribute resolver.
      *
      * @var callable|array
      */
     protected $pivot;
+
     /**
      * The relationship name.
      *
      * @var string
      */
     protected $relationship;
+
     /**
      * Create a new attached relationship definition.
      *
-     * @param  \Illuminate\Database\Eloquent\Factories\Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array  $factory
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Factories\Factory|\Archetype\Vendor\Illuminate\Support\Collection|\Archetype\Vendor\Illuminate\Database\Eloquent\Model|array  $factory
      * @param  callable|array  $pivot
      * @param  string  $relationship
      */
@@ -37,26 +46,33 @@ class BelongsToManyRelationship
         $this->pivot = $pivot;
         $this->relationship = $relationship;
     }
+
     /**
      * Create the attached relationship for the given model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
     public function createFor(Model $model)
     {
         $factoryInstance = $this->factory instanceof Factory;
+
         if ($factoryInstance) {
             $relationship = $model->{$this->relationship}();
         }
+
         Collection::wrap($factoryInstance ? $this->factory->prependState($relationship->getQuery()->pendingAttributes)->create([], $model) : $this->factory)->each(function ($attachable) use ($model) {
-            $model->{$this->relationship}()->attach($attachable, is_callable($this->pivot) ? call_user_func($this->pivot, $model) : $this->pivot);
+            $model->{$this->relationship}()->attach(
+                $attachable,
+                is_callable($this->pivot) ? call_user_func($this->pivot, $model) : $this->pivot
+            );
         });
     }
+
     /**
      * Specify the model instances to always use when creating relationships.
      *
-     * @param  \Illuminate\Support\Collection  $recycle
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection  $recycle
      * @return $this
      */
     public function recycle($recycle)
@@ -64,6 +80,7 @@ class BelongsToManyRelationship
         if ($this->factory instanceof Factory) {
             $this->factory = $this->factory->recycle($recycle);
         }
+
         return $this;
     }
 }

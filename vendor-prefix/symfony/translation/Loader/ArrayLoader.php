@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Loader;
 
 use Archetype\Vendor\Symfony\Component\Translation\MessageCatalogue;
+
 /**
  * ArrayLoader loads translations from a PHP array.
  *
@@ -23,8 +27,10 @@ class ArrayLoader implements LoaderInterface
         $resource = $this->flatten($resource);
         $catalogue = new MessageCatalogue($locale);
         $catalogue->add($resource, $domain);
+
         return $catalogue;
     }
+
     /**
      * Flattens an nested array of translations.
      *
@@ -40,13 +46,14 @@ class ArrayLoader implements LoaderInterface
             if (\is_array($value)) {
                 foreach ($this->flatten($value) as $k => $v) {
                     if (null !== $v) {
-                        $result[$key . '.' . $k] = $v;
+                        $result[$key.'.'.$k] = $v;
                     }
                 }
             } elseif (null !== $value) {
                 $result[$key] = $value;
             }
         }
+
         return $result;
     }
 }

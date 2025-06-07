@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent;
 
@@ -7,6 +12,7 @@ use Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasMany;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Archetype\Vendor\Illuminate\Support\Str;
 use Archetype\Vendor\Illuminate\Support\Stringable;
+
 /**
  * @template TIntermediateModel of \Illuminate\Database\Eloquent\Model
  * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
@@ -20,12 +26,14 @@ class PendingHasThroughRelationship
      * @var TDeclaringModel
      */
     protected $rootModel;
+
     /**
      * The local relationship.
      *
      * @var TLocalRelationship
      */
     protected $localRelationship;
+
     /**
      * Create a pending has-many-through or has-one-through relationship.
      *
@@ -35,24 +43,26 @@ class PendingHasThroughRelationship
     public function __construct($rootModel, $localRelationship)
     {
         $this->rootModel = $rootModel;
+
         $this->localRelationship = $localRelationship;
     }
+
     /**
      * Define the distant relationship that this model has.
      *
      * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
      *
-     * @param  string|(callable(TIntermediateModel): (\Illuminate\Database\Eloquent\Relations\HasOne<TRelatedModel, TIntermediateModel>|\Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TIntermediateModel>|\Illuminate\Database\Eloquent\Relations\MorphOneOrMany<TRelatedModel, TIntermediateModel>))  $callback
+     * @param  string|(callable(TIntermediateModel): (\Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasOne<TRelatedModel, TIntermediateModel>|\Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TIntermediateModel>|\Archetype\Vendor\Illuminate\Database\Eloquent\Relations\MorphOneOrMany<TRelatedModel, TIntermediateModel>))  $callback
      * @return (
      *     $callback is string
-     *     ? \Illuminate\Database\Eloquent\Relations\HasManyThrough<\Illuminate\Database\Eloquent\Model, TIntermediateModel, TDeclaringModel>|\Illuminate\Database\Eloquent\Relations\HasOneThrough<\Illuminate\Database\Eloquent\Model, TIntermediateModel, TDeclaringModel>
+     *     ? \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasManyThrough<\Illuminate\Database\Eloquent\Model, TIntermediateModel, TDeclaringModel>|\Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasOneThrough<\Illuminate\Database\Eloquent\Model, TIntermediateModel, TDeclaringModel>
      *     : (
      *         TLocalRelationship is \Illuminate\Database\Eloquent\Relations\HasMany<TIntermediateModel, TDeclaringModel>
-     *         ? \Illuminate\Database\Eloquent\Relations\HasManyThrough<TRelatedModel, TIntermediateModel, TDeclaringModel>
+     *         ? \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasManyThrough<TRelatedModel, TIntermediateModel, TDeclaringModel>
      *         : (
-     *              $callback is callable(TIntermediateModel): \Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TIntermediateModel>
-     *              ? \Illuminate\Database\Eloquent\Relations\HasManyThrough<TRelatedModel, TIntermediateModel, TDeclaringModel>
-     *              : \Illuminate\Database\Eloquent\Relations\HasOneThrough<TRelatedModel, TIntermediateModel, TDeclaringModel>
+     *              $callback is callable(TIntermediateModel): \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TIntermediateModel>
+     *              ? \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasManyThrough<TRelatedModel, TIntermediateModel, TDeclaringModel>
+     *              : \Archetype\Vendor\Illuminate\Database\Eloquent\Relations\HasOneThrough<TRelatedModel, TIntermediateModel, TDeclaringModel>
      *         )
      *     )
      * )
@@ -60,19 +70,38 @@ class PendingHasThroughRelationship
     public function has($callback)
     {
         if (is_string($callback)) {
-            $callback = fn() => $this->localRelationship->getRelated()->{$callback}();
+            $callback = fn () => $this->localRelationship->getRelated()->{$callback}();
         }
+
         $distantRelation = $callback($this->localRelationship->getRelated());
+
         if ($distantRelation instanceof HasMany || $this->localRelationship instanceof HasMany) {
-            $returnedRelation = $this->rootModel->hasManyThrough($distantRelation->getRelated()::class, $this->localRelationship->getRelated()::class, $this->localRelationship->getForeignKeyName(), $distantRelation->getForeignKeyName(), $this->localRelationship->getLocalKeyName(), $distantRelation->getLocalKeyName());
+            $returnedRelation = $this->rootModel->hasManyThrough(
+                $distantRelation->getRelated()::class,
+                $this->localRelationship->getRelated()::class,
+                $this->localRelationship->getForeignKeyName(),
+                $distantRelation->getForeignKeyName(),
+                $this->localRelationship->getLocalKeyName(),
+                $distantRelation->getLocalKeyName(),
+            );
         } else {
-            $returnedRelation = $this->rootModel->hasOneThrough($distantRelation->getRelated()::class, $this->localRelationship->getRelated()::class, $this->localRelationship->getForeignKeyName(), $distantRelation->getForeignKeyName(), $this->localRelationship->getLocalKeyName(), $distantRelation->getLocalKeyName());
+            $returnedRelation = $this->rootModel->hasOneThrough(
+                $distantRelation->getRelated()::class,
+                $this->localRelationship->getRelated()::class,
+                $this->localRelationship->getForeignKeyName(),
+                $distantRelation->getForeignKeyName(),
+                $this->localRelationship->getLocalKeyName(),
+                $distantRelation->getLocalKeyName(),
+            );
         }
+
         if ($this->localRelationship instanceof MorphOneOrMany) {
             $returnedRelation->where($this->localRelationship->getQualifiedMorphType(), $this->localRelationship->getMorphClass());
         }
+
         return $returnedRelation;
     }
+
     /**
      * Handle dynamic method calls into the model.
      *
@@ -85,6 +114,9 @@ class PendingHasThroughRelationship
         if (Str::startsWith($method, 'has')) {
             return $this->has((new Stringable($method))->after('has')->lcfirst()->toString());
         }
-        throw new BadMethodCallException(sprintf('Call to undefined method %s::%s()', static::class, $method));
+
+        throw new BadMethodCallException(sprintf(
+            'Call to undefined method %s::%s()', static::class, $method
+        ));
     }
 }

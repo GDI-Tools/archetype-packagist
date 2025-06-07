@@ -1,14 +1,21 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use Archetype\Vendor\Illuminate\Contracts\Support\Arrayable;
 use Archetype\Vendor\Illuminate\Support\Traits\InteractsWithData;
-use Archetype\Vendor\League\Uri\QueryString;
+use League\Uri\QueryString;
 use Stringable;
+
 class UriQueryString implements Arrayable, Stringable
 {
     use InteractsWithData;
+
     /**
      * Create a new URI query string instance.
      */
@@ -16,6 +23,7 @@ class UriQueryString implements Arrayable, Stringable
     {
         //
     }
+
     /**
      * Retrieve all data from the instance.
      *
@@ -25,15 +33,20 @@ class UriQueryString implements Arrayable, Stringable
     public function all($keys = null)
     {
         $query = $this->toArray();
-        if (!$keys) {
+
+        if (! $keys) {
             return $query;
         }
+
         $results = [];
+
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
             Arr::set($results, $key, Arr::get($query, $key));
         }
+
         return $results;
     }
+
     /**
      * Retrieve data from the instance.
      *
@@ -45,6 +58,7 @@ class UriQueryString implements Arrayable, Stringable
     {
         return $this->get($key, $default);
     }
+
     /**
      * Get a query string parameter.
      */
@@ -52,6 +66,7 @@ class UriQueryString implements Arrayable, Stringable
     {
         return data_get($this->toArray(), $key, $default);
     }
+
     /**
      * Get the URL decoded version of the query string.
      */
@@ -59,6 +74,7 @@ class UriQueryString implements Arrayable, Stringable
     {
         return rawurldecode((string) $this);
     }
+
     /**
      * Get the string representation of the query string.
      */
@@ -66,6 +82,7 @@ class UriQueryString implements Arrayable, Stringable
     {
         return (string) $this;
     }
+
     /**
      * Convert the query string into an array.
      */
@@ -73,6 +90,7 @@ class UriQueryString implements Arrayable, Stringable
     {
         return QueryString::extract($this->value());
     }
+
     /**
      * Get the string representation of the query string.
      */

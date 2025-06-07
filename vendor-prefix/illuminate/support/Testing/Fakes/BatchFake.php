@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Testing\Fakes;
 
@@ -7,6 +12,7 @@ use Archetype\Vendor\Illuminate\Bus\Batch;
 use Archetype\Vendor\Illuminate\Bus\UpdatedBatchJobCounts;
 use Archetype\Vendor\Illuminate\Support\Carbon;
 use Archetype\Vendor\Illuminate\Support\Collection;
+
 class BatchFake extends Batch
 {
     /**
@@ -15,12 +21,14 @@ class BatchFake extends Batch
      * @var array
      */
     public $added = [];
+
     /**
      * Indicates if the batch has been deleted.
      *
      * @var bool
      */
-    public $deleted = \false;
+    public $deleted = false;
+
     /**
      * Create a new batch instance.
      *
@@ -31,12 +39,22 @@ class BatchFake extends Batch
      * @param  int  $failedJobs
      * @param  array  $failedJobIds
      * @param  array  $options
-     * @param  \Carbon\CarbonImmutable  $createdAt
-     * @param  \Carbon\CarbonImmutable|null  $cancelledAt
-     * @param  \Carbon\CarbonImmutable|null  $finishedAt
+     * @param  \Archetype\Vendor\Carbon\CarbonImmutable  $createdAt
+     * @param  \Archetype\Vendor\Carbon\CarbonImmutable|null  $cancelledAt
+     * @param  \Archetype\Vendor\Carbon\CarbonImmutable|null  $finishedAt
      */
-    public function __construct(string $id, string $name, int $totalJobs, int $pendingJobs, int $failedJobs, array $failedJobIds, array $options, CarbonImmutable $createdAt, ?CarbonImmutable $cancelledAt = null, ?CarbonImmutable $finishedAt = null)
-    {
+    public function __construct(
+        string $id,
+        string $name,
+        int $totalJobs,
+        int $pendingJobs,
+        int $failedJobs,
+        array $failedJobIds,
+        array $options,
+        CarbonImmutable $createdAt,
+        ?CarbonImmutable $cancelledAt = null,
+        ?CarbonImmutable $finishedAt = null,
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->totalJobs = $totalJobs;
@@ -48,6 +66,7 @@ class BatchFake extends Batch
         $this->cancelledAt = $cancelledAt;
         $this->finishedAt = $finishedAt;
     }
+
     /**
      * Get a fresh instance of the batch represented by this ID.
      *
@@ -57,21 +76,26 @@ class BatchFake extends Batch
     {
         return $this;
     }
+
     /**
      * Add additional jobs to the batch.
      *
-     * @param  \Illuminate\Support\Enumerable|object|array  $jobs
+     * @param  \Archetype\Vendor\Illuminate\Support\Enumerable|object|array  $jobs
      * @return self
      */
     public function add($jobs)
     {
         $jobs = Collection::wrap($jobs);
+
         foreach ($jobs as $job) {
             $this->added[] = $job;
         }
+
         $this->totalJobs += $jobs->count();
+
         return $this;
     }
+
     /**
      * Record that a job within the batch finished successfully, executing any callbacks if necessary.
      *
@@ -82,6 +106,7 @@ class BatchFake extends Batch
     {
         //
     }
+
     /**
      * Decrement the pending jobs for the batch.
      *
@@ -92,6 +117,7 @@ class BatchFake extends Batch
     {
         //
     }
+
     /**
      * Record that a job within the batch failed to finish successfully, executing any callbacks if necessary.
      *
@@ -103,16 +129,18 @@ class BatchFake extends Batch
     {
         //
     }
+
     /**
      * Increment the failed jobs for the batch.
      *
      * @param  string  $jobId
-     * @return \Illuminate\Bus\UpdatedBatchJobCounts
+     * @return \Archetype\Vendor\Illuminate\Bus\UpdatedBatchJobCounts
      */
     public function incrementFailedJobs(string $jobId)
     {
-        return new UpdatedBatchJobCounts();
+        return new UpdatedBatchJobCounts;
     }
+
     /**
      * Cancel the batch.
      *
@@ -122,6 +150,7 @@ class BatchFake extends Batch
     {
         $this->cancelledAt = Carbon::now();
     }
+
     /**
      * Delete the batch from storage.
      *
@@ -129,8 +158,9 @@ class BatchFake extends Batch
      */
     public function delete()
     {
-        $this->deleted = \true;
+        $this->deleted = true;
     }
+
     /**
      * Determine if the batch has been deleted.
      *

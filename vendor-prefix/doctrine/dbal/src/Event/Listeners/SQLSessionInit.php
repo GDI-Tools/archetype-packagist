@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Event\Listeners;
 
@@ -6,6 +11,7 @@ use Archetype\Vendor\Doctrine\Common\EventSubscriber;
 use Archetype\Vendor\Doctrine\DBAL\Event\ConnectionEventArgs;
 use Archetype\Vendor\Doctrine\DBAL\Events;
 use Archetype\Vendor\Doctrine\DBAL\Exception;
+
 /**
  * Session init listener for executing a single SQL statement right after a connection is opened.
  *
@@ -15,11 +21,13 @@ class SQLSessionInit implements EventSubscriber
 {
     /** @var string */
     protected $sql;
+
     /** @param string $sql */
     public function __construct($sql)
     {
         $this->sql = $sql;
     }
+
     /**
      * @return void
      *
@@ -29,6 +37,7 @@ class SQLSessionInit implements EventSubscriber
     {
         $args->getConnection()->executeStatement($this->sql);
     }
+
     /**
      * {@inheritDoc}
      */

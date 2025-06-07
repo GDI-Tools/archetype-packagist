@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Dumper;
 
 use Archetype\Vendor\Symfony\Component\Translation\MessageCatalogue;
+
 /**
  * DumperInterface is the interface implemented by all translation dumpers.
  * There is no common option.

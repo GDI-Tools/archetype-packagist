@@ -8,13 +8,18 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Provider\Dce;
 
 use Archetype\Vendor\Ramsey\Uuid\Exception\DceSecurityException;
 use Archetype\Vendor\Ramsey\Uuid\Provider\DceSecurityProviderInterface;
 use Archetype\Vendor\Ramsey\Uuid\Type\Integer as IntegerObject;
+
 use function escapeshellarg;
 use function preg_split;
 use function str_getcsv;
@@ -23,7 +28,9 @@ use function strtolower;
 use function strtoupper;
 use function substr;
 use function trim;
+
 use const PREG_SPLIT_NO_EMPTY;
+
 /**
  * SystemDceSecurityProvider retrieves the user or group identifiers from the system
  */
@@ -38,18 +45,27 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     {
         /** @var IntegerObject | int | float | string | null $uid */
         static $uid = null;
+
         if ($uid instanceof IntegerObject) {
             return $uid;
         }
+
         if ($uid === null) {
             $uid = $this->getSystemUid();
         }
+
         if ($uid === '') {
-            throw new DceSecurityException('Unable to get a user identifier using the system DCE Security provider; please provide a custom ' . 'identifier or use a different provider');
+            throw new DceSecurityException(
+                'Unable to get a user identifier using the system DCE Security provider; please provide a custom '
+                . 'identifier or use a different provider',
+            );
         }
+
         $uid = new IntegerObject($uid);
+
         return $uid;
     }
+
     /**
      * @throws DceSecurityException if unable to get a group identifier
      *
@@ -59,18 +75,27 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     {
         /** @var IntegerObject | int | float | string | null $gid */
         static $gid = null;
+
         if ($gid instanceof IntegerObject) {
             return $gid;
         }
+
         if ($gid === null) {
             $gid = $this->getSystemGid();
         }
+
         if ($gid === '') {
-            throw new DceSecurityException('Unable to get a group identifier using the system DCE Security provider; please provide a custom ' . 'identifier or use a different provider');
+            throw new DceSecurityException(
+                'Unable to get a group identifier using the system DCE Security provider; please provide a custom '
+                . 'identifier or use a different provider',
+            );
         }
+
         $gid = new IntegerObject($gid);
+
         return $gid;
     }
+
     /**
      * Returns the UID from the system
      */
@@ -79,11 +104,13 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
         if (!$this->hasShellExec()) {
             return '';
         }
+
         return match ($this->getOs()) {
             'WIN' => $this->getWindowsUid(),
             default => trim((string) shell_exec('id -u')),
         };
     }
+
     /**
      * Returns the GID from the system
      */
@@ -92,11 +119,13 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
         if (!$this->hasShellExec()) {
             return '';
         }
+
         return match ($this->getOs()) {
             'WIN' => $this->getWindowsGid(),
             default => trim((string) shell_exec('id -g')),
         };
     }
+
     /**
      * Returns true if shell_exec() is available for use
      */
@@ -104,6 +133,7 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     {
         return !str_contains(strtolower((string) ini_get('disable_functions')), 'shell_exec');
     }
+
     /**
      * Returns the PHP_OS string
      */
@@ -111,8 +141,10 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     {
         /** @var string $phpOs */
         $phpOs = constant('PHP_OS');
+
         return strtoupper(substr($phpOs, 0, 3));
     }
+
     /**
      * Returns the user identifier for a user on a Windows system
      *
@@ -129,15 +161,20 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     private function getWindowsUid(): string
     {
         $response = shell_exec('whoami /user /fo csv /nh');
+
         if ($response === null) {
             return '';
         }
+
         $sid = str_getcsv(trim((string) $response), escape: '\\')[1] ?? '';
-        if (($lastHyphen = strrpos($sid, '-')) === \false) {
+
+        if (($lastHyphen = strrpos($sid, '-')) === false) {
             return '';
         }
+
         return trim(substr($sid, $lastHyphen + 1));
     }
+
     /**
      * Returns a group identifier for a user on a Windows system
      *
@@ -151,23 +188,31 @@ class SystemDceSecurityProvider implements DceSecurityProviderInterface
     private function getWindowsGid(): string
     {
         $response = shell_exec('net user %username% | findstr /b /i "Local Group Memberships"');
+
         if ($response === null) {
             return '';
         }
+
         $userGroups = preg_split('/\s{2,}/', (string) $response, -1, PREG_SPLIT_NO_EMPTY);
-        $firstGroup = trim($userGroups[1] ?? '', "* \t\n\r\x00\v");
+        $firstGroup = trim($userGroups[1] ?? '', "* \t\n\r\0\x0B");
+
         if ($firstGroup === '') {
             return '';
         }
+
         $response = shell_exec('wmic group get name,sid | findstr /b /i ' . escapeshellarg($firstGroup));
+
         if ($response === null) {
             return '';
         }
+
         $userGroup = preg_split('/\s{2,}/', (string) $response, -1, PREG_SPLIT_NO_EMPTY);
         $sid = $userGroup[1] ?? '';
-        if (($lastHyphen = strrpos($sid, '-')) === \false) {
+
+        if (($lastHyphen = strrpos($sid, '-')) === false) {
             return '';
         }
+
         return trim(substr($sid, $lastHyphen + 1));
     }
 }

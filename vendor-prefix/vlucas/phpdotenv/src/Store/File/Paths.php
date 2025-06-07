@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Store\File;
 
 /**
@@ -19,6 +25,7 @@ final class Paths
     {
         //
     }
+
     /**
      * Returns the full paths to the files.
      *
@@ -30,11 +37,13 @@ final class Paths
     public static function filePaths(array $paths, array $names)
     {
         $files = [];
+
         foreach ($paths as $path) {
             foreach ($names as $name) {
-                $files[] = \rtrim($path, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $name;
+                $files[] = \rtrim($path, \DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR.$name;
             }
         }
+
         return $files;
     }
 }

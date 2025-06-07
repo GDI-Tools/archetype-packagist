@@ -7,13 +7,17 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\DependencyInjection;
 
-use Archetype\Vendor\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Archetype\Vendor\Symfony\Component\DependencyInjection\ContainerBuilder;
-use Archetype\Vendor\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use Archetype\Vendor\Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use Symfony\Component\DependencyInjection\Reference;
+
 /**
  * Adds tagged translation.extractor services to translation extractor.
  */
@@ -24,11 +28,14 @@ class TranslationExtractorPass implements CompilerPassInterface
         if (!$container->hasDefinition('translation.extractor')) {
             return;
         }
+
         $definition = $container->getDefinition('translation.extractor');
-        foreach ($container->findTaggedServiceIds('translation.extractor', \true) as $id => $attributes) {
+
+        foreach ($container->findTaggedServiceIds('translation.extractor', true) as $id => $attributes) {
             if (!isset($attributes[0]['alias'])) {
                 throw new RuntimeException(\sprintf('The alias for the tag "translation.extractor" of service "%s" must be set.', $id));
             }
+
             $definition->addMethodCall('addExtractor', [$attributes[0]['alias'], new Reference($id)]);
         }
     }

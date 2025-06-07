@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Extractor;
 
 use Archetype\Vendor\Symfony\Component\Translation\MessageCatalogue;
+
 /**
  * Extracts translation messages from a directory or files to the catalogue.
  * New found messages are injected to the catalogue using the prefix.
@@ -27,6 +31,7 @@ interface ExtractorInterface
      * @return void
      */
     public function extract(string|iterable $resource, MessageCatalogue $catalogue);
+
     /**
      * Sets the prefix that should be used for new found messages.
      *

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Testing\Fakes;
 
 use Closure;
+
 class ChainedBatchTruthTest
 {
     /**
@@ -11,6 +17,7 @@ class ChainedBatchTruthTest
      * @var \Closure
      */
     protected $callback;
+
     /**
      * Create a new truth test instance.
      *
@@ -20,10 +27,11 @@ class ChainedBatchTruthTest
     {
         $this->callback = $callback;
     }
+
     /**
      * Invoke the truth test with the given pending batch.
      *
-     * @param  \Illuminate\Bus\PendingBatch  $pendingBatch
+     * @param  \Archetype\Vendor\Illuminate\Bus\PendingBatch  $pendingBatch
      * @return bool
      */
     public function __invoke($pendingBatch)

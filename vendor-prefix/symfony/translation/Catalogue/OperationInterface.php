@@ -7,10 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Catalogue;
 
 use Archetype\Vendor\Symfony\Component\Translation\MessageCatalogueInterface;
+
 /**
  * Represents an operation on catalogue(s).
  *
@@ -36,18 +40,22 @@ interface OperationInterface
      * Returns domains affected by operation.
      */
     public function getDomains(): array;
+
     /**
      * Returns all valid messages ('all') after operation.
      */
     public function getMessages(string $domain): array;
+
     /**
      * Returns new messages ('new') after operation.
      */
     public function getNewMessages(string $domain): array;
+
     /**
      * Returns obsolete messages ('obsolete') after operation.
      */
     public function getObsoleteMessages(string $domain): array;
+
     /**
      * Returns resulting catalogue ('result').
      */

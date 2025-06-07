@@ -1,10 +1,17 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
 
 use Archetype\Vendor\Doctrine\DBAL\Types\JsonType;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function sprintf;
+
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB 10.4 database platform.
  *
@@ -26,6 +33,7 @@ class MariaDb1043Platform extends MariaDb1027Platform
     {
         return 'JSON';
     }
+
     /**
      * {@inheritDoc}
      *
@@ -40,24 +48,30 @@ class MariaDb1043Platform extends MariaDb1027Platform
     {
         // @todo 4.0 - call getColumnTypeSQLSnippet() instead
         [$columnTypeSQL, $joinCheckConstraintSQL] = $this->getColumnTypeSQLSnippets('c', $database);
-        return sprintf(<<<SQL
-SELECT c.COLUMN_NAME AS Field,
-       {$columnTypeSQL} AS Type,
-       c.IS_NULLABLE AS `Null`,
-       c.COLUMN_KEY AS `Key`,
-       c.COLUMN_DEFAULT AS `Default`,
-       c.EXTRA AS Extra,
-       c.COLUMN_COMMENT AS Comment,
-       c.CHARACTER_SET_NAME AS CharacterSet,
-       c.COLLATION_NAME AS Collation
-FROM information_schema.COLUMNS c
-    {$joinCheckConstraintSQL}
-WHERE c.TABLE_SCHEMA = %s
-AND c.TABLE_NAME = %s
-ORDER BY ORDINAL_POSITION ASC;
-SQL
-, $this->getDatabaseNameSQL($database), $this->quoteStringLiteral($table));
+
+        return sprintf(
+            <<<SQL
+            SELECT c.COLUMN_NAME AS Field,
+                   $columnTypeSQL AS Type,
+                   c.IS_NULLABLE AS `Null`,
+                   c.COLUMN_KEY AS `Key`,
+                   c.COLUMN_DEFAULT AS `Default`,
+                   c.EXTRA AS Extra,
+                   c.COLUMN_COMMENT AS Comment,
+                   c.CHARACTER_SET_NAME AS CharacterSet,
+                   c.COLLATION_NAME AS Collation
+            FROM information_schema.COLUMNS c
+                $joinCheckConstraintSQL
+            WHERE c.TABLE_SCHEMA = %s
+            AND c.TABLE_NAME = %s
+            ORDER BY ORDINAL_POSITION ASC;
+            SQL
+            ,
+            $this->getDatabaseNameSQL($database),
+            $this->quoteStringLiteral($table),
+        );
     }
+
     /**
      * Generate SQL snippets to reverse the aliasing of JSON to LONGTEXT.
      *
@@ -72,30 +86,41 @@ SQL
         if ($this->getJsonTypeDeclarationSQL([]) !== 'JSON') {
             return parent::getColumnTypeSQLSnippet($tableAlias, $databaseName);
         }
+
         if ($databaseName === null) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/6215', 'Not passing a database name to methods "getColumnTypeSQLSnippet()", ' . '"getColumnTypeSQLSnippets()", and "getListTableColumnsSQL()" of "%s" is deprecated.', self::class);
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/6215',
+                'Not passing a database name to methods "getColumnTypeSQLSnippet()", '
+                    . '"getColumnTypeSQLSnippets()", and "getListTableColumnsSQL()" of "%s" is deprecated.',
+                self::class,
+            );
         }
+
         $subQueryAlias = 'i_' . $tableAlias;
+
         $databaseName = $this->getDatabaseNameSQL($databaseName);
+
         // The check for `CONSTRAINT_SCHEMA = $databaseName` is mandatory here to prevent performance issues
         return <<<SQL
-    IF(
-        {$tableAlias}.COLUMN_TYPE = 'longtext'
-        AND EXISTS(
-            SELECT * from information_schema.CHECK_CONSTRAINTS {$subQueryAlias}
-            WHERE {$subQueryAlias}.CONSTRAINT_SCHEMA = {$databaseName}
-            AND {$subQueryAlias}.TABLE_NAME = {$tableAlias}.TABLE_NAME
-            AND {$subQueryAlias}.CHECK_CLAUSE = CONCAT(
-                'json_valid(`',
-                    {$tableAlias}.COLUMN_NAME,
-                '`)'
+            IF(
+                $tableAlias.COLUMN_TYPE = 'longtext'
+                AND EXISTS(
+                    SELECT * from information_schema.CHECK_CONSTRAINTS $subQueryAlias
+                    WHERE $subQueryAlias.CONSTRAINT_SCHEMA = $databaseName
+                    AND $subQueryAlias.TABLE_NAME = $tableAlias.TABLE_NAME
+                    AND $subQueryAlias.CHECK_CLAUSE = CONCAT(
+                        'json_valid(`',
+                            $tableAlias.COLUMN_NAME,
+                        '`)'
+                    )
+                ),
+                'json',
+                $tableAlias.COLUMN_TYPE
             )
-        ),
-        'json',
-        {$tableAlias}.COLUMN_TYPE
-    )
-SQL;
+        SQL;
     }
+
     /** {@inheritDoc} */
     public function getColumnDeclarationSQL($name, array $column)
     {
@@ -105,6 +130,7 @@ SQL;
             unset($column['collation']);
             unset($column['charset']);
         }
+
         return parent::getColumnDeclarationSQL($name, $column);
     }
 }

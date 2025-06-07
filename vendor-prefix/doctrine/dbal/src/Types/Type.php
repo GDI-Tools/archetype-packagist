@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -6,8 +11,10 @@ use Archetype\Vendor\Doctrine\DBAL\Exception;
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function array_map;
 use function get_class;
+
 /**
  * The base class for so-called Doctrine mapping types.
  *
@@ -18,12 +25,41 @@ abstract class Type
     /**
      * The map of supported doctrine mapping types.
      */
-    private const BUILTIN_TYPES_MAP = [Types::ARRAY => ArrayType::class, Types::ASCII_STRING => AsciiStringType::class, Types::BIGINT => BigIntType::class, Types::BINARY => BinaryType::class, Types::BLOB => BlobType::class, Types::BOOLEAN => BooleanType::class, Types::DATE_MUTABLE => DateType::class, Types::DATE_IMMUTABLE => DateImmutableType::class, Types::DATEINTERVAL => DateIntervalType::class, Types::DATETIME_MUTABLE => DateTimeType::class, Types::DATETIME_IMMUTABLE => DateTimeImmutableType::class, Types::DATETIMETZ_MUTABLE => DateTimeTzType::class, Types::DATETIMETZ_IMMUTABLE => DateTimeTzImmutableType::class, Types::DECIMAL => DecimalType::class, Types::FLOAT => FloatType::class, Types::GUID => GuidType::class, Types::INTEGER => IntegerType::class, Types::JSON => JsonType::class, Types::OBJECT => ObjectType::class, Types::SIMPLE_ARRAY => SimpleArrayType::class, Types::SMALLINT => SmallIntType::class, Types::STRING => StringType::class, Types::TEXT => TextType::class, Types::TIME_MUTABLE => TimeType::class, Types::TIME_IMMUTABLE => TimeImmutableType::class];
+    private const BUILTIN_TYPES_MAP = [
+        Types::ARRAY                => ArrayType::class,
+        Types::ASCII_STRING         => AsciiStringType::class,
+        Types::BIGINT               => BigIntType::class,
+        Types::BINARY               => BinaryType::class,
+        Types::BLOB                 => BlobType::class,
+        Types::BOOLEAN              => BooleanType::class,
+        Types::DATE_MUTABLE         => DateType::class,
+        Types::DATE_IMMUTABLE       => DateImmutableType::class,
+        Types::DATEINTERVAL         => DateIntervalType::class,
+        Types::DATETIME_MUTABLE     => DateTimeType::class,
+        Types::DATETIME_IMMUTABLE   => DateTimeImmutableType::class,
+        Types::DATETIMETZ_MUTABLE   => DateTimeTzType::class,
+        Types::DATETIMETZ_IMMUTABLE => DateTimeTzImmutableType::class,
+        Types::DECIMAL              => DecimalType::class,
+        Types::FLOAT                => FloatType::class,
+        Types::GUID                 => GuidType::class,
+        Types::INTEGER              => IntegerType::class,
+        Types::JSON                 => JsonType::class,
+        Types::OBJECT               => ObjectType::class,
+        Types::SIMPLE_ARRAY         => SimpleArrayType::class,
+        Types::SMALLINT             => SmallIntType::class,
+        Types::STRING               => StringType::class,
+        Types::TEXT                 => TextType::class,
+        Types::TIME_MUTABLE         => TimeType::class,
+        Types::TIME_IMMUTABLE       => TimeImmutableType::class,
+    ];
+
     private static ?TypeRegistry $typeRegistry = null;
+
     /** @internal Do not instantiate directly - use {@see Type::addType()} method instead. */
     final public function __construct()
     {
     }
+
     /**
      * Converts a value from its PHP representation to its database representation
      * of this type.
@@ -39,6 +75,7 @@ abstract class Type
     {
         return $value;
     }
+
     /**
      * Converts a value from its database representation to its PHP representation
      * of this type.
@@ -54,6 +91,7 @@ abstract class Type
     {
         return $value;
     }
+
     /**
      * Gets the SQL declaration snippet for a column of this type.
      *
@@ -63,6 +101,7 @@ abstract class Type
      * @return string
      */
     abstract public function getSQLDeclaration(array $column, AbstractPlatform $platform);
+
     /**
      * Gets the name of this type.
      *
@@ -72,18 +111,23 @@ abstract class Type
      * @return string
      */
     abstract public function getName();
+
     final public static function getTypeRegistry(): TypeRegistry
     {
         return self::$typeRegistry ??= self::createTypeRegistry();
     }
+
     private static function createTypeRegistry(): TypeRegistry
     {
         $instances = [];
+
         foreach (self::BUILTIN_TYPES_MAP as $name => $class) {
             $instances[$name] = new $class();
         }
+
         return new TypeRegistry($instances);
     }
+
     /**
      * Factory method to create type instances.
      * Type instances are implemented as flyweights.
@@ -98,6 +142,7 @@ abstract class Type
     {
         return self::getTypeRegistry()->get($name);
     }
+
     /**
      * Finds a name for the given type.
      *
@@ -107,6 +152,7 @@ abstract class Type
     {
         return self::getTypeRegistry()->lookupName($type);
     }
+
     /**
      * Adds a custom type to the type map.
      *
@@ -121,6 +167,7 @@ abstract class Type
     {
         self::getTypeRegistry()->register($name, new $className());
     }
+
     /**
      * Checks if exists support for a type.
      *
@@ -132,6 +179,7 @@ abstract class Type
     {
         return self::getTypeRegistry()->has($name);
     }
+
     /**
      * Overrides an already defined type to use a different implementation.
      *
@@ -146,6 +194,7 @@ abstract class Type
     {
         self::getTypeRegistry()->override($name, new $className());
     }
+
     /**
      * Gets the (preferred) binding type for values of this type that
      * can be used when binding parameters to prepared statements.
@@ -158,6 +207,7 @@ abstract class Type
     {
         return ParameterType::STRING;
     }
+
     /**
      * Gets the types array map which holds all registered types and the corresponding
      * type class
@@ -166,10 +216,14 @@ abstract class Type
      */
     public static function getTypesMap()
     {
-        return array_map(static function (Type $type): string {
-            return get_class($type);
-        }, self::getTypeRegistry()->getMap());
+        return array_map(
+            static function (Type $type): string {
+                return get_class($type);
+            },
+            self::getTypeRegistry()->getMap(),
+        );
     }
+
     /**
      * Does working with this column require SQL conversion functions?
      *
@@ -185,8 +239,9 @@ abstract class Type
      */
     public function canRequireSQLConversion()
     {
-        return \false;
+        return false;
     }
+
     /**
      * Modifies the SQL expression (identifier, parameter) to convert to a database value.
      *
@@ -198,6 +253,7 @@ abstract class Type
     {
         return $sqlExpr;
     }
+
     /**
      * Modifies the SQL expression (identifier, parameter) to convert to a PHP value.
      *
@@ -210,6 +266,7 @@ abstract class Type
     {
         return $sqlExpr;
     }
+
     /**
      * Gets an array of database types that map to this Doctrine type.
      *
@@ -219,6 +276,7 @@ abstract class Type
     {
         return [];
     }
+
     /**
      * If this Doctrine Type maps to an already mapped database type,
      * reverse schema engineering can't tell them apart. You need to mark
@@ -231,7 +289,13 @@ abstract class Type
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return \false;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return false;
     }
 }

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Pipeline;
 
 use Closure;
+
 interface Pipeline
 {
     /**
@@ -12,6 +18,7 @@ interface Pipeline
      * @return $this
      */
     public function send($passable);
+
     /**
      * Set the array of pipes.
      *
@@ -19,6 +26,7 @@ interface Pipeline
      * @return $this
      */
     public function through($pipes);
+
     /**
      * Set the method to call on the pipes.
      *
@@ -26,6 +34,7 @@ interface Pipeline
      * @return $this
      */
     public function via($method);
+
     /**
      * Run the pipeline with a final destination callback.
      *

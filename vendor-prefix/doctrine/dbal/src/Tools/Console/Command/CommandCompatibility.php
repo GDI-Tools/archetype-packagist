@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Tools\Console\Command;
 
 use ReflectionMethod;
-use Archetype\Vendor\Symfony\Component\Console\Command\Command;
-use Archetype\Vendor\Symfony\Component\Console\Input\InputInterface;
-use Archetype\Vendor\Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 if ((new ReflectionMethod(Command::class, 'execute'))->hasReturnType()) {
     /** @internal */
     trait CommandCompatibility

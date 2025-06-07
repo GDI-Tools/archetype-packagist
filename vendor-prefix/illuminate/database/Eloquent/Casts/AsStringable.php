@@ -1,17 +1,23 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Casts;
 
 use Archetype\Vendor\Illuminate\Contracts\Database\Eloquent\Castable;
 use Archetype\Vendor\Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Archetype\Vendor\Illuminate\Support\Stringable;
+
 class AsStringable implements Castable
 {
     /**
      * Get the caster class to use when casting from / to this cast target.
      *
      * @param  array  $arguments
-     * @return \Illuminate\Contracts\Database\Eloquent\CastsAttributes<\Illuminate\Support\Stringable, string|\Stringable>
+     * @return \Archetype\Vendor\Illuminate\Contracts\Database\Eloquent\CastsAttributes<\Illuminate\Support\Stringable, string|\Stringable>
      */
     public static function castUsing(array $arguments)
     {
@@ -21,6 +27,7 @@ class AsStringable implements Castable
             {
                 return isset($value) ? new Stringable($value) : null;
             }
+
             public function set($model, $key, $value, $attributes)
             {
                 return isset($value) ? (string) $value : null;

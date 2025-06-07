@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -12,11 +17,11 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void includeUnvalidatedArrayKeys()
  * @method static void excludeUnvalidatedArrayKeys()
  * @method static void resolver(\Closure $resolver)
- * @method static \Illuminate\Contracts\Translation\Translator getTranslator()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Translation\Translator getTranslator()
  * @method static \Illuminate\Validation\PresenceVerifierInterface getPresenceVerifier()
  * @method static void setPresenceVerifier(\Illuminate\Validation\PresenceVerifierInterface $presenceVerifier)
- * @method static \Illuminate\Contracts\Container\Container|null getContainer()
- * @method static \Illuminate\Validation\Factory setContainer(\Illuminate\Contracts\Container\Container $container)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Container\Container|null getContainer()
+ * @method static \Illuminate\Validation\Factory setContainer(\Archetype\Vendor\Illuminate\Contracts\Container\Container $container)
  *
  * @see \Illuminate\Validation\Factory
  */

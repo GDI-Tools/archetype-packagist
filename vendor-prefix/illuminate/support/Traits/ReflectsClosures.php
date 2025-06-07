@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Traits;
 
@@ -7,6 +12,7 @@ use Archetype\Vendor\Illuminate\Support\Collection;
 use Archetype\Vendor\Illuminate\Support\Reflector;
 use ReflectionFunction;
 use RuntimeException;
+
 trait ReflectsClosures
 {
     /**
@@ -21,14 +27,18 @@ trait ReflectsClosures
     protected function firstClosureParameterType(Closure $closure)
     {
         $types = array_values($this->closureParameterTypes($closure));
-        if (!$types) {
+
+        if (! $types) {
             throw new RuntimeException('The given Closure has no parameters.');
         }
+
         if ($types[0] === null) {
             throw new RuntimeException('The first parameter of the given Closure is missing a type hint.');
         }
+
         return $types[0];
     }
+
     /**
      * Get the class names of the first parameter of the given Closure, including union types.
      *
@@ -41,20 +51,30 @@ trait ReflectsClosures
     protected function firstClosureParameterTypes(Closure $closure)
     {
         $reflection = new ReflectionFunction($closure);
-        $types = (new Collection($reflection->getParameters()))->mapWithKeys(function ($parameter) {
-            if ($parameter->isVariadic()) {
-                return [$parameter->getName() => null];
-            }
-            return [$parameter->getName() => Reflector::getParameterClassNames($parameter)];
-        })->filter()->values()->all();
+
+        $types = (new Collection($reflection->getParameters()))
+            ->mapWithKeys(function ($parameter) {
+                if ($parameter->isVariadic()) {
+                    return [$parameter->getName() => null];
+                }
+
+                return [$parameter->getName() => Reflector::getParameterClassNames($parameter)];
+            })
+            ->filter()
+            ->values()
+            ->all();
+
         if (empty($types)) {
             throw new RuntimeException('The given Closure has no parameters.');
         }
+
         if (isset($types[0]) && empty($types[0])) {
             throw new RuntimeException('The first parameter of the given Closure is missing a type hint.');
         }
+
         return $types[0];
     }
+
     /**
      * Get the class names / types of the parameters of the given Closure.
      *
@@ -66,11 +86,15 @@ trait ReflectsClosures
     protected function closureParameterTypes(Closure $closure)
     {
         $reflection = new ReflectionFunction($closure);
-        return (new Collection($reflection->getParameters()))->mapWithKeys(function ($parameter) {
-            if ($parameter->isVariadic()) {
-                return [$parameter->getName() => null];
-            }
-            return [$parameter->getName() => Reflector::getParameterClassName($parameter)];
-        })->all();
+
+        return (new Collection($reflection->getParameters()))
+            ->mapWithKeys(function ($parameter) {
+                if ($parameter->isVariadic()) {
+                    return [$parameter->getName() => null];
+                }
+
+                return [$parameter->getName() => Reflector::getParameterClassName($parameter)];
+            })
+            ->all();
     }
 }

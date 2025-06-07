@@ -1,69 +1,97 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Testing\Fakes;
 
 use Closure;
 use Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler;
-use Archetype\Vendor\Illuminate\Foundation\Testing\Concerns\WithoutExceptionHandlingHandler;
+use Illuminate\Foundation\Testing\Concerns\WithoutExceptionHandlingHandler;
 use Archetype\Vendor\Illuminate\Support\Collection;
 use Archetype\Vendor\Illuminate\Support\Traits\ForwardsCalls;
 use Archetype\Vendor\Illuminate\Support\Traits\ReflectsClosures;
-use Archetype\Vendor\Illuminate\Testing\Assert;
+use Illuminate\Testing\Assert;
 use PHPUnit\Framework\Assert as PHPUnit;
 use PHPUnit\Framework\ExpectationFailedException;
 use Throwable;
+
 /**
  * @mixin \Illuminate\Foundation\Exceptions\Handler
  */
 class ExceptionHandlerFake implements ExceptionHandler, Fake
 {
     use ForwardsCalls, ReflectsClosures;
+
     /**
      * All of the exceptions that have been reported.
      *
      * @var list<\Throwable>
      */
     protected $reported = [];
+
     /**
      * If the fake should throw exceptions when they are reported.
      *
      * @var bool
      */
-    protected $throwOnReport = \false;
+    protected $throwOnReport = false;
+
     /**
      * Create a new exception handler fake.
      *
-     * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $handler
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler  $handler
      * @param  list<class-string<\Throwable>>  $exceptions
      */
-    public function __construct(protected ExceptionHandler $handler, protected array $exceptions = [])
-    {
+    public function __construct(
+        protected ExceptionHandler $handler,
+        protected array $exceptions = [],
+    ) {
         //
     }
+
     /**
      * Get the underlying handler implementation.
      *
-     * @return \Illuminate\Contracts\Debug\ExceptionHandler
+     * @return \Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler
      */
     public function handler()
     {
         return $this->handler;
     }
+
     /**
      * Assert if an exception of the given type has been reported.
      *
-     * @param  (Closure(\Throwable): bool)|class-string<\Throwable>  $exception
+     * @param  (\Closure(\Throwable): bool)|class-string<\Throwable>  $exception
      * @return void
      */
     public function assertReported(Closure|string $exception)
     {
-        $message = sprintf('The expected [%s] exception was not reported.', is_string($exception) ? $exception : $this->firstClosureParameterType($exception));
+        $message = sprintf(
+            'The expected [%s] exception was not reported.',
+            is_string($exception) ? $exception : $this->firstClosureParameterType($exception)
+        );
+
         if (is_string($exception)) {
-            Assert::assertTrue(in_array($exception, array_map(get_class(...), $this->reported), \true), $message);
+            Assert::assertTrue(
+                in_array($exception, array_map(get_class(...), $this->reported), true),
+                $message,
+            );
+
             return;
         }
-        Assert::assertTrue((new Collection($this->reported))->contains(fn(Throwable $e) => $this->firstClosureParameterType($exception) === get_class($e) && $exception($e) === \true), $message);
+
+        Assert::assertTrue(
+            (new Collection($this->reported))->contains(
+                fn (Throwable $e) => $this->firstClosureParameterType($exception) === get_class($e)
+                    && $exception($e) === true,
+            ), $message,
+        );
     }
+
     /**
      * Assert the number of exceptions that have been reported.
      *
@@ -73,12 +101,17 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
     public function assertReportedCount(int $count)
     {
         $total = (new Collection($this->reported))->count();
-        PHPUnit::assertSame($count, $total, "The total number of exceptions reported was {$total} instead of {$count}.");
+
+        PHPUnit::assertSame(
+            $count, $total,
+            "The total number of exceptions reported was {$total} instead of {$count}."
+        );
     }
+
     /**
      * Assert if an exception of the given type has not been reported.
      *
-     * @param  (Closure(\Throwable): bool)|class-string<\Throwable>  $exception
+     * @param  (\Closure(\Throwable): bool)|class-string<\Throwable>  $exception
      * @return void
      */
     public function assertNotReported(Closure|string $exception)
@@ -88,8 +121,13 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
         } catch (ExpectationFailedException $e) {
             return;
         }
-        throw new ExpectationFailedException(sprintf('The expected [%s] exception was reported.', is_string($exception) ? $exception : $this->firstClosureParameterType($exception)));
+
+        throw new ExpectationFailedException(sprintf(
+            'The expected [%s] exception was reported.',
+            is_string($exception) ? $exception : $this->firstClosureParameterType($exception)
+        ));
     }
+
     /**
      * Assert nothing has been reported.
      *
@@ -97,8 +135,15 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
      */
     public function assertNothingReported()
     {
-        Assert::assertEmpty($this->reported, sprintf('The following exceptions were reported: %s.', implode(', ', array_map(get_class(...), $this->reported))));
+        Assert::assertEmpty(
+            $this->reported,
+            sprintf(
+                'The following exceptions were reported: %s.',
+                implode(', ', array_map(get_class(...), $this->reported)),
+            ),
+        );
     }
+
     /**
      * Report or log an exception.
      *
@@ -107,18 +152,23 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
      */
     public function report($e)
     {
-        if (!$this->isFakedException($e)) {
+        if (! $this->isFakedException($e)) {
             $this->handler->report($e);
+
             return;
         }
-        if (!$this->shouldReport($e)) {
+
+        if (! $this->shouldReport($e)) {
             return;
         }
+
         $this->reported[] = $e;
+
         if ($this->throwOnReport) {
             throw $e;
         }
     }
+
     /**
      * Determine if the given exception is faked.
      *
@@ -127,8 +177,9 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
      */
     protected function isFakedException(Throwable $e)
     {
-        return count($this->exceptions) === 0 || in_array(get_class($e), $this->exceptions, \true);
+        return count($this->exceptions) === 0 || in_array(get_class($e), $this->exceptions, true);
     }
+
     /**
      * Determine if the exception should be reported.
      *
@@ -139,6 +190,7 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
     {
         return $this->runningWithoutExceptionHandling() || $this->handler->shouldReport($e);
     }
+
     /**
      * Determine if the handler is running without exception handling.
      *
@@ -148,6 +200,7 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
     {
         return $this->handler instanceof WithoutExceptionHandlingHandler;
     }
+
     /**
      * Render an exception into an HTTP response.
      *
@@ -159,6 +212,7 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
     {
         return $this->handler->render($request, $e);
     }
+
     /**
      * Render an exception to the console.
      *
@@ -170,6 +224,7 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
     {
         $this->handler->renderForConsole($output, $e);
     }
+
     /**
      * Throw exceptions when they are reported.
      *
@@ -177,9 +232,11 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
      */
     public function throwOnReport()
     {
-        $this->throwOnReport = \true;
+        $this->throwOnReport = true;
+
         return $this;
     }
+
     /**
      * Throw the first reported exception.
      *
@@ -192,19 +249,23 @@ class ExceptionHandlerFake implements ExceptionHandler, Fake
         foreach ($this->reported as $e) {
             throw $e;
         }
+
         return $this;
     }
+
     /**
      * Set the "original" handler that should be used by the fake.
      *
-     * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $handler
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler  $handler
      * @return $this
      */
     public function setHandler(ExceptionHandler $handler)
     {
         $this->handler = $handler;
+
         return $this;
     }
+
     /**
      * Handle dynamic method calls to the handler.
      *

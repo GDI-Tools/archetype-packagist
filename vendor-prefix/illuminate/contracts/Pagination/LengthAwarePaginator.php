@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Pagination;
 
@@ -19,12 +24,14 @@ interface LengthAwarePaginator extends Paginator
      * @return array
      */
     public function getUrlRange($start, $end);
+
     /**
      * Determine the total number of items in the data store.
      *
      * @return int
      */
     public function total();
+
     /**
      * Get the page number of the last available page.
      *

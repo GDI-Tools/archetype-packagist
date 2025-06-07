@@ -1,20 +1,30 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\SQLSrv;
 
 use Archetype\Vendor\Doctrine\DBAL\Driver\FetchUtils;
 use Archetype\Vendor\Doctrine\DBAL\Driver\Result as ResultInterface;
+
 use function sqlsrv_fetch;
 use function sqlsrv_fetch_array;
 use function sqlsrv_num_fields;
 use function sqlsrv_rows_affected;
+
 use const SQLSRV_FETCH_ASSOC;
 use const SQLSRV_FETCH_NUMERIC;
+
 final class Result implements ResultInterface
 {
     /** @var resource */
     private $statement;
+
     /**
      * @internal The result can be only instantiated by its driver connection or statement.
      *
@@ -24,6 +34,7 @@ final class Result implements ResultInterface
     {
         $this->statement = $stmt;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -31,6 +42,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(SQLSRV_FETCH_NUMERIC);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -38,6 +50,7 @@ final class Result implements ResultInterface
     {
         return $this->fetch(SQLSRV_FETCH_ASSOC);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -45,6 +58,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchOne($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -52,6 +66,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchAllNumeric($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -59,6 +74,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchAllAssociative($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -66,22 +82,29 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchFirstColumn($this);
     }
+
     public function rowCount(): int
     {
         $count = sqlsrv_rows_affected($this->statement);
-        if ($count !== \false) {
+
+        if ($count !== false) {
             return $count;
         }
+
         return 0;
     }
+
     public function columnCount(): int
     {
         $count = sqlsrv_num_fields($this->statement);
-        if ($count !== \false) {
+
+        if ($count !== false) {
             return $count;
         }
+
         return 0;
     }
+
     public function free(): void
     {
         // emulate it by fetching and discarding rows, similarly to what PDO does in this case
@@ -91,9 +114,10 @@ final class Result implements ResultInterface
         while (sqlsrv_fetch($this->statement)) {
         }
     }
+
     /** @return mixed|false */
     private function fetch(int $fetchType)
     {
-        return sqlsrv_fetch_array($this->statement, $fetchType) ?? \false;
+        return sqlsrv_fetch_array($this->statement, $fetchType) ?? false;
     }
 }

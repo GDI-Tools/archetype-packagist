@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Analog\Handler;
 
@@ -12,7 +17,7 @@ namespace Archetype\Vendor\Analog\Handler;
  *
  * Usage:
  *
- *     Analog::handler (Analog\Handler\LevelBuffer::init (
+ *     Analog::handler (Archetype\Vendor\Analog\Handler\LevelBuffer::init (
  *         Analog\Handler\Mail::init ($to, $subject, $from),
  *         Analog::ERROR
  *     ));
@@ -25,34 +30,34 @@ namespace Archetype\Vendor\Analog\Handler;
  * Note: Uses Analog::$format to format the messages as they're appended
  * to the buffer.
  */
-class LevelBuffer
-{
-    /**
-     * Accepts another handler function to be used on close().
-     * $until_level defaults to CRITICAL.
-     */
-    public static function init($handler, $until_level = 2)
-    {
-        return new LevelBuffer($handler, $until_level);
-    }
-    /**
-     * For use as a class instance
-     */
-    private $_handler;
-    private $_until_level = 2;
-    private $_buffer = '';
-    public function __construct($handler, $until_level = 2)
-    {
-        $this->_handler = $handler;
-        $this->_until_level = $until_level;
-    }
-    public function log($info)
-    {
-        $this->_buffer .= vsprintf(\Archetype\Vendor\Analog\Analog::$format, $info);
-        if ($info['level'] <= $this->_until_level) {
-            // flush and reset the buffer
-            call_user_func($this->_handler, $this->_buffer, \true);
-            $this->_buffer = '';
-        }
-    }
+class LevelBuffer {
+
+	/**
+	 * Accepts another handler function to be used on close().
+	 * $until_level defaults to CRITICAL.
+	 */
+	public static function init ($handler, $until_level = 2) {
+		return new LevelBuffer ($handler, $until_level);
+	}
+
+	/**
+	 * For use as a class instance
+	 */
+	private $_handler;
+	private $_until_level = 2;
+	private $_buffer = '';
+
+	public function __construct ($handler, $until_level = 2) {
+		$this->_handler = $handler;
+		$this->_until_level = $until_level;
+	}
+
+	public function log ($info) {
+		$this->_buffer .= vsprintf (\Archetype\Vendor\Analog\Analog::$format, $info);
+		if ($info['level'] <= $this->_until_level) {
+			// flush and reset the buffer
+			call_user_func ($this->_handler, $this->_buffer, true);
+			$this->_buffer = '';
+		}
+	}
 }

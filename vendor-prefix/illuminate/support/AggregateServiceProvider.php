@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
@@ -10,12 +15,14 @@ class AggregateServiceProvider extends ServiceProvider
      * @var array
      */
     protected $providers = [];
+
     /**
      * An array of the service provider instances.
      *
      * @var array
      */
     protected $instances = [];
+
     /**
      * Register the service provider.
      *
@@ -24,10 +31,12 @@ class AggregateServiceProvider extends ServiceProvider
     public function register()
     {
         $this->instances = [];
+
         foreach ($this->providers as $provider) {
             $this->instances[] = $this->app->register($provider);
         }
     }
+
     /**
      * Get the services provided by the provider.
      *
@@ -36,10 +45,13 @@ class AggregateServiceProvider extends ServiceProvider
     public function provides()
     {
         $provides = [];
+
         foreach ($this->providers as $provider) {
             $instance = $this->app->resolveProvider($provider);
+
             $provides = array_merge($provides, $instance->provides());
         }
+
         return $provides;
     }
 }

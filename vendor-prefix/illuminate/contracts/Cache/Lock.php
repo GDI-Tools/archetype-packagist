@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Cache;
 
@@ -11,6 +16,7 @@ interface Lock
      * @return mixed
      */
     public function get($callback = null);
+
     /**
      * Attempt to acquire the lock for the given number of seconds.
      *
@@ -18,21 +24,24 @@ interface Lock
      * @param  callable|null  $callback
      * @return mixed
      *
-     * @throws \Illuminate\Contracts\Cache\LockTimeoutException
+     * @throws \Archetype\Vendor\Illuminate\Contracts\Cache\LockTimeoutException
      */
     public function block($seconds, $callback = null);
+
     /**
      * Release the lock.
      *
      * @return bool
      */
     public function release();
+
     /**
      * Returns the current owner of the lock.
      *
      * @return string
      */
     public function owner();
+
     /**
      * Releases this lock in disregard of ownership.
      *

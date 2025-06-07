@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -7,19 +12,21 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * All of the registered connections.
      *
-     * @var \Illuminate\Database\ConnectionInterface[]
+     * @var \Archetype\Vendor\Illuminate\Database\ConnectionInterface[]
      */
     protected $connections = [];
+
     /**
      * The default connection name.
      *
      * @var string
      */
     protected $default;
+
     /**
      * Create a new connection resolver instance.
      *
-     * @param  array<string, \Illuminate\Database\ConnectionInterface>  $connections
+     * @param  array<string, \Archetype\Vendor\Illuminate\Database\ConnectionInterface>  $connections
      */
     public function __construct(array $connections = [])
     {
@@ -27,30 +34,34 @@ class ConnectionResolver implements ConnectionResolverInterface
             $this->addConnection($name, $connection);
         }
     }
+
     /**
      * Get a database connection instance.
      *
      * @param  string|null  $name
-     * @return \Illuminate\Database\ConnectionInterface
+     * @return \Archetype\Vendor\Illuminate\Database\ConnectionInterface
      */
     public function connection($name = null)
     {
         if (is_null($name)) {
             $name = $this->getDefaultConnection();
         }
+
         return $this->connections[$name];
     }
+
     /**
      * Add a connection to the resolver.
      *
      * @param  string  $name
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
+     * @param  \Archetype\Vendor\Illuminate\Database\ConnectionInterface  $connection
      * @return void
      */
     public function addConnection($name, ConnectionInterface $connection)
     {
         $this->connections[$name] = $connection;
     }
+
     /**
      * Check if a connection has been registered.
      *
@@ -61,6 +72,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     {
         return isset($this->connections[$name]);
     }
+
     /**
      * Get the default connection name.
      *
@@ -70,6 +82,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     {
         return $this->default;
     }
+
     /**
      * Set the default connection name.
      *

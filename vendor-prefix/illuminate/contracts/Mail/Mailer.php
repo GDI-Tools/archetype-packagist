@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Mail;
 
@@ -11,6 +16,7 @@ interface Mailer
      * @return \Illuminate\Mail\PendingMail
      */
     public function to($users);
+
     /**
      * Begin the process of mailing a mailable class instance.
      *
@@ -18,6 +24,7 @@ interface Mailer
      * @return \Illuminate\Mail\PendingMail
      */
     public function bcc($users);
+
     /**
      * Send a new message with only a raw text part.
      *
@@ -26,19 +33,21 @@ interface Mailer
      * @return \Illuminate\Mail\SentMessage|null
      */
     public function raw($text, $callback);
+
     /**
      * Send a new message using a view.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailable|string|array  $view
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Mail\Mailable|string|array  $view
      * @param  array  $data
      * @param  \Closure|string|null  $callback
      * @return \Illuminate\Mail\SentMessage|null
      */
     public function send($view, array $data = [], $callback = null);
+
     /**
      * Send a new message synchronously using a view.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailable|string|array  $mailable
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Mail\Mailable|string|array  $mailable
      * @param  array  $data
      * @param  \Closure|string|null  $callback
      * @return \Illuminate\Mail\SentMessage|null

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Events;
 
@@ -10,16 +15,18 @@ abstract class ConnectionEvent
      * @var string
      */
     public $connectionName;
+
     /**
      * The database connection instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Archetype\Vendor\Illuminate\Database\Connection
      */
     public $connection;
+
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Archetype\Vendor\Illuminate\Database\Connection  $connection
      */
     public function __construct($connection)
     {

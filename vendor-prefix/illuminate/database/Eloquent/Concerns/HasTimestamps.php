@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Concerns;
 
 use Archetype\Vendor\Illuminate\Support\Facades\Date;
+
 trait HasTimestamps
 {
     /**
@@ -10,13 +16,15 @@ trait HasTimestamps
      *
      * @var bool
      */
-    public $timestamps = \true;
+    public $timestamps = true;
+
     /**
      * The list of models classes that have timestamps temporarily disabled.
      *
      * @var array
      */
     protected static $ignoreTimestampsOn = [];
+
     /**
      * Update the model's update timestamp.
      *
@@ -26,15 +34,20 @@ trait HasTimestamps
     public function touch($attribute = null)
     {
         if ($attribute) {
-            $this->{$attribute} = $this->freshTimestamp();
+            $this->$attribute = $this->freshTimestamp();
+
             return $this->save();
         }
-        if (!$this->usesTimestamps()) {
-            return \false;
+
+        if (! $this->usesTimestamps()) {
+            return false;
         }
+
         $this->updateTimestamps();
+
         return $this->save();
     }
+
     /**
      * Update the model's update timestamp without raising any events.
      *
@@ -43,8 +56,9 @@ trait HasTimestamps
      */
     public function touchQuietly($attribute = null)
     {
-        return static::withoutEvents(fn() => $this->touch($attribute));
+        return static::withoutEvents(fn () => $this->touch($attribute));
     }
+
     /**
      * Update the creation and update timestamps.
      *
@@ -53,16 +67,22 @@ trait HasTimestamps
     public function updateTimestamps()
     {
         $time = $this->freshTimestamp();
+
         $updatedAtColumn = $this->getUpdatedAtColumn();
-        if (!is_null($updatedAtColumn) && !$this->isDirty($updatedAtColumn)) {
+
+        if (! is_null($updatedAtColumn) && ! $this->isDirty($updatedAtColumn)) {
             $this->setUpdatedAt($time);
         }
+
         $createdAtColumn = $this->getCreatedAtColumn();
-        if (!$this->exists && !is_null($createdAtColumn) && !$this->isDirty($createdAtColumn)) {
+
+        if (! $this->exists && ! is_null($createdAtColumn) && ! $this->isDirty($createdAtColumn)) {
             $this->setCreatedAt($time);
         }
+
         return $this;
     }
+
     /**
      * Set the value of the "created at" attribute.
      *
@@ -72,8 +92,10 @@ trait HasTimestamps
     public function setCreatedAt($value)
     {
         $this->{$this->getCreatedAtColumn()} = $value;
+
         return $this;
     }
+
     /**
      * Set the value of the "updated at" attribute.
      *
@@ -83,17 +105,20 @@ trait HasTimestamps
     public function setUpdatedAt($value)
     {
         $this->{$this->getUpdatedAtColumn()} = $value;
+
         return $this;
     }
+
     /**
      * Get a fresh timestamp for the model.
      *
-     * @return \Illuminate\Support\Carbon
+     * @return \Archetype\Vendor\Illuminate\Support\Carbon
      */
     public function freshTimestamp()
     {
         return Date::now();
     }
+
     /**
      * Get a fresh timestamp for the model.
      *
@@ -103,6 +128,7 @@ trait HasTimestamps
     {
         return $this->fromDateTime($this->freshTimestamp());
     }
+
     /**
      * Determine if the model uses timestamps.
      *
@@ -110,8 +136,9 @@ trait HasTimestamps
      */
     public function usesTimestamps()
     {
-        return $this->timestamps && !static::isIgnoringTimestamps($this::class);
+        return $this->timestamps && ! static::isIgnoringTimestamps($this::class);
     }
+
     /**
      * Get the name of the "created at" column.
      *
@@ -121,6 +148,7 @@ trait HasTimestamps
     {
         return static::CREATED_AT;
     }
+
     /**
      * Get the name of the "updated at" column.
      *
@@ -130,6 +158,7 @@ trait HasTimestamps
     {
         return static::UPDATED_AT;
     }
+
     /**
      * Get the fully qualified "created at" column.
      *
@@ -138,8 +167,10 @@ trait HasTimestamps
     public function getQualifiedCreatedAtColumn()
     {
         $column = $this->getCreatedAtColumn();
+
         return $column ? $this->qualifyColumn($column) : null;
     }
+
     /**
      * Get the fully qualified "updated at" column.
      *
@@ -148,8 +179,10 @@ trait HasTimestamps
     public function getQualifiedUpdatedAtColumn()
     {
         $column = $this->getUpdatedAtColumn();
+
         return $column ? $this->qualifyColumn($column) : null;
     }
+
     /**
      * Disable timestamps for the current class during the given callback scope.
      *
@@ -160,6 +193,7 @@ trait HasTimestamps
     {
         return static::withoutTimestampsOn([static::class], $callback);
     }
+
     /**
      * Disable timestamps for the given model classes during the given callback scope.
      *
@@ -170,16 +204,18 @@ trait HasTimestamps
     public static function withoutTimestampsOn($models, $callback)
     {
         static::$ignoreTimestampsOn = array_values(array_merge(static::$ignoreTimestampsOn, $models));
+
         try {
             return $callback();
         } finally {
             foreach ($models as $model) {
-                if (($key = array_search($model, static::$ignoreTimestampsOn, \true)) !== \false) {
+                if (($key = array_search($model, static::$ignoreTimestampsOn, true)) !== false) {
                     unset(static::$ignoreTimestampsOn[$key]);
                 }
             }
         }
     }
+
     /**
      * Determine if the given model is ignoring timestamps / touches.
      *
@@ -189,11 +225,13 @@ trait HasTimestamps
     public static function isIgnoringTimestamps($class = null)
     {
         $class ??= static::class;
+
         foreach (static::$ignoreTimestampsOn as $ignoredClass) {
             if ($class === $ignoredClass || is_subclass_of($class, $ignoredClass)) {
-                return \true;
+                return true;
             }
         }
-        return \false;
+
+        return false;
     }
 }

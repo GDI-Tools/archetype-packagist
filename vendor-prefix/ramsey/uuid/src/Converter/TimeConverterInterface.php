@@ -8,12 +8,17 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Converter;
 
 use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
 use Archetype\Vendor\Ramsey\Uuid\Type\Time;
+
 /**
  * A time converter converts timestamps into representations that may be used in UUIDs
  *
@@ -33,6 +38,7 @@ interface TimeConverterInterface
      * @return Hexadecimal The full UUID timestamp as a Hexadecimal value
      */
     public function calculateTime(string $seconds, string $microseconds): Hexadecimal;
+
     /**
      * Converts a timestamp extracted from a UUID to a Unix timestamp
      *

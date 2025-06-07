@@ -1,15 +1,23 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\Inflector\Rules\English;
 
 use Archetype\Vendor\Doctrine\Inflector\Rules\Pattern;
+
 final class Uninflected
 {
     /** @return Pattern[] */
     public static function getSingular(): iterable
     {
         yield from self::getDefault();
+
         yield new Pattern('.*ss');
         yield new Pattern('clothes');
         yield new Pattern('data');
@@ -24,15 +32,18 @@ final class Uninflected
         yield new Pattern('trivia');
         yield new Pattern('utopia');
     }
+
     /** @return Pattern[] */
     public static function getPlural(): iterable
     {
         yield from self::getDefault();
+
         yield new Pattern('people');
         yield new Pattern('trivia');
         yield new Pattern('\w+ware$');
         yield new Pattern('media');
     }
+
     /** @return Pattern[] */
     private static function getDefault(): iterable
     {

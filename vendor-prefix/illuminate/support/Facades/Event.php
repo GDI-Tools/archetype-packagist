@@ -1,11 +1,17 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
 use Archetype\Vendor\Illuminate\Support\Testing\Fakes\EventFake;
+
 /**
- * @method static void listen(\Illuminate\Events\QueuedClosure|callable|array|string $events, \Illuminate\Events\QueuedClosure|callable|array|string|null $listener = null)
+ * @method static void listen(\Archetype\Vendor\Illuminate\Events\QueuedClosure|callable|array|string $events, \Archetype\Vendor\Illuminate\Events\QueuedClosure|callable|array|string|null $listener = null)
  * @method static bool hasListeners(string $eventName)
  * @method static bool hasWildcardListeners(string $eventName)
  * @method static void push(string $event, object|array $payload = [])
@@ -18,25 +24,25 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\EventFake;
  * @method static \Closure createClassListener(string $listener, bool $wildcard = false)
  * @method static void forget(string $event)
  * @method static void forgetPushed()
- * @method static \Illuminate\Events\Dispatcher setQueueResolver(callable $resolver)
- * @method static \Illuminate\Events\Dispatcher setTransactionManagerResolver(callable $resolver)
+ * @method static \Archetype\Vendor\Illuminate\Events\Dispatcher setQueueResolver(callable $resolver)
+ * @method static \Archetype\Vendor\Illuminate\Events\Dispatcher setTransactionManagerResolver(callable $resolver)
  * @method static array getRawListeners()
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
- * @method static \Illuminate\Support\Testing\Fakes\EventFake except(array|string $eventsToDispatch)
+ * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\EventFake except(array|string $eventsToDispatch)
  * @method static void assertListening(string $expectedEvent, string|array $expectedListener)
  * @method static void assertDispatched(string|\Closure $event, callable|int|null $callback = null)
  * @method static void assertDispatchedTimes(string $event, int $times = 1)
  * @method static void assertNotDispatched(string|\Closure $event, callable|null $callback = null)
  * @method static void assertNothingDispatched()
- * @method static \Illuminate\Support\Collection dispatched(string $event, callable|null $callback = null)
+ * @method static \Archetype\Vendor\Illuminate\Support\Collection dispatched(string $event, callable|null $callback = null)
  * @method static bool hasDispatched(string $event)
  * @method static array dispatchedEvents()
  *
- * @see \Illuminate\Events\Dispatcher
- * @see \Illuminate\Support\Testing\Fakes\EventFake
+ * @see \Archetype\Vendor\Illuminate\Events\Dispatcher
+ * @see \Archetype\Vendor\Illuminate\Support\Testing\Fakes\EventFake
  */
 class Event extends Facade
 {
@@ -44,29 +50,37 @@ class Event extends Facade
      * Replace the bound instance with a fake.
      *
      * @param  array|string  $eventsToFake
-     * @return \Illuminate\Support\Testing\Fakes\EventFake
+     * @return \Archetype\Vendor\Illuminate\Support\Testing\Fakes\EventFake
      */
     public static function fake($eventsToFake = [])
     {
-        $actualDispatcher = static::isFake() ? static::getFacadeRoot()->dispatcher : static::getFacadeRoot();
+        $actualDispatcher = static::isFake()
+            ? static::getFacadeRoot()->dispatcher
+            : static::getFacadeRoot();
+
         return tap(new EventFake($actualDispatcher, $eventsToFake), function ($fake) {
             static::swap($fake);
+
             Model::setEventDispatcher($fake);
             Cache::refreshEventDispatcher();
         });
     }
+
     /**
      * Replace the bound instance with a fake that fakes all events except the given events.
      *
      * @param  string[]|string  $eventsToAllow
-     * @return \Illuminate\Support\Testing\Fakes\EventFake
+     * @return \Archetype\Vendor\Illuminate\Support\Testing\Fakes\EventFake
      */
     public static function fakeExcept($eventsToAllow)
     {
-        return static::fake([function ($eventName) use ($eventsToAllow) {
-            return !in_array($eventName, (array) $eventsToAllow);
-        }]);
+        return static::fake([
+            function ($eventName) use ($eventsToAllow) {
+                return ! in_array($eventName, (array) $eventsToAllow);
+            },
+        ]);
     }
+
     /**
      * Replace the bound instance with a fake during the given callable's execution.
      *
@@ -77,13 +91,17 @@ class Event extends Facade
     public static function fakeFor(callable $callable, array $eventsToFake = [])
     {
         $originalDispatcher = static::getFacadeRoot();
+
         static::fake($eventsToFake);
+
         return tap($callable(), function () use ($originalDispatcher) {
             static::swap($originalDispatcher);
+
             Model::setEventDispatcher($originalDispatcher);
             Cache::refreshEventDispatcher();
         });
     }
+
     /**
      * Replace the bound instance with a fake during the given callable's execution.
      *
@@ -94,13 +112,17 @@ class Event extends Facade
     public static function fakeExceptFor(callable $callable, array $eventsToAllow = [])
     {
         $originalDispatcher = static::getFacadeRoot();
+
         static::fakeExcept($eventsToAllow);
+
         return tap($callable(), function () use ($originalDispatcher) {
             static::swap($originalDispatcher);
+
             Model::setEventDispatcher($originalDispatcher);
             Cache::refreshEventDispatcher();
         });
     }
+
     /**
      * Get the registered name of the component.
      *

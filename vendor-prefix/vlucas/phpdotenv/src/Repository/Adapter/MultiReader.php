@@ -1,21 +1,29 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Repository\Adapter;
 
 use Archetype\Vendor\PhpOption\None;
+
 final class MultiReader implements ReaderInterface
 {
     /**
      * The set of readers to use.
      *
-     * @var \Dotenv\Repository\Adapter\ReaderInterface[]
+     * @var \Archetype\Vendor\Dotenv\Repository\Adapter\ReaderInterface[]
      */
     private $readers;
+
     /**
      * Create a new multi-reader instance.
      *
-     * @param \Dotenv\Repository\Adapter\ReaderInterface[] $readers
+     * @param \Archetype\Vendor\Dotenv\Repository\Adapter\ReaderInterface[] $readers
      *
      * @return void
      */
@@ -23,12 +31,13 @@ final class MultiReader implements ReaderInterface
     {
         $this->readers = $readers;
     }
+
     /**
      * Read an environment variable, if it exists.
      *
      * @param non-empty-string $name
      *
-     * @return \PhpOption\Option<string>
+     * @return \Archetype\Vendor\PhpOption\Option<string>
      */
     public function read(string $name)
     {
@@ -38,6 +47,7 @@ final class MultiReader implements ReaderInterface
                 return $result;
             }
         }
+
         return None::create();
     }
 }

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
-use Archetype\Vendor\Illuminate\Concurrency\ConcurrencyManager;
+use Illuminate\Concurrency\ConcurrencyManager;
+
 /**
  * @method static mixed driver(string|null $name = null)
  * @method static \Illuminate\Concurrency\ProcessDriver createProcessDriver(array $config)
@@ -15,9 +21,9 @@ use Archetype\Vendor\Illuminate\Concurrency\ConcurrencyManager;
  * @method static \Illuminate\Concurrency\ConcurrencyManager forgetInstance(array|string|null $name = null)
  * @method static void purge(string|null $name = null)
  * @method static \Illuminate\Concurrency\ConcurrencyManager extend(string $name, \Closure $callback)
- * @method static \Illuminate\Concurrency\ConcurrencyManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Illuminate\Concurrency\ConcurrencyManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static array run(\Closure|array $tasks)
- * @method static \Illuminate\Support\Defer\DeferredCallback defer(\Closure|array $tasks)
+ * @method static \Archetype\Vendor\Illuminate\Support\Defer\DeferredCallback defer(\Closure|array $tasks)
  *
  * @see \Illuminate\Concurrency\ConcurrencyManager
  */

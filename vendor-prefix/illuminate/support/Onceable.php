@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use Closure;
 use Archetype\Vendor\Laravel\SerializableClosure\Support\ReflectionClosure;
+
 class Onceable
 {
     /**
@@ -13,10 +19,14 @@ class Onceable
      * @param  object|null  $object
      * @param  callable  $callable
      */
-    public function __construct(public string $hash, public ?object $object, public $callable)
-    {
+    public function __construct(
+        public string $hash,
+        public ?object $object,
+        public $callable,
+    ) {
         //
     }
+
     /**
      * Tries to create a new onceable instance from the given trace.
      *
@@ -25,11 +35,13 @@ class Onceable
      */
     public static function tryFromTrace(array $trace, callable $callable)
     {
-        if (!is_null($hash = static::hashFromTrace($trace, $callable))) {
+        if (! is_null($hash = static::hashFromTrace($trace, $callable))) {
             $object = static::objectFromTrace($trace);
+
             return new static($hash, $object, $callable);
         }
     }
+
     /**
      * Computes the object of the onceable from the given trace, if any.
      *
@@ -40,6 +52,7 @@ class Onceable
     {
         return $trace[1]['object'] ?? null;
     }
+
     /**
      * Computes the hash of the onceable from the given trace.
      *
@@ -51,9 +64,23 @@ class Onceable
         if (str_contains($trace[0]['file'] ?? '', 'eval()\'d code')) {
             return null;
         }
-        $uses = array_map(fn(mixed $argument) => is_object($argument) ? spl_object_hash($argument) : $argument, $callable instanceof Closure ? (new ReflectionClosure($callable))->getClosureUsedVariables() : []);
+
+        $uses = array_map(
+            fn (mixed $argument) => is_object($argument) ? spl_object_hash($argument) : $argument,
+            $callable instanceof Closure ? (new ReflectionClosure($callable))->getClosureUsedVariables() : [],
+        );
+
         $class = $callable instanceof Closure ? (new ReflectionClosure($callable))->getClosureCalledClass()?->getName() : null;
+
         $class ??= isset($trace[1]['class']) ? $trace[1]['class'] : null;
-        return hash('xxh128', sprintf('%s@%s%s:%s (%s)', $trace[0]['file'], $class ? $class . '@' : '', $trace[1]['function'], $trace[0]['line'], serialize($uses)));
+
+        return hash('xxh128', sprintf(
+            '%s@%s%s:%s (%s)',
+            $trace[0]['file'],
+            $class ? $class.'@' : '',
+            $trace[1]['function'],
+            $trace[0]['line'],
+            serialize($uses),
+        ));
     }
 }

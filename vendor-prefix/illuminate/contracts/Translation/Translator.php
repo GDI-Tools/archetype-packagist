@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Translation;
 
@@ -13,6 +18,7 @@ interface Translator
      * @return mixed
      */
     public function get($key, array $replace = [], $locale = null);
+
     /**
      * Get a translation according to an integer value.
      *
@@ -23,12 +29,14 @@ interface Translator
      * @return string
      */
     public function choice($key, $number, array $replace = [], $locale = null);
+
     /**
      * Get the default locale being used.
      *
      * @return string
      */
     public function getLocale();
+
     /**
      * Set the default locale.
      *

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver;
 
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
+
 /**
  * Connection interface.
  * Driver connections must implement this interface.
@@ -17,12 +23,14 @@ interface Connection
      * @throws Exception
      */
     public function prepare(string $sql): Statement;
+
     /**
      * Executes an SQL statement, returning a result set as a Statement object.
      *
      * @throws Exception
      */
     public function query(string $sql): Result;
+
     /**
      * Quotes a string for use in a query.
      *
@@ -35,12 +43,14 @@ interface Connection
      * @return mixed
      */
     public function quote($value, $type = ParameterType::STRING);
+
     /**
      * Executes an SQL statement and return the number of affected rows.
      *
      * @throws Exception
      */
     public function exec(string $sql): int;
+
     /**
      * Returns the ID of the last inserted row or sequence value.
      *
@@ -51,6 +61,7 @@ interface Connection
      * @throws Exception
      */
     public function lastInsertId($name = null);
+
     /**
      * Initiates a transaction.
      *
@@ -59,6 +70,7 @@ interface Connection
      * @throws Exception
      */
     public function beginTransaction();
+
     /**
      * Commits a transaction.
      *
@@ -67,6 +79,7 @@ interface Connection
      * @throws Exception
      */
     public function commit();
+
     /**
      * Rolls back the current transaction, as initiated by beginTransaction().
      *

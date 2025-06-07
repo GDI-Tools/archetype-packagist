@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Encryption;
 
@@ -10,19 +15,17 @@ interface StringEncrypter
      * @param  string  $value
      * @return string
      *
-     * @throws \Illuminate\Contracts\Encryption\EncryptException
+     * @throws \Archetype\Vendor\Illuminate\Contracts\Encryption\EncryptException
      */
-    public function encryptString(
-        #[\SensitiveParameter]
-        $value
-    );
+    public function encryptString(#[\SensitiveParameter] $value);
+
     /**
      * Decrypt the given string without unserialization.
      *
      * @param  string  $payload
      * @return string
      *
-     * @throws \Illuminate\Contracts\Encryption\DecryptException
+     * @throws \Archetype\Vendor\Illuminate\Contracts\Encryption\DecryptException
      */
     public function decryptString($payload);
 }

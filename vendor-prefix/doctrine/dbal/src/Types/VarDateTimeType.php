@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Types;
 
@@ -6,6 +11,7 @@ use DateTime;
 use DateTimeInterface;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Exception;
+
 /**
  * Variable DateTime Type using DateTime::__construct() instead of DateTime::createFromFormat().
  *
@@ -29,11 +35,13 @@ class VarDateTimeType extends DateTimeType
         if ($value === null || $value instanceof DateTime) {
             return $value;
         }
+
         try {
             $dateTime = new DateTime($value);
         } catch (Exception $e) {
             throw ConversionException::conversionFailed($value, $this->getName(), $e);
         }
+
         return $dateTime;
     }
 }

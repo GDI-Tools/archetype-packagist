@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Connectors;
 
 use PDO;
+
 class MariaDbConnector extends MySqlConnector
 {
     /**
@@ -17,12 +23,15 @@ class MariaDbConnector extends MySqlConnector
         if (isset($config['modes'])) {
             return implode(',', $config['modes']);
         }
-        if (!isset($config['strict'])) {
+
+        if (! isset($config['strict'])) {
             return null;
         }
-        if (!$config['strict']) {
+
+        if (! $config['strict']) {
             return 'NO_ENGINE_SUBSTITUTION';
         }
+
         return 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
     }
 }

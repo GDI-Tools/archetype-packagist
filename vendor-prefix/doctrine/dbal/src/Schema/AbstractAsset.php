@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function array_map;
 use function crc32;
 use function dechex;
@@ -14,6 +20,7 @@ use function strpos;
 use function strtolower;
 use function strtoupper;
 use function substr;
+
 /**
  * The abstract asset allows to reset the name of all assets without publishing this to the public userland.
  *
@@ -25,14 +32,17 @@ abstract class AbstractAsset
 {
     /** @var string */
     protected $_name = '';
+
     /**
      * Namespace of the asset. If none isset the default namespace is assumed.
      *
      * @var string|null
      */
     protected $_namespace;
+
     /** @var bool */
-    protected $_quoted = \false;
+    protected $_quoted = false;
+
     /**
      * Sets the name of this asset.
      *
@@ -43,16 +53,19 @@ abstract class AbstractAsset
     protected function _setName($name)
     {
         if ($this->isIdentifierQuoted($name)) {
-            $this->_quoted = \true;
-            $name = $this->trimQuotes($name);
+            $this->_quoted = true;
+            $name          = $this->trimQuotes($name);
         }
-        if (strpos($name, '.') !== \false) {
-            $parts = explode('.', $name);
+
+        if (strpos($name, '.') !== false) {
+            $parts            = explode('.', $name);
             $this->_namespace = $parts[0];
-            $name = $parts[1];
+            $name             = $parts[1];
         }
+
         $this->_name = $name;
     }
+
     /**
      * Is this asset in the default namespace?
      *
@@ -64,6 +77,7 @@ abstract class AbstractAsset
     {
         return $this->_namespace === $defaultNamespaceName || $this->_namespace === null;
     }
+
     /**
      * Gets the namespace name of this asset.
      *
@@ -75,6 +89,7 @@ abstract class AbstractAsset
     {
         return $this->_namespace;
     }
+
     /**
      * The shortest name is stripped of the default namespace. All other
      * namespaced elements are returned as full-qualified names.
@@ -89,8 +104,10 @@ abstract class AbstractAsset
         if ($this->_namespace === $defaultNamespaceName) {
             $shortestName = $this->_name;
         }
+
         return strtolower($shortestName);
     }
+
     /**
      * The normalized name is full-qualified and lower-cased. Lower-casing is
      * actually wrong, but we have to do it to keep our sanity. If you are
@@ -108,13 +125,21 @@ abstract class AbstractAsset
      */
     public function getFullQualifiedName($defaultNamespaceName)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4814', 'AbstractAsset::getFullQualifiedName() is deprecated.' . ' Use AbstractAsset::getNamespaceName() and ::getName() instead.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4814',
+            'AbstractAsset::getFullQualifiedName() is deprecated.'
+            . ' Use AbstractAsset::getNamespaceName() and ::getName() instead.',
+        );
+
         $name = $this->getName();
         if ($this->_namespace === null) {
             $name = $defaultNamespaceName . '.' . $name;
         }
+
         return strtolower($name);
     }
+
     /**
      * Checks if this asset's name is quoted.
      *
@@ -124,6 +149,7 @@ abstract class AbstractAsset
     {
         return $this->_quoted;
     }
+
     /**
      * Checks if this identifier is quoted.
      *
@@ -135,6 +161,7 @@ abstract class AbstractAsset
     {
         return isset($identifier[0]) && ($identifier[0] === '`' || $identifier[0] === '"' || $identifier[0] === '[');
     }
+
     /**
      * Trim quotes from the identifier.
      *
@@ -146,6 +173,7 @@ abstract class AbstractAsset
     {
         return str_replace(['`', '"', '[', ']'], '', $identifier);
     }
+
     /**
      * Returns the name of this schema asset.
      *
@@ -156,8 +184,10 @@ abstract class AbstractAsset
         if ($this->_namespace !== null) {
             return $this->_namespace . '.' . $this->_name;
         }
+
         return $this->_name;
     }
+
     /**
      * Gets the quoted representation of this asset but only if it was defined with one. Otherwise
      * return the plain unquoted value as inserted.
@@ -167,12 +197,14 @@ abstract class AbstractAsset
     public function getQuotedName(AbstractPlatform $platform)
     {
         $keywords = $platform->getReservedKeywordsList();
-        $parts = explode('.', $this->getName());
+        $parts    = explode('.', $this->getName());
         foreach ($parts as $k => $v) {
             $parts[$k] = $this->_quoted || $keywords->isKeyword($v) ? $platform->quoteIdentifier($v) : $v;
         }
+
         return implode('.', $parts);
     }
+
     /**
      * Generates an identifier from a list of column names obeying a certain string length.
      *
@@ -191,6 +223,7 @@ abstract class AbstractAsset
         $hash = implode('', array_map(static function ($column): string {
             return dechex(crc32($column));
         }, $columnNames));
+
         return strtoupper(substr($prefix . '_' . $hash, 0, $maxSize));
     }
 }

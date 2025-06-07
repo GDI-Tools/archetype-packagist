@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL;
 
@@ -8,18 +13,22 @@ final class ArrayParameterType
      * Represents an array of ints to be expanded by Doctrine SQL parsing.
      */
     public const INTEGER = ParameterType::INTEGER + Connection::ARRAY_PARAM_OFFSET;
+
     /**
      * Represents an array of strings to be expanded by Doctrine SQL parsing.
      */
     public const STRING = ParameterType::STRING + Connection::ARRAY_PARAM_OFFSET;
+
     /**
      * Represents an array of ascii strings to be expanded by Doctrine SQL parsing.
      */
     public const ASCII = ParameterType::ASCII + Connection::ARRAY_PARAM_OFFSET;
+
     /**
      * Represents an array of ascii strings to be expanded by Doctrine SQL parsing.
      */
     public const BINARY = ParameterType::BINARY + Connection::ARRAY_PARAM_OFFSET;
+
     /**
      * @internal
      *
@@ -31,6 +40,7 @@ final class ArrayParameterType
     {
         return $type - Connection::ARRAY_PARAM_OFFSET;
     }
+
     private function __construct()
     {
     }

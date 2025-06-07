@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
@@ -9,6 +14,7 @@ class View extends AbstractAsset
 {
     /** @var string */
     private $sql;
+
     /**
      * @param string $name
      * @param string $sql
@@ -18,6 +24,7 @@ class View extends AbstractAsset
         $this->_setName($name);
         $this->sql = $sql;
     }
+
     /** @return string */
     public function getSql()
     {

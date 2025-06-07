@@ -1,14 +1,21 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema\Visitor;
 
 use Archetype\Vendor\Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Archetype\Vendor\Doctrine\DBAL\Schema\Schema;
 use Archetype\Vendor\Doctrine\DBAL\Schema\Table;
+
 use function current;
 use function file_put_contents;
 use function in_array;
 use function strtolower;
+
 /**
  * Create a Graphviz output of a Schema.
  *
@@ -17,52 +24,89 @@ use function strtolower;
 class Graphviz extends AbstractVisitor
 {
     private string $output = '';
+
     /**
      * {@inheritDoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
-        $this->output .= $this->createNodeRelation($fkConstraint->getLocalTableName() . ':col' . current($fkConstraint->getLocalColumns()) . ':se', $fkConstraint->getForeignTableName() . ':col' . current($fkConstraint->getForeignColumns()) . ':se', ['dir' => 'back', 'arrowtail' => 'dot', 'arrowhead' => 'normal']);
+        $this->output .= $this->createNodeRelation(
+            $fkConstraint->getLocalTableName() . ':col' . current($fkConstraint->getLocalColumns()) . ':se',
+            $fkConstraint->getForeignTableName() . ':col' . current($fkConstraint->getForeignColumns()) . ':se',
+            [
+                'dir'       => 'back',
+                'arrowtail' => 'dot',
+                'arrowhead' => 'normal',
+            ],
+        );
     }
+
     /**
      * {@inheritDoc}
      */
     public function acceptSchema(Schema $schema)
     {
-        $this->output = 'digraph "' . $schema->getName() . '" {' . "\n";
+        $this->output  = 'digraph "' . $schema->getName() . '" {' . "\n";
         $this->output .= 'splines = true;' . "\n";
         $this->output .= 'overlap = false;' . "\n";
         $this->output .= 'outputorder=edgesfirst;' . "\n";
         $this->output .= 'mindist = 0.6;' . "\n";
         $this->output .= 'sep = .2;' . "\n";
     }
+
     /**
      * {@inheritDoc}
      */
     public function acceptTable(Table $table)
     {
-        $this->output .= $this->createNode($table->getName(), ['label' => $this->createTableLabel($table), 'shape' => 'plaintext']);
+        $this->output .= $this->createNode(
+            $table->getName(),
+            [
+                'label' => $this->createTableLabel($table),
+                'shape' => 'plaintext',
+            ],
+        );
     }
+
     private function createTableLabel(Table $table): string
     {
         // Start the table
         $label = '<<TABLE CELLSPACING="0" BORDER="1" ALIGN="LEFT">';
+
         // The title
-        $label .= '<TR><TD BORDER="1" COLSPAN="3" ALIGN="CENTER" BGCOLOR="#fcaf3e">' . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $table->getName() . '</FONT></TD></TR>';
+        $label .= '<TR><TD BORDER="1" COLSPAN="3" ALIGN="CENTER" BGCOLOR="#fcaf3e">'
+            . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $table->getName() . '</FONT></TD></TR>';
+
         // The attributes block
         foreach ($table->getColumns() as $column) {
             $columnLabel = $column->getName();
-            $label .= '<TR>' . '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">' . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $columnLabel . '</FONT>' . '</TD>' . '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">' . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="10">' . strtolower($column->getType()->getName()) . '</FONT>' . '</TD>' . '<TD BORDER="0" ALIGN="RIGHT" BGCOLOR="#eeeeec" PORT="col' . $column->getName() . '">';
+
+            $label .= '<TR>'
+                . '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">'
+                . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $columnLabel . '</FONT>'
+                . '</TD>'
+                . '<TD BORDER="0" ALIGN="LEFT" BGCOLOR="#eeeeec">'
+                . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="10">'
+                . strtolower($column->getType()->getName())
+                . '</FONT>'
+                . '</TD>'
+                . '<TD BORDER="0" ALIGN="RIGHT" BGCOLOR="#eeeeec" PORT="col' . $column->getName() . '">';
+
             $primaryKey = $table->getPrimaryKey();
-            if ($primaryKey !== null && in_array($column->getName(), $primaryKey->getColumns(), \true)) {
-                $label .= "✷";
+
+            if ($primaryKey !== null && in_array($column->getName(), $primaryKey->getColumns(), true)) {
+                $label .= "\xe2\x9c\xb7";
             }
+
             $label .= '</TD></TR>';
         }
+
         // End the table
         $label .= '</TABLE>>';
+
         return $label;
     }
+
     /**
      * @param string   $name
      * @param string[] $options
@@ -73,9 +117,12 @@ class Graphviz extends AbstractVisitor
         foreach ($options as $key => $value) {
             $node .= $key . '=' . $value . ' ';
         }
+
         $node .= "]\n";
+
         return $node;
     }
+
     /**
      * @param string   $node1
      * @param string   $node2
@@ -87,9 +134,12 @@ class Graphviz extends AbstractVisitor
         foreach ($options as $key => $value) {
             $relation .= $key . '=' . $value . ' ';
         }
+
         $relation .= "]\n";
+
         return $relation;
     }
+
     /**
      * Get Graphviz Output
      *
@@ -99,6 +149,7 @@ class Graphviz extends AbstractVisitor
     {
         return $this->output . '}';
     }
+
     /**
      * Writes dot language output to a file. This should usually be a *.dot file.
      *

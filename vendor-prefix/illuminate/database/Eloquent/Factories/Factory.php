@@ -1,9 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Factories;
 
 use Closure;
-use Archetype\Vendor\Faker\Generator;
+use Faker\Generator;
 use Archetype\Vendor\Illuminate\Container\Container;
 use Archetype\Vendor\Illuminate\Contracts\Foundation\Application;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -17,6 +22,7 @@ use Archetype\Vendor\Illuminate\Support\Traits\Conditionable;
 use Archetype\Vendor\Illuminate\Support\Traits\ForwardsCalls;
 use Archetype\Vendor\Illuminate\Support\Traits\Macroable;
 use Throwable;
+
 /**
  * @template TModel of \Illuminate\Database\Eloquent\Model
  *
@@ -27,128 +33,155 @@ abstract class Factory
     use Conditionable, ForwardsCalls, Macroable {
         __call as macroCall;
     }
+
     /**
      * The name of the factory's corresponding model.
      *
      * @var class-string<TModel>
      */
     protected $model;
+
     /**
      * The number of models that should be generated.
      *
      * @var int|null
      */
     protected $count;
+
     /**
      * The state transformations that will be applied to the model.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Archetype\Vendor\Illuminate\Support\Collection
      */
     protected $states;
+
     /**
      * The parent relationships that will be applied to the model.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Archetype\Vendor\Illuminate\Support\Collection
      */
     protected $has;
+
     /**
      * The child relationships that will be applied to the model.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Archetype\Vendor\Illuminate\Support\Collection
      */
     protected $for;
+
     /**
      * The model instances to always use when creating relationships.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Archetype\Vendor\Illuminate\Support\Collection
      */
     protected $recycle;
+
     /**
      * The "after making" callbacks that will be applied to the model.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Archetype\Vendor\Illuminate\Support\Collection
      */
     protected $afterMaking;
+
     /**
      * The "after creating" callbacks that will be applied to the model.
      *
-     * @var \Illuminate\Support\Collection
+     * @var \Archetype\Vendor\Illuminate\Support\Collection
      */
     protected $afterCreating;
+
     /**
      * Whether relationships should not be automatically created.
      *
      * @var bool
      */
-    protected $expandRelationships = \true;
+    protected $expandRelationships = true;
+
     /**
      * The name of the database connection that will be used to create the models.
      *
      * @var string|null
      */
     protected $connection;
+
     /**
      * The current Faker instance.
      *
      * @var \Faker\Generator
      */
     protected $faker;
+
     /**
      * The default namespace where factories reside.
      *
      * @var string
      */
-    public static $namespace = 'Database\Factories\\';
+    public static $namespace = 'Database\\Factories\\';
+
     /**
      * @deprecated use $modelNameResolvers
      *
      * @var callable(self): class-string<TModel>
      */
     protected static $modelNameResolver;
+
     /**
      * The default model name resolvers.
      *
      * @var array<class-string, callable(self): class-string<TModel>>
      */
     protected static $modelNameResolvers = [];
+
     /**
      * The factory name resolver.
      *
      * @var callable
      */
     protected static $factoryNameResolver;
+
     /**
      * Create a new factory instance.
      *
      * @param  int|null  $count
-     * @param  \Illuminate\Support\Collection|null  $states
-     * @param  \Illuminate\Support\Collection|null  $has
-     * @param  \Illuminate\Support\Collection|null  $for
-     * @param  \Illuminate\Support\Collection|null  $afterMaking
-     * @param  \Illuminate\Support\Collection|null  $afterCreating
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection|null  $states
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection|null  $has
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection|null  $for
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection|null  $afterMaking
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection|null  $afterCreating
      * @param  string|null  $connection
-     * @param  \Illuminate\Support\Collection|null  $recycle
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection|null  $recycle
      * @param  bool  $expandRelationships
      */
-    public function __construct($count = null, ?Collection $states = null, ?Collection $has = null, ?Collection $for = null, ?Collection $afterMaking = null, ?Collection $afterCreating = null, $connection = null, ?Collection $recycle = null, bool $expandRelationships = \true)
-    {
+    public function __construct(
+        $count = null,
+        ?Collection $states = null,
+        ?Collection $has = null,
+        ?Collection $for = null,
+        ?Collection $afterMaking = null,
+        ?Collection $afterCreating = null,
+        $connection = null,
+        ?Collection $recycle = null,
+        bool $expandRelationships = true
+    ) {
         $this->count = $count;
-        $this->states = $states ?? new Collection();
-        $this->has = $has ?? new Collection();
-        $this->for = $for ?? new Collection();
-        $this->afterMaking = $afterMaking ?? new Collection();
-        $this->afterCreating = $afterCreating ?? new Collection();
+        $this->states = $states ?? new Collection;
+        $this->has = $has ?? new Collection;
+        $this->for = $for ?? new Collection;
+        $this->afterMaking = $afterMaking ?? new Collection;
+        $this->afterCreating = $afterCreating ?? new Collection;
         $this->connection = $connection;
-        $this->recycle = $recycle ?? new Collection();
+        $this->recycle = $recycle ?? new Collection;
         $this->faker = $this->withFaker();
         $this->expandRelationships = $expandRelationships;
     }
+
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
     abstract public function definition();
+
     /**
      * Get a new factory instance for the given attributes.
      *
@@ -157,8 +190,9 @@ abstract class Factory
      */
     public static function new($attributes = [])
     {
-        return (new static())->state($attributes)->configure();
+        return (new static)->state($attributes)->configure();
     }
+
     /**
      * Get a new factory instance for the given number of models.
      *
@@ -169,6 +203,7 @@ abstract class Factory
     {
         return static::new()->count($count);
     }
+
     /**
      * Configure the factory.
      *
@@ -178,11 +213,12 @@ abstract class Factory
     {
         return $this;
     }
+
     /**
      * Get the raw attributes generated by the factory.
      *
      * @param  (callable(array<string, mixed>): array<string, mixed>)|array<string, mixed>  $attributes
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
      * @return array<int|string, mixed>
      */
     public function raw($attributes = [], ?Model $parent = null)
@@ -190,10 +226,12 @@ abstract class Factory
         if ($this->count === null) {
             return $this->state($attributes)->getExpandedAttributes($parent);
         }
+
         return array_map(function () use ($attributes, $parent) {
             return $this->state($attributes)->getExpandedAttributes($parent);
         }, range(1, $this->count));
     }
+
     /**
      * Create a single model and persist it to the database.
      *
@@ -204,6 +242,7 @@ abstract class Factory
     {
         return $this->count(null)->create($attributes);
     }
+
     /**
      * Create a single model and persist it to the database without dispatching any model events.
      *
@@ -214,102 +253,122 @@ abstract class Factory
     {
         return $this->count(null)->createQuietly($attributes);
     }
+
     /**
      * Create a collection of models and persist them to the database.
      *
      * @param  int|null|iterable<int, array<string, mixed>>  $records
-     * @return \Illuminate\Database\Eloquent\Collection<int, TModel>
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Collection<int, TModel>
      */
     public function createMany(int|iterable|null $records = null)
     {
-        $records ??= $this->count ?? 1;
+        $records ??= ($this->count ?? 1);
+
         $this->count = null;
+
         if (is_numeric($records)) {
             $records = array_fill(0, $records, []);
         }
-        return new EloquentCollection((new Collection($records))->map(function ($record) {
-            return $this->state($record)->create();
-        }));
+
+        return new EloquentCollection(
+            (new Collection($records))->map(function ($record) {
+                return $this->state($record)->create();
+            })
+        );
     }
+
     /**
      * Create a collection of models and persist them to the database without dispatching any model events.
      *
      * @param  int|null|iterable<int, array<string, mixed>>  $records
-     * @return \Illuminate\Database\Eloquent\Collection<int, TModel>
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Collection<int, TModel>
      */
     public function createManyQuietly(int|iterable|null $records = null)
     {
-        return Model::withoutEvents(fn() => $this->createMany($records));
+        return Model::withoutEvents(fn () => $this->createMany($records));
     }
+
     /**
      * Create a collection of models and persist them to the database.
      *
      * @param  (callable(array<string, mixed>): array<string, mixed>)|array<string, mixed>  $attributes
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return \Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
      */
     public function create($attributes = [], ?Model $parent = null)
     {
-        if (!empty($attributes)) {
+        if (! empty($attributes)) {
             return $this->state($attributes)->create([], $parent);
         }
+
         $results = $this->make($attributes, $parent);
+
         if ($results instanceof Model) {
             $this->store(new Collection([$results]));
+
             $this->callAfterCreating(new Collection([$results]), $parent);
         } else {
             $this->store($results);
+
             $this->callAfterCreating($results, $parent);
         }
+
         return $results;
     }
+
     /**
      * Create a collection of models and persist them to the database without dispatching any model events.
      *
      * @param  (callable(array<string, mixed>): array<string, mixed>)|array<string, mixed>  $attributes
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return \Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
      */
     public function createQuietly($attributes = [], ?Model $parent = null)
     {
-        return Model::withoutEvents(fn() => $this->create($attributes, $parent));
+        return Model::withoutEvents(fn () => $this->create($attributes, $parent));
     }
+
     /**
      * Create a callback that persists a model in the database when invoked.
      *
      * @param  array<string, mixed>  $attributes
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return Closure(): (\Illuminate\Database\Eloquent\Collection<int, TModel>|TModel)
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Closure(): (\Archetype\Vendor\Illuminate\Database\Eloquent\Collection<int, TModel>|TModel)
      */
     public function lazy(array $attributes = [], ?Model $parent = null)
     {
-        return fn() => $this->create($attributes, $parent);
+        return fn () => $this->create($attributes, $parent);
     }
+
     /**
      * Set the connection name on the results and store them.
      *
-     * @param  \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model>  $results
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection<int, \Archetype\Vendor\Illuminate\Database\Eloquent\Model>  $results
      * @return void
      */
     protected function store(Collection $results)
     {
         $results->each(function ($model) {
-            if (!isset($this->connection)) {
+            if (! isset($this->connection)) {
                 $model->setConnection($model->newQueryWithoutScopes()->getConnection()->getName());
             }
+
             $model->save();
+
             foreach ($model->getRelations() as $name => $items) {
                 if ($items instanceof Enumerable && $items->isEmpty()) {
                     $model->unsetRelation($name);
                 }
             }
+
             $this->createChildren($model);
         });
     }
+
     /**
      * Create the children for the given model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
     protected function createChildren(Model $model)
@@ -320,6 +379,7 @@ abstract class Factory
             });
         });
     }
+
     /**
      * Make a single instance of the model.
      *
@@ -330,37 +390,44 @@ abstract class Factory
     {
         return $this->count(null)->make($attributes);
     }
+
     /**
      * Create a collection of models.
      *
      * @param  (callable(array<string, mixed>): array<string, mixed>)|array<string, mixed>  $attributes
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return \Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Collection<int, TModel>|TModel
      */
     public function make($attributes = [], ?Model $parent = null)
     {
-        if (!empty($attributes)) {
+        if (! empty($attributes)) {
             return $this->state($attributes)->make([], $parent);
         }
+
         if ($this->count === null) {
             return tap($this->makeInstance($parent), function ($instance) {
                 $this->callAfterMaking(new Collection([$instance]));
             });
         }
+
         if ($this->count < 1) {
             return $this->newModel()->newCollection();
         }
+
         $instances = $this->newModel()->newCollection(array_map(function () use ($parent) {
             return $this->makeInstance($parent);
         }, range(1, $this->count)));
+
         $this->callAfterMaking($instances);
+
         return $instances;
     }
+
     /**
      * Make an instance of the model with the given attributes.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Model
      */
     protected function makeInstance(?Model $parent)
     {
@@ -372,20 +439,22 @@ abstract class Factory
             });
         });
     }
+
     /**
      * Get a raw attributes array for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
      * @return mixed
      */
     protected function getExpandedAttributes(?Model $parent)
     {
         return $this->expandAttributes($this->getRawAttributes($parent));
     }
+
     /**
      * Get the raw attributes for the model as an array.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
      * @return array
      */
     protected function getRawAttributes(?Model $parent)
@@ -398,9 +467,11 @@ abstract class Factory
             if ($state instanceof Closure) {
                 $state = $state->bindTo($this);
             }
+
             return array_merge($carry, $state($carry, $parent));
         }, $this->definition());
     }
+
     /**
      * Create the parent relationship resolvers (as deferred Closures).
      *
@@ -408,8 +479,12 @@ abstract class Factory
      */
     protected function parentResolvers()
     {
-        return $this->for->map(fn(BelongsToRelationship $for) => $for->recycle($this->recycle)->attributesFor($this->newModel()))->collapse()->all();
+        return $this->for
+            ->map(fn (BelongsToRelationship $for) => $for->recycle($this->recycle)->attributesFor($this->newModel()))
+            ->collapse()
+            ->all();
     }
+
     /**
      * Expand all attributes to their underlying values.
      *
@@ -418,24 +493,33 @@ abstract class Factory
      */
     protected function expandAttributes(array $definition)
     {
-        return (new Collection($definition))->map($evaluateRelations = function ($attribute) {
-            if (!$this->expandRelationships && $attribute instanceof self) {
-                $attribute = null;
-            } elseif ($attribute instanceof self) {
-                $attribute = $this->getRandomRecycledModel($attribute->modelName())?->getKey() ?? $attribute->recycle($this->recycle)->create()->getKey();
-            } elseif ($attribute instanceof Model) {
-                $attribute = $attribute->getKey();
-            }
-            return $attribute;
-        })->map(function ($attribute, $key) use (&$definition, $evaluateRelations) {
-            if (is_callable($attribute) && !is_string($attribute) && !is_array($attribute)) {
-                $attribute = $attribute($definition);
-            }
-            $attribute = $evaluateRelations($attribute);
-            $definition[$key] = $attribute;
-            return $attribute;
-        })->all();
+        return (new Collection($definition))
+            ->map($evaluateRelations = function ($attribute) {
+                if (! $this->expandRelationships && $attribute instanceof self) {
+                    $attribute = null;
+                } elseif ($attribute instanceof self) {
+                    $attribute = $this->getRandomRecycledModel($attribute->modelName())?->getKey()
+                        ?? $attribute->recycle($this->recycle)->create()->getKey();
+                } elseif ($attribute instanceof Model) {
+                    $attribute = $attribute->getKey();
+                }
+
+                return $attribute;
+            })
+            ->map(function ($attribute, $key) use (&$definition, $evaluateRelations) {
+                if (is_callable($attribute) && ! is_string($attribute) && ! is_array($attribute)) {
+                    $attribute = $attribute($definition);
+                }
+
+                $attribute = $evaluateRelations($attribute);
+
+                $definition[$key] = $attribute;
+
+                return $attribute;
+            })
+            ->all();
     }
+
     /**
      * Add a new state transformation to the model definition.
      *
@@ -444,8 +528,13 @@ abstract class Factory
      */
     public function state($state)
     {
-        return $this->newInstance(['states' => $this->states->concat([is_callable($state) ? $state : fn() => $state])]);
+        return $this->newInstance([
+            'states' => $this->states->concat([
+                is_callable($state) ? $state : fn () => $state,
+            ]),
+        ]);
     }
+
     /**
      * Prepend a new state transformation to the model definition.
      *
@@ -454,8 +543,13 @@ abstract class Factory
      */
     public function prependState($state)
     {
-        return $this->newInstance(['states' => $this->states->prepend(is_callable($state) ? $state : fn() => $state)]);
+        return $this->newInstance([
+            'states' => $this->states->prepend(
+                is_callable($state) ? $state : fn () => $state,
+            ),
+        ]);
     }
+
     /**
      * Set a single model attribute.
      *
@@ -467,6 +561,7 @@ abstract class Factory
     {
         return $this->state([$key => $value]);
     }
+
     /**
      * Add a new sequenced state transformation to the model definition.
      *
@@ -477,6 +572,7 @@ abstract class Factory
     {
         return $this->state(new Sequence(...$sequence));
     }
+
     /**
      * Add a new sequenced state transformation to the model definition and update the pending creation count to the size of the sequence.
      *
@@ -487,6 +583,7 @@ abstract class Factory
     {
         return $this->state(new Sequence(...$sequence))->count(count($sequence));
     }
+
     /**
      * Add a new cross joined sequenced state transformation to the model definition.
      *
@@ -497,17 +594,23 @@ abstract class Factory
     {
         return $this->state(new CrossJoinSequence(...$sequence));
     }
+
     /**
      * Define a child relationship for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Factories\Factory  $factory
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Factories\Factory  $factory
      * @param  string|null  $relationship
      * @return static
      */
     public function has(self $factory, $relationship = null)
     {
-        return $this->newInstance(['has' => $this->has->concat([new Relationship($factory, $relationship ?? $this->guessRelationship($factory->modelName()))])]);
+        return $this->newInstance([
+            'has' => $this->has->concat([new Relationship(
+                $factory, $relationship ?? $this->guessRelationship($factory->modelName())
+            )]),
+        ]);
     }
+
     /**
      * Attempt to guess the relationship name for a "has" relationship.
      *
@@ -517,42 +620,69 @@ abstract class Factory
     protected function guessRelationship(string $related)
     {
         $guess = Str::camel(Str::plural(class_basename($related)));
+
         return method_exists($this->modelName(), $guess) ? $guess : Str::singular($guess);
     }
+
     /**
      * Define an attached relationship for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Factories\Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array  $factory
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Factories\Factory|\Archetype\Vendor\Illuminate\Support\Collection|\Archetype\Vendor\Illuminate\Database\Eloquent\Model|array  $factory
      * @param  (callable(): array<string, mixed>)|array<string, mixed>  $pivot
      * @param  string|null  $relationship
      * @return static
      */
     public function hasAttached($factory, $pivot = [], $relationship = null)
     {
-        return $this->newInstance(['has' => $this->has->concat([new BelongsToManyRelationship($factory, $pivot, $relationship ?? Str::camel(Str::plural(class_basename($factory instanceof Factory ? $factory->modelName() : Collection::wrap($factory)->first()))))])]);
+        return $this->newInstance([
+            'has' => $this->has->concat([new BelongsToManyRelationship(
+                $factory,
+                $pivot,
+                $relationship ?? Str::camel(Str::plural(class_basename(
+                    $factory instanceof Factory
+                        ? $factory->modelName()
+                        : Collection::wrap($factory)->first()
+                )))
+            )]),
+        ]);
     }
+
     /**
      * Define a parent relationship for the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Factories\Factory|\Illuminate\Database\Eloquent\Model  $factory
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Factories\Factory|\Archetype\Vendor\Illuminate\Database\Eloquent\Model  $factory
      * @param  string|null  $relationship
      * @return static
      */
     public function for($factory, $relationship = null)
     {
-        return $this->newInstance(['for' => $this->for->concat([new BelongsToRelationship($factory, $relationship ?? Str::camel(class_basename($factory instanceof Factory ? $factory->modelName() : $factory)))])]);
+        return $this->newInstance(['for' => $this->for->concat([new BelongsToRelationship(
+            $factory,
+            $relationship ?? Str::camel(class_basename(
+                $factory instanceof Factory ? $factory->modelName() : $factory
+            ))
+        )])]);
     }
+
     /**
      * Provide model instances to use instead of any nested factory calls when creating relationships.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Support\Collection|array  $model
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|\Archetype\Vendor\Illuminate\Support\Collection|array  $model
      * @return static
      */
     public function recycle($model)
     {
         // Group provided models by the type and merge them into existing recycle collection
-        return $this->newInstance(['recycle' => $this->recycle->flatten()->merge(Collection::wrap($model instanceof Model ? func_get_args() : $model)->flatten())->groupBy(fn($model) => get_class($model))]);
+        return $this->newInstance([
+            'recycle' => $this->recycle
+                ->flatten()
+                ->merge(
+                    Collection::wrap($model instanceof Model ? func_get_args() : $model)
+                        ->flatten()
+                )->groupBy(fn ($model) => get_class($model)),
+        ]);
     }
+
     /**
      * Retrieve a random model of a given type from previously provided models to recycle.
      *
@@ -565,30 +695,33 @@ abstract class Factory
     {
         return $this->recycle->get($modelClassName)?->random();
     }
+
     /**
      * Add a new "after making" callback to the model definition.
      *
-     * @param  Closure(TModel): mixed  $callback
+     * @param  \Closure(TModel): mixed  $callback
      * @return static
      */
     public function afterMaking(Closure $callback)
     {
         return $this->newInstance(['afterMaking' => $this->afterMaking->concat([$callback])]);
     }
+
     /**
      * Add a new "after creating" callback to the model definition.
      *
-     * @param  Closure(TModel, \Illuminate\Database\Eloquent\Model|null): mixed  $callback
+     * @param  \Closure(TModel, \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null): mixed  $callback
      * @return static
      */
     public function afterCreating(Closure $callback)
     {
         return $this->newInstance(['afterCreating' => $this->afterCreating->concat([$callback])]);
     }
+
     /**
      * Call the "after making" callbacks for the given model instances.
      *
-     * @param  \Illuminate\Support\Collection  $instances
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection  $instances
      * @return void
      */
     protected function callAfterMaking(Collection $instances)
@@ -599,11 +732,12 @@ abstract class Factory
             });
         });
     }
+
     /**
      * Call the "after creating" callbacks for the given model instances.
      *
-     * @param  \Illuminate\Support\Collection  $instances
-     * @param  \Illuminate\Database\Eloquent\Model|null  $parent
+     * @param  \Archetype\Vendor\Illuminate\Support\Collection  $instances
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|null  $parent
      * @return void
      */
     protected function callAfterCreating(Collection $instances, ?Model $parent = null)
@@ -614,6 +748,7 @@ abstract class Factory
             });
         });
     }
+
     /**
      * Specify how many models should be generated.
      *
@@ -624,6 +759,7 @@ abstract class Factory
     {
         return $this->newInstance(['count' => $count]);
     }
+
     /**
      * Indicate that related parent models should not be created.
      *
@@ -631,8 +767,9 @@ abstract class Factory
      */
     public function withoutParents()
     {
-        return $this->newInstance(['expandRelationships' => \false]);
+        return $this->newInstance(['expandRelationships' => false]);
     }
+
     /**
      * Get the name of the database connection that is used to generate models.
      *
@@ -642,6 +779,7 @@ abstract class Factory
     {
         return $this->connection;
     }
+
     /**
      * Specify the database connection that should be used to generate models.
      *
@@ -652,6 +790,7 @@ abstract class Factory
     {
         return $this->newInstance(['connection' => $connection]);
     }
+
     /**
      * Create a new instance of the factory builder with the given mutated properties.
      *
@@ -660,8 +799,19 @@ abstract class Factory
      */
     protected function newInstance(array $arguments = [])
     {
-        return new static(...array_values(array_merge(['count' => $this->count, 'states' => $this->states, 'has' => $this->has, 'for' => $this->for, 'afterMaking' => $this->afterMaking, 'afterCreating' => $this->afterCreating, 'connection' => $this->connection, 'recycle' => $this->recycle, 'expandRelationships' => $this->expandRelationships], $arguments)));
+        return new static(...array_values(array_merge([
+            'count' => $this->count,
+            'states' => $this->states,
+            'has' => $this->has,
+            'for' => $this->for,
+            'afterMaking' => $this->afterMaking,
+            'afterCreating' => $this->afterCreating,
+            'connection' => $this->connection,
+            'recycle' => $this->recycle,
+            'expandRelationships' => $this->expandRelationships,
+        ], $arguments)));
     }
+
     /**
      * Get a new model instance.
      *
@@ -671,8 +821,10 @@ abstract class Factory
     public function newModel(array $attributes = [])
     {
         $model = $this->modelName();
+
         return new $model($attributes);
     }
+
     /**
      * Get the name of the model that is generated by the factory.
      *
@@ -683,14 +835,24 @@ abstract class Factory
         if ($this->model !== null) {
             return $this->model;
         }
+
         $resolver = static::$modelNameResolvers[static::class] ?? static::$modelNameResolvers[self::class] ?? static::$modelNameResolver ?? function (self $factory) {
-            $namespacedFactoryBasename = Str::replaceLast('Factory', '', Str::replaceFirst(static::$namespace, '', $factory::class));
+            $namespacedFactoryBasename = Str::replaceLast(
+                'Factory', '', Str::replaceFirst(static::$namespace, '', $factory::class)
+            );
+
             $factoryBasename = Str::replaceLast('Factory', '', class_basename($factory));
+
             $appNamespace = static::appNamespace();
-            return class_exists($appNamespace . 'Models\\' . $namespacedFactoryBasename) ? $appNamespace . 'Models\\' . $namespacedFactoryBasename : $appNamespace . $factoryBasename;
+
+            return class_exists($appNamespace.'Models\\'.$namespacedFactoryBasename)
+                ? $appNamespace.'Models\\'.$namespacedFactoryBasename
+                : $appNamespace.$factoryBasename;
         };
+
         return $resolver($this);
     }
+
     /**
      * Specify the callback that should be invoked to guess model names based on factory names.
      *
@@ -701,6 +863,7 @@ abstract class Factory
     {
         static::$modelNameResolvers[static::class] = $callback;
     }
+
     /**
      * Specify the default namespace that contains the application's model factories.
      *
@@ -711,19 +874,22 @@ abstract class Factory
     {
         static::$namespace = $namespace;
     }
+
     /**
      * Get a new factory instance for the given model name.
      *
      * @template TClass of \Illuminate\Database\Eloquent\Model
      *
      * @param  class-string<TClass>  $modelName
-     * @return \Illuminate\Database\Eloquent\Factories\Factory<TClass>
+     * @return \Archetype\Vendor\Illuminate\Database\Eloquent\Factories\Factory<TClass>
      */
     public static function factoryForModel(string $modelName)
     {
         $factory = static::resolveFactoryName($modelName);
+
         return $factory::new();
     }
+
     /**
      * Specify the callback that should be invoked to guess factory names based on dynamic relationship names.
      *
@@ -734,6 +900,7 @@ abstract class Factory
     {
         static::$factoryNameResolver = $callback;
     }
+
     /**
      * Get a new Faker instance.
      *
@@ -743,6 +910,7 @@ abstract class Factory
     {
         return Container::getInstance()->make(Generator::class);
     }
+
     /**
      * Get the factory name for the given model name.
      *
@@ -755,11 +923,17 @@ abstract class Factory
     {
         $resolver = static::$factoryNameResolver ?? function (string $modelName) {
             $appNamespace = static::appNamespace();
-            $modelName = Str::startsWith($modelName, $appNamespace . 'Models\\') ? Str::after($modelName, $appNamespace . 'Models\\') : Str::after($modelName, $appNamespace);
-            return static::$namespace . $modelName . 'Factory';
+
+            $modelName = Str::startsWith($modelName, $appNamespace.'Models\\')
+                ? Str::after($modelName, $appNamespace.'Models\\')
+                : Str::after($modelName, $appNamespace);
+
+            return static::$namespace.$modelName.'Factory';
         };
+
         return $resolver($modelName);
     }
+
     /**
      * Get the application namespace for the application.
      *
@@ -768,11 +942,14 @@ abstract class Factory
     protected static function appNamespace()
     {
         try {
-            return Container::getInstance()->make(Application::class)->getNamespace();
+            return Container::getInstance()
+                ->make(Application::class)
+                ->getNamespace();
         } catch (Throwable) {
             return 'App\\';
         }
     }
+
     /**
      * Flush the factory's global state.
      *
@@ -783,8 +960,9 @@ abstract class Factory
         static::$modelNameResolver = null;
         static::$modelNameResolvers = [];
         static::$factoryNameResolver = null;
-        static::$namespace = 'Database\Factories\\';
+        static::$namespace = 'Database\\Factories\\';
     }
+
     /**
      * Proxy dynamic factory methods onto their proper methods.
      *
@@ -797,23 +975,36 @@ abstract class Factory
         if (static::hasMacro($method)) {
             return $this->macroCall($method, $parameters);
         }
+
         if ($method === 'trashed' && in_array(SoftDeletes::class, class_uses_recursive($this->modelName()))) {
-            return $this->state([$this->newModel()->getDeletedAtColumn() => $parameters[0] ?? Carbon::now()->subDay()]);
+            return $this->state([
+                $this->newModel()->getDeletedAtColumn() => $parameters[0] ?? Carbon::now()->subDay(),
+            ]);
         }
-        if (!Str::startsWith($method, ['for', 'has'])) {
+
+        if (! Str::startsWith($method, ['for', 'has'])) {
             static::throwBadMethodCallException($method);
         }
+
         $relationship = Str::camel(Str::substr($method, 3));
+
         $relatedModel = get_class($this->newModel()->{$relationship}()->getRelated());
+
         if (method_exists($relatedModel, 'newFactory')) {
             $factory = $relatedModel::newFactory() ?? static::factoryForModel($relatedModel);
         } else {
             $factory = static::factoryForModel($relatedModel);
         }
+
         if (str_starts_with($method, 'for')) {
             return $this->for($factory->state($parameters[0] ?? []), $relationship);
         } elseif (str_starts_with($method, 'has')) {
-            return $this->has($factory->count(is_numeric($parameters[0] ?? null) ? $parameters[0] : 1)->state(is_callable($parameters[0] ?? null) || is_array($parameters[0] ?? null) ? $parameters[0] : $parameters[1] ?? []), $relationship);
+            return $this->has(
+                $factory
+                    ->count(is_numeric($parameters[0] ?? null) ? $parameters[0] : 1)
+                    ->state((is_callable($parameters[0] ?? null) || is_array($parameters[0] ?? null)) ? $parameters[0] : ($parameters[1] ?? [])),
+                $relationship
+            );
         }
     }
 }

@@ -8,13 +8,18 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection;
 
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+
 /**
  * `ArrayInterface` provides traversable array functionality to data types.
  *
@@ -22,18 +27,23 @@ use IteratorAggregate;
  * @extends ArrayAccess<array-key, T>
  * @extends IteratorAggregate<array-key, T>
  */
-interface ArrayInterface extends ArrayAccess, Countable, IteratorAggregate
+interface ArrayInterface extends
+    ArrayAccess,
+    Countable,
+    IteratorAggregate
 {
     /**
      * Removes all items from this array.
      */
     public function clear(): void;
+
     /**
      * Returns a native PHP array representation of this array object.
      *
      * @return array<array-key, T>
      */
     public function toArray(): array;
+
     /**
      * Returns `true` if this array is empty.
      */

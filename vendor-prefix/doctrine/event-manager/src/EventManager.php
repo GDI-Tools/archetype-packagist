@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\Common;
 
 use function spl_object_hash;
+
 /**
  * The EventManager is the central point of Doctrine's event listener system.
  * Listeners are registered on the manager and events are dispatched through the
@@ -18,6 +25,7 @@ class EventManager
      * @var array<string, object[]>
      */
     private array $listeners = [];
+
     /**
      * Dispatches an event to all registered listeners.
      *
@@ -28,14 +36,17 @@ class EventManager
      */
     public function dispatchEvent(string $eventName, EventArgs|null $eventArgs = null): void
     {
-        if (!isset($this->listeners[$eventName])) {
+        if (! isset($this->listeners[$eventName])) {
             return;
         }
+
         $eventArgs ??= EventArgs::getEmptyInstance();
+
         foreach ($this->listeners[$eventName] as $listener) {
-            $listener->{$eventName}($eventArgs);
+            $listener->$eventName($eventArgs);
         }
     }
+
     /**
      * Gets the listeners of a specific event.
      *
@@ -47,6 +58,7 @@ class EventManager
     {
         return $this->listeners[$event] ?? [];
     }
+
     /**
      * Gets all listeners keyed by event name.
      *
@@ -56,13 +68,15 @@ class EventManager
     {
         return $this->listeners;
     }
+
     /**
      * Checks whether an event has any registered listeners.
      */
     public function hasListeners(string $event): bool
     {
-        return !empty($this->listeners[$event]);
+        return ! empty($this->listeners[$event]);
     }
+
     /**
      * Adds an event listener that listens on the specified events.
      *
@@ -73,12 +87,14 @@ class EventManager
     {
         // Picks the hash code related to that listener
         $hash = spl_object_hash($listener);
+
         foreach ((array) $events as $event) {
             // Overrides listener if a previous one was associated already
             // Prevents duplicate listeners on same event (same instance only)
             $this->listeners[$event][$hash] = $listener;
         }
     }
+
     /**
      * Removes an event listener from the specified events.
      *
@@ -88,10 +104,12 @@ class EventManager
     {
         // Picks the hash code related to that listener
         $hash = spl_object_hash($listener);
+
         foreach ((array) $events as $event) {
             unset($this->listeners[$event][$hash]);
         }
     }
+
     /**
      * Adds an EventSubscriber.
      *
@@ -102,6 +120,7 @@ class EventManager
     {
         $this->addEventListener($subscriber->getSubscribedEvents(), $subscriber);
     }
+
     /**
      * Removes an EventSubscriber.
      *

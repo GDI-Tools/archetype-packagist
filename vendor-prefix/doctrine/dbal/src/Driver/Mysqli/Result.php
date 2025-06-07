@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\Mysqli;
 
 use Archetype\Vendor\Doctrine\DBAL\Driver\Exception;
@@ -9,13 +15,16 @@ use Archetype\Vendor\Doctrine\DBAL\Driver\Mysqli\Exception\StatementError;
 use Archetype\Vendor\Doctrine\DBAL\Driver\Result as ResultInterface;
 use mysqli_sql_exception;
 use mysqli_stmt;
+
 use function array_column;
 use function array_combine;
 use function array_fill;
 use function count;
+
 final class Result implements ResultInterface
 {
     private mysqli_stmt $statement;
+
     /**
      * Maintains a reference to the Statement that generated this result. This ensures that the lifetime of the
      * Statement is managed in conjunction with its associated results, so they are destroyed together
@@ -24,11 +33,13 @@ final class Result implements ResultInterface
      * @phpstan-ignore property.onlyWritten
      */
     private ?Statement $statementReference = null;
+
     /**
      * Whether the statement result has columns. The property should be used only after the result metadata
      * has been fetched ({@see $metadataFetched}). Otherwise, the property value is undetermined.
      */
-    private bool $hasColumns = \false;
+    private bool $hasColumns = false;
+
     /**
      * Mapping of statement result column indexes to their names. The property should be used only
      * if the statement result has columns ({@see $hasColumns}). Otherwise, the property value is undetermined.
@@ -36,28 +47,39 @@ final class Result implements ResultInterface
      * @var array<int,string>
      */
     private array $columnNames = [];
+
     /** @var mixed[] */
     private array $boundValues = [];
+
     /**
      * @internal The result can be only instantiated by its driver connection or statement.
      *
      * @throws Exception
      */
-    public function __construct(mysqli_stmt $statement, ?Statement $statementReference = null)
-    {
-        $this->statement = $statement;
+    public function __construct(
+        mysqli_stmt $statement,
+        ?Statement $statementReference = null
+    ) {
+        $this->statement          = $statement;
         $this->statementReference = $statementReference;
+
         $meta = $statement->result_metadata();
-        if ($meta === \false) {
+
+        if ($meta === false) {
             return;
         }
-        $this->hasColumns = \true;
+
+        $this->hasColumns = true;
+
         $this->columnNames = array_column($meta->fetch_fields(), 'name');
+
         $meta->free();
+
         // Store result of every execution which has it. Otherwise it will be impossible
         // to execute a new statement in case if the previous one has non-fetched rows
         // @link http://dev.mysql.com/doc/refman/5.7/en/commands-out-of-sync.html
         $this->statement->store_result();
+
         // Bind row values _after_ storing the result. Otherwise, if mysqli is compiled with libmysql,
         // it will have to allocate as much memory as it may be needed for the given column type
         // (e.g. for a LONGBLOB column it's 4 gigabytes)
@@ -70,12 +92,15 @@ final class Result implements ResultInterface
         // if mysqli is compiled with libmysql, subsequently fetched string values will get truncated
         // to the length of the ones fetched during the previous execution.
         $this->boundValues = array_fill(0, count($this->columnNames), null);
+
         // The following is necessary as PHP cannot handle references to properties properly
-        $refs =& $this->boundValues;
-        if (!$this->statement->bind_result(...$refs)) {
+        $refs = &$this->boundValues;
+
+        if (! $this->statement->bind_result(...$refs)) {
             throw StatementError::new($this->statement);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -86,29 +111,38 @@ final class Result implements ResultInterface
         } catch (mysqli_sql_exception $e) {
             throw StatementError::upcast($e);
         }
-        if ($ret === \false) {
+
+        if ($ret === false) {
             throw StatementError::new($this->statement);
         }
+
         if ($ret === null) {
-            return \false;
+            return false;
         }
+
         $values = [];
+
         foreach ($this->boundValues as $v) {
             $values[] = $v;
         }
+
         return $values;
     }
+
     /**
      * {@inheritDoc}
      */
     public function fetchAssociative()
     {
         $values = $this->fetchNumeric();
-        if ($values === \false) {
-            return \false;
+
+        if ($values === false) {
+            return false;
         }
+
         return array_combine($this->columnNames, $values);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -116,6 +150,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchOne($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -123,6 +158,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchAllNumeric($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -130,6 +166,7 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchAllAssociative($this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -137,17 +174,21 @@ final class Result implements ResultInterface
     {
         return FetchUtils::fetchFirstColumn($this);
     }
+
     public function rowCount(): int
     {
         if ($this->hasColumns) {
             return $this->statement->num_rows;
         }
+
         return $this->statement->affected_rows;
     }
+
     public function columnCount(): int
     {
         return $this->statement->field_count;
     }
+
     public function free(): void
     {
         $this->statement->free_result();

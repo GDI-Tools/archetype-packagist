@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection\Map;
 
 /**
@@ -90,14 +94,19 @@ class TypedMap extends AbstractTypedMap
      * @param string $valueType The data type of the map's values.
      * @param array<K, T> $data The initial data to set for this map.
      */
-    public function __construct(private readonly string $keyType, private readonly string $valueType, array $data = [])
-    {
+    public function __construct(
+        private readonly string $keyType,
+        private readonly string $valueType,
+        array $data = [],
+    ) {
         parent::__construct($data);
     }
+
     public function getKeyType(): string
     {
         return $this->keyType;
     }
+
     public function getValueType(): string
     {
         return $this->valueType;

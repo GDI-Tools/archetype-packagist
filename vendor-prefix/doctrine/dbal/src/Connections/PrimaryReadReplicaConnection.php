@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Connections;
 
@@ -16,8 +21,10 @@ use Archetype\Vendor\Doctrine\DBAL\Statement;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use InvalidArgumentException;
 use SensitiveParameter;
+
 use function array_rand;
 use function count;
+
 /**
  * Primary-Replica Connection
  *
@@ -61,7 +68,7 @@ use function count;
  * @example
  *
  * $conn = DriverManager::getConnection(array(
- *    'wrapperClass' => 'Doctrine\DBAL\Connections\PrimaryReadReplicaConnection',
+ *    'wrapperClass' => 'Archetype\Vendor\Doctrine\DBAL\Connections\PrimaryReadReplicaConnection',
  *    'driver' => 'pdo_mysql',
  *    'primary' => array('user' => '', 'password' => '', 'host' => '', 'dbname' => ''),
  *    'replica' => array(
@@ -81,13 +88,15 @@ class PrimaryReadReplicaConnection extends Connection
      * @var DriverConnection[]|null[]
      */
     protected $connections = ['primary' => null, 'replica' => null];
+
     /**
      * You can keep the replica connection and then switch back to it
      * during the request if you know what you are doing.
      *
      * @var bool
      */
-    protected $keepReplica = \false;
+    protected $keepReplica = false;
+
     /**
      * Creates Primary Replica Connection.
      *
@@ -99,23 +108,33 @@ class PrimaryReadReplicaConnection extends Connection
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params, Driver $driver, ?Configuration $config = null, ?EventManager $eventManager = null)
-    {
-        if (!isset($params['replica'], $params['primary'])) {
+    public function __construct(
+        array $params,
+        Driver $driver,
+        ?Configuration $config = null,
+        ?EventManager $eventManager = null
+    ) {
+        if (! isset($params['replica'], $params['primary'])) {
             throw new InvalidArgumentException('primary or replica configuration missing');
         }
+
         if (count($params['replica']) === 0) {
             throw new InvalidArgumentException('You have to configure at least one replica.');
         }
+
         if (isset($params['driver'])) {
             $params['primary']['driver'] = $params['driver'];
+
             foreach ($params['replica'] as $replicaKey => $replica) {
                 $params['replica'][$replicaKey]['driver'] = $params['driver'];
             }
         }
-        $this->keepReplica = (bool) ($params['keepReplica'] ?? \false);
+
+        $this->keepReplica = (bool) ($params['keepReplica'] ?? false);
+
         parent::__construct($params, $driver, $config, $eventManager);
     }
+
     /**
      * Checks if the connection is currently towards the primary or not.
      */
@@ -123,6 +142,7 @@ class PrimaryReadReplicaConnection extends Connection
     {
         return $this->_conn !== null && $this->_conn === $this->connections['primary'];
     }
+
     /**
      * @param string|null $connectionName
      *
@@ -131,51 +151,74 @@ class PrimaryReadReplicaConnection extends Connection
     public function connect($connectionName = null)
     {
         if ($connectionName !== null) {
-            throw new InvalidArgumentException('Passing a connection name as first argument is not supported anymore.' . ' Use ensureConnectedToPrimary()/ensureConnectedToReplica() instead.');
+            throw new InvalidArgumentException(
+                'Passing a connection name as first argument is not supported anymore.'
+                    . ' Use ensureConnectedToPrimary()/ensureConnectedToReplica() instead.',
+            );
         }
+
         return $this->performConnect();
     }
+
     protected function performConnect(?string $connectionName = null): bool
     {
-        $requestedConnectionChange = $connectionName !== null;
-        $connectionName = $connectionName ?? 'replica';
+        $requestedConnectionChange = ($connectionName !== null);
+        $connectionName            = $connectionName ?? 'replica';
+
         if ($connectionName !== 'replica' && $connectionName !== 'primary') {
             throw new InvalidArgumentException('Invalid option to connect(), only primary or replica allowed.');
         }
+
         // If we have a connection open, and this is not an explicit connection
         // change request, then abort right here, because we are already done.
         // This prevents writes to the replica in case of "keepReplica" option enabled.
-        if ($this->_conn !== null && !$requestedConnectionChange) {
-            return \false;
+        if ($this->_conn !== null && ! $requestedConnectionChange) {
+            return false;
         }
-        $forcePrimaryAsReplica = \false;
+
+        $forcePrimaryAsReplica = false;
+
         if ($this->getTransactionNestingLevel() > 0) {
-            $connectionName = 'primary';
-            $forcePrimaryAsReplica = \true;
+            $connectionName        = 'primary';
+            $forcePrimaryAsReplica = true;
         }
+
         if (isset($this->connections[$connectionName])) {
             $this->_conn = $this->connections[$connectionName];
-            if ($forcePrimaryAsReplica && !$this->keepReplica) {
+
+            if ($forcePrimaryAsReplica && ! $this->keepReplica) {
                 $this->connections['replica'] = $this->_conn;
             }
-            return \false;
+
+            return false;
         }
+
         if ($connectionName === 'primary') {
             $this->connections['primary'] = $this->_conn = $this->connectTo($connectionName);
+
             // Set replica connection to primary to avoid invalid reads
-            if (!$this->keepReplica) {
+            if (! $this->keepReplica) {
                 $this->connections['replica'] = $this->connections['primary'];
             }
         } else {
             $this->connections['replica'] = $this->_conn = $this->connectTo($connectionName);
         }
+
         if ($this->_eventManager->hasListeners(Events::postConnect)) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/issues/5784', 'Subscribing to %s events is deprecated. Implement a middleware instead.', Events::postConnect);
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/issues/5784',
+                'Subscribing to %s events is deprecated. Implement a middleware instead.',
+                Events::postConnect,
+            );
+
             $eventArgs = new ConnectionEventArgs($this);
             $this->_eventManager->dispatchEvent(Events::postConnect, $eventArgs);
         }
-        return \true;
+
+        return true;
     }
+
     /**
      * Connects to the primary node of the database cluster.
      *
@@ -185,6 +228,7 @@ class PrimaryReadReplicaConnection extends Connection
     {
         return $this->performConnect('primary');
     }
+
     /**
      * Connects to a replica node of the database cluster.
      *
@@ -196,6 +240,7 @@ class PrimaryReadReplicaConnection extends Connection
     {
         return $this->performConnect('replica');
     }
+
     /**
      * Connects to a specific connection.
      *
@@ -208,13 +253,16 @@ class PrimaryReadReplicaConnection extends Connection
     protected function connectTo($connectionName)
     {
         $params = $this->getParams();
+
         $connectionParams = $this->chooseConnectionConfiguration($connectionName, $params);
+
         try {
             return $this->_driver->connect($connectionParams);
         } catch (DriverException $e) {
             throw $this->convertException($e);
         }
     }
+
     /**
      * @param string  $connectionName
      * @param mixed[] $params
@@ -225,86 +273,107 @@ class PrimaryReadReplicaConnection extends Connection
         $connectionName,
         #[SensitiveParameter]
         $params
-    )
-    {
+    ) {
         if ($connectionName === 'primary') {
             return $params['primary'];
         }
+
         $config = $params['replica'][array_rand($params['replica'])];
-        if (!isset($config['charset']) && isset($params['primary']['charset'])) {
+
+        if (! isset($config['charset']) && isset($params['primary']['charset'])) {
             $config['charset'] = $params['primary']['charset'];
         }
+
         return $config;
     }
+
     /**
      * {@inheritDoc}
      */
     public function executeStatement($sql, array $params = [], array $types = [])
     {
         $this->ensureConnectedToPrimary();
+
         return parent::executeStatement($sql, $params, $types);
     }
+
     /**
      * {@inheritDoc}
      */
     public function beginTransaction()
     {
         $this->ensureConnectedToPrimary();
+
         return parent::beginTransaction();
     }
+
     /**
      * {@inheritDoc}
      */
     public function commit()
     {
         $this->ensureConnectedToPrimary();
+
         return parent::commit();
     }
+
     /**
      * {@inheritDoc}
      */
     public function rollBack()
     {
         $this->ensureConnectedToPrimary();
+
         return parent::rollBack();
     }
+
     /**
      * {@inheritDoc}
      */
     public function close()
     {
         unset($this->connections['primary'], $this->connections['replica']);
+
         parent::close();
-        $this->_conn = null;
+
+        $this->_conn       = null;
         $this->connections = ['primary' => null, 'replica' => null];
     }
+
     /**
      * {@inheritDoc}
      */
     public function createSavepoint($savepoint)
     {
         $this->ensureConnectedToPrimary();
+
         parent::createSavepoint($savepoint);
     }
+
     /**
      * {@inheritDoc}
      */
     public function releaseSavepoint($savepoint)
     {
         $this->ensureConnectedToPrimary();
+
         parent::releaseSavepoint($savepoint);
     }
+
     /**
      * {@inheritDoc}
      */
     public function rollbackSavepoint($savepoint)
     {
         $this->ensureConnectedToPrimary();
+
         parent::rollbackSavepoint($savepoint);
     }
+
     public function prepare(string $sql): Statement
     {
         $this->ensureConnectedToPrimary();
+
         return parent::prepare($sql);
     }
 }

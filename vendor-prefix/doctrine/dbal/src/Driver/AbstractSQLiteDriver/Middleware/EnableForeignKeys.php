@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware;
 
@@ -7,22 +12,23 @@ use Archetype\Vendor\Doctrine\DBAL\Driver\Connection;
 use Archetype\Vendor\Doctrine\DBAL\Driver\Middleware;
 use Archetype\Vendor\Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
 use SensitiveParameter;
+
 class EnableForeignKeys implements Middleware
 {
     public function wrap(Driver $driver): Driver
     {
-        return new class($driver) extends AbstractDriverMiddleware
-        {
+        return new class ($driver) extends AbstractDriverMiddleware {
             /**
              * {@inheritDoc}
              */
             public function connect(
                 #[SensitiveParameter]
                 array $params
-            ): Connection
-            {
+            ): Connection {
                 $connection = parent::connect($params);
+
                 $connection->exec('PRAGMA foreign_keys=ON');
+
                 return $connection;
             }
         };

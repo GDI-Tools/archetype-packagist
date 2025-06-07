@@ -1,8 +1,13 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Console\Migrations;
 
-use Archetype\Vendor\Illuminate\Console\ConfirmableTrait;
+use Illuminate\Console\ConfirmableTrait;
 use Archetype\Vendor\Illuminate\Contracts\Console\Isolatable;
 use Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher;
 use Archetype\Vendor\Illuminate\Database\Events\SchemaLoaded;
@@ -12,13 +17,16 @@ use Archetype\Vendor\Illuminate\Database\SqlServerConnection;
 use Archetype\Vendor\Illuminate\Support\Str;
 use PDOException;
 use RuntimeException;
-use Archetype\Vendor\Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
-use function Archetype\Vendor\Laravel\Prompts\confirm;
+
+use function Laravel\Prompts\confirm;
+
 #[AsCommand(name: 'migrate')]
 class MigrateCommand extends BaseCommand implements Isolatable
 {
     use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -34,36 +42,42 @@ class MigrateCommand extends BaseCommand implements Isolatable
                 {--seeder= : The class name of the root seeder}
                 {--step : Force the migrations to be run so they can be rolled back individually}
                 {--graceful : Return a successful exit code even if an error occurs}';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Run the database migrations';
+
     /**
      * The migrator instance.
      *
-     * @var \Illuminate\Database\Migrations\Migrator
+     * @var \Archetype\Vendor\Illuminate\Database\Migrations\Migrator
      */
     protected $migrator;
+
     /**
      * The event dispatcher instance.
      *
-     * @var \Illuminate\Contracts\Events\Dispatcher
+     * @var \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher
      */
     protected $dispatcher;
+
     /**
      * Create a new migration command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
+     * @param  \Archetype\Vendor\Illuminate\Database\Migrations\Migrator  $migrator
+     * @param  \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher  $dispatcher
      */
     public function __construct(Migrator $migrator, Dispatcher $dispatcher)
     {
         parent::__construct();
+
         $this->migrator = $migrator;
         $this->dispatcher = $dispatcher;
     }
+
     /**
      * Execute the console command.
      *
@@ -71,20 +85,25 @@ class MigrateCommand extends BaseCommand implements Isolatable
      */
     public function handle()
     {
-        if (!$this->confirmToProceed()) {
+        if (! $this->confirmToProceed()) {
             return 1;
         }
+
         try {
             $this->runMigrations();
         } catch (Throwable $e) {
             if ($this->option('graceful')) {
                 $this->components->warn($e->getMessage());
+
                 return 0;
             }
+
             throw $e;
         }
+
         return 0;
     }
+
     /**
      * Run the pending migrations.
      *
@@ -94,18 +113,28 @@ class MigrateCommand extends BaseCommand implements Isolatable
     {
         $this->migrator->usingConnection($this->option('database'), function () {
             $this->prepareDatabase();
+
             // Next, we will check to see if a path option has been defined. If it has
             // we will use the path relative to the root of this installation folder
             // so that migrations may be run for any path within the applications.
-            $this->migrator->setOutput($this->output)->run($this->getMigrationPaths(), ['pretend' => $this->option('pretend'), 'step' => $this->option('step')]);
+            $this->migrator->setOutput($this->output)
+                ->run($this->getMigrationPaths(), [
+                    'pretend' => $this->option('pretend'),
+                    'step' => $this->option('step'),
+                ]);
+
             // Finally, if the "seed" option has been given, we will re-run the database
             // seed task to re-populate the database, which is convenient when adding
             // a migration and a seed at the same time, as it is only this command.
-            if ($this->option('seed') && !$this->option('pretend')) {
-                $this->call('db:seed', ['--class' => $this->option('seeder') ?: 'Database\Seeders\DatabaseSeeder', '--force' => \true]);
+            if ($this->option('seed') && ! $this->option('pretend')) {
+                $this->call('db:seed', [
+                    '--class' => $this->option('seeder') ?: 'Database\\Seeders\\DatabaseSeeder',
+                    '--force' => true,
+                ]);
             }
         });
     }
+
     /**
      * Prepare the migration database for running.
      *
@@ -113,17 +142,23 @@ class MigrateCommand extends BaseCommand implements Isolatable
      */
     protected function prepareDatabase()
     {
-        if (!$this->repositoryExists()) {
+        if (! $this->repositoryExists()) {
             $this->components->info('Preparing database.');
+
             $this->components->task('Creating migration table', function () {
-                return $this->callSilent('migrate:install', array_filter(['--database' => $this->option('database')])) == 0;
+                return $this->callSilent('migrate:install', array_filter([
+                    '--database' => $this->option('database'),
+                ])) == 0;
             });
+
             $this->newLine();
         }
-        if (!$this->migrator->hasRunAnyMigrations() && !$this->option('pretend')) {
+
+        if (! $this->migrator->hasRunAnyMigrations() && ! $this->option('pretend')) {
             $this->loadSchemaState();
         }
     }
+
     /**
      * Determine if the migrator repository exists.
      *
@@ -131,14 +166,15 @@ class MigrateCommand extends BaseCommand implements Isolatable
      */
     protected function repositoryExists()
     {
-        return retry(2, fn() => $this->migrator->repositoryExists(), 0, function ($e) {
+        return retry(2, fn () => $this->migrator->repositoryExists(), 0, function ($e) {
             try {
                 return $this->handleMissingDatabase($e->getPrevious());
             } catch (Throwable) {
-                return \false;
+                return false;
             }
         });
     }
+
     /**
      * Attempt to create the database if it is missing.
      *
@@ -150,15 +186,23 @@ class MigrateCommand extends BaseCommand implements Isolatable
         if ($e instanceof SQLiteDatabaseDoesNotExistException) {
             return $this->createMissingSqliteDatabase($e->path);
         }
+
         $connection = $this->migrator->resolveConnection($this->option('database'));
-        if (!$e instanceof PDOException) {
-            return \false;
+
+        if (! $e instanceof PDOException) {
+            return false;
         }
-        if ($e->getCode() === 1049 && in_array($connection->getDriverName(), ['mysql', 'mariadb']) || ($e->errorInfo[0] ?? null) == '08006' && $connection->getDriverName() == 'pgsql' && Str::contains($e->getMessage(), '"' . $connection->getDatabaseName() . '"')) {
+
+        if (($e->getCode() === 1049 && in_array($connection->getDriverName(), ['mysql', 'mariadb'])) ||
+            (($e->errorInfo[0] ?? null) == '08006' &&
+              $connection->getDriverName() == 'pgsql' &&
+              Str::contains($e->getMessage(), '"'.$connection->getDatabaseName().'"'))) {
             return $this->createMissingMySqlOrPgsqlDatabase($connection);
         }
-        return \false;
+
+        return false;
     }
+
     /**
      * Create a missing SQLite database.
      *
@@ -172,20 +216,26 @@ class MigrateCommand extends BaseCommand implements Isolatable
         if ($this->option('force')) {
             return touch($path);
         }
+
         if ($this->option('no-interaction')) {
-            return \false;
+            return false;
         }
-        $this->components->warn('The SQLite database configured for this application does not exist: ' . $path);
-        if (!confirm('Would you like to create it?', default: \true)) {
+
+        $this->components->warn('The SQLite database configured for this application does not exist: '.$path);
+
+        if (! confirm('Would you like to create it?', default: true)) {
             $this->components->info('Operation cancelled. No database was created.');
+
             throw new RuntimeException('Database was not created. Aborting migration.');
         }
+
         return touch($path);
     }
+
     /**
      * Create a missing MySQL or Postgres database.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Archetype\Vendor\Illuminate\Database\Connection  $connection
      * @return bool
      *
      * @throws \RuntimeException
@@ -193,35 +243,48 @@ class MigrateCommand extends BaseCommand implements Isolatable
     protected function createMissingMySqlOrPgsqlDatabase($connection)
     {
         if ($this->laravel['config']->get("database.connections.{$connection->getName()}.database") !== $connection->getDatabaseName()) {
-            return \false;
+            return false;
         }
-        if (!$this->option('force') && $this->option('no-interaction')) {
-            return \false;
+
+        if (! $this->option('force') && $this->option('no-interaction')) {
+            return false;
         }
-        if (!$this->option('force') && !$this->option('no-interaction')) {
+
+        if (! $this->option('force') && ! $this->option('no-interaction')) {
             $this->components->warn("The database '{$connection->getDatabaseName()}' does not exist on the '{$connection->getName()}' connection.");
-            if (!confirm('Would you like to create it?', default: \true)) {
+
+            if (! confirm('Would you like to create it?', default: true)) {
                 $this->components->info('Operation cancelled. No database was created.');
+
                 throw new RuntimeException('Database was not created. Aborting migration.');
             }
         }
         try {
-            $this->laravel['config']->set("database.connections.{$connection->getName()}.database", match ($connection->getDriverName()) {
-                'mysql', 'mariadb' => null,
-                'pgsql' => 'postgres',
-            });
+            $this->laravel['config']->set(
+                "database.connections.{$connection->getName()}.database",
+                match ($connection->getDriverName()) {
+                    'mysql', 'mariadb' => null,
+                    'pgsql' => 'postgres',
+                },
+            );
+
             $this->laravel['db']->purge();
+
             $freshConnection = $this->migrator->resolveConnection($this->option('database'));
-            return tap($freshConnection->unprepared(match ($connection->getDriverName()) {
-                'mysql', 'mariadb' => "CREATE DATABASE IF NOT EXISTS `{$connection->getDatabaseName()}`",
-                'pgsql' => 'CREATE DATABASE "' . $connection->getDatabaseName() . '"',
-            }), function () {
+
+            return tap($freshConnection->unprepared(
+                match ($connection->getDriverName()) {
+                    'mysql', 'mariadb' => "CREATE DATABASE IF NOT EXISTS `{$connection->getDatabaseName()}`",
+                    'pgsql' => 'CREATE DATABASE "'.$connection->getDatabaseName().'"',
+                }
+            ), function () {
                 $this->laravel['db']->purge();
             });
         } finally {
             $this->laravel['config']->set("database.connections.{$connection->getName()}.database", $connection->getDatabaseName());
         }
     }
+
     /**
      * Load the schema state to seed the initial database schema structure.
      *
@@ -230,32 +293,42 @@ class MigrateCommand extends BaseCommand implements Isolatable
     protected function loadSchemaState()
     {
         $connection = $this->migrator->resolveConnection($this->option('database'));
+
         // First, we will make sure that the connection supports schema loading and that
         // the schema file exists before we proceed any further. If not, we will just
         // continue with the standard migration operation as normal without errors.
-        if ($connection instanceof SqlServerConnection || !is_file($path = $this->schemaPath($connection))) {
+        if ($connection instanceof SqlServerConnection ||
+            ! is_file($path = $this->schemaPath($connection))) {
             return;
         }
+
         $this->components->info('Loading stored database schemas.');
+
         $this->components->task($path, function () use ($connection, $path) {
             // Since the schema file will create the "migrations" table and reload it to its
             // proper state, we need to delete it here so we don't get an error that this
             // table already exists when the stored database schema file gets executed.
             $this->migrator->deleteRepository();
+
             $connection->getSchemaState()->handleOutputUsing(function ($type, $buffer) {
                 $this->output->write($buffer);
             })->load($path);
         });
+
         $this->newLine();
+
         // Finally, we will fire an event that this schema has been loaded so developers
         // can perform any post schema load tasks that are necessary in listeners for
         // this event, which may seed the database tables with some necessary data.
-        $this->dispatcher->dispatch(new SchemaLoaded($connection, $path));
+        $this->dispatcher->dispatch(
+            new SchemaLoaded($connection, $path)
+        );
     }
+
     /**
      * Get the path to the stored schema for the given connection.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Archetype\Vendor\Illuminate\Database\Connection  $connection
      * @return string
      */
     protected function schemaPath($connection)
@@ -263,9 +336,11 @@ class MigrateCommand extends BaseCommand implements Isolatable
         if ($this->option('schema-path')) {
             return $this->option('schema-path');
         }
-        if (file_exists($path = database_path('schema/' . $connection->getName() . '-schema.dump'))) {
+
+        if (file_exists($path = database_path('schema/'.$connection->getName().'-schema.dump'))) {
             return $path;
         }
-        return database_path('schema/' . $connection->getName() . '-schema.sql');
+
+        return database_path('schema/'.$connection->getName().'-schema.sql');
     }
 }

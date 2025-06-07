@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Parser;
 
 use Archetype\Vendor\Dotenv\Exception\InvalidFileException;
 use Archetype\Vendor\Dotenv\Util\Regex;
 use Archetype\Vendor\GrahamCampbell\ResultType\Result;
 use Archetype\Vendor\GrahamCampbell\ResultType\Success;
+
 final class Parser implements ParserInterface
 {
     /**
@@ -14,9 +21,9 @@ final class Parser implements ParserInterface
      *
      * @param string $content
      *
-     * @throws \Dotenv\Exception\InvalidFileException
+     * @throws \Archetype\Vendor\Dotenv\Exception\InvalidFileException
      *
-     * @return \Dotenv\Parser\Entry[]
+     * @return \Archetype\Vendor\Dotenv\Parser\Entry[]
      */
     public function parse(string $content)
     {
@@ -28,20 +35,21 @@ final class Parser implements ParserInterface
             throw new InvalidFileException(\sprintf('Failed to parse dotenv file. %s', $error));
         })->success()->get();
     }
+
     /**
      * Convert the raw entries into proper entries.
      *
      * @param string[] $entries
      *
-     * @return \GrahamCampbell\ResultType\Result<\Dotenv\Parser\Entry[], string>
+     * @return \Archetype\Vendor\GrahamCampbell\ResultType\Result<\Dotenv\Parser\Entry[], string>
      */
     private static function process(array $entries)
     {
-        /** @var \GrahamCampbell\ResultType\Result<\Dotenv\Parser\Entry[], string> */
+        /** @var \Archetype\Vendor\GrahamCampbell\ResultType\Result<\Dotenv\Parser\Entry[], string> */
         return \array_reduce($entries, static function (Result $result, string $raw) {
             return $result->flatMap(static function (array $entries) use ($raw) {
                 return EntryParser::parse($raw)->map(static function (Entry $entry) use ($entries) {
-                    /** @var \Dotenv\Parser\Entry[] */
+                    /** @var \Archetype\Vendor\Dotenv\Parser\Entry[] */
                     return \array_merge($entries, [$entry]);
                 });
             });

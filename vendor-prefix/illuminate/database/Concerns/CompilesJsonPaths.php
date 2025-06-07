@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Concerns;
 
 use Archetype\Vendor\Illuminate\Support\Collection;
 use Archetype\Vendor\Illuminate\Support\Str;
+
 trait CompilesJsonPaths
 {
     /**
@@ -15,10 +21,14 @@ trait CompilesJsonPaths
     protected function wrapJsonFieldAndPath($column)
     {
         $parts = explode('->', $column, 2);
+
         $field = $this->wrap($parts[0]);
-        $path = count($parts) > 1 ? ', ' . $this->wrapJsonPath($parts[1], '->') : '';
+
+        $path = count($parts) > 1 ? ', '.$this->wrapJsonPath($parts[1], '->') : '';
+
         return [$field, $path];
     }
+
     /**
      * Wrap the given JSON path.
      *
@@ -29,9 +39,14 @@ trait CompilesJsonPaths
     protected function wrapJsonPath($value, $delimiter = '->')
     {
         $value = preg_replace("/([\\\\]+)?\\'/", "''", $value);
-        $jsonPath = (new Collection(explode($delimiter, $value)))->map(fn($segment) => $this->wrapJsonPathSegment($segment))->join('.');
-        return "'\$" . (str_starts_with($jsonPath, '[') ? '' : '.') . $jsonPath . "'";
+
+        $jsonPath = (new Collection(explode($delimiter, $value)))
+            ->map(fn ($segment) => $this->wrapJsonPathSegment($segment))
+            ->join('.');
+
+        return "'$".(str_starts_with($jsonPath, '[') ? '' : '.').$jsonPath."'";
     }
+
     /**
      * Wrap the given JSON path segment.
      *
@@ -42,11 +57,14 @@ trait CompilesJsonPaths
     {
         if (preg_match('/(\[[^\]]+\])+$/', $segment, $parts)) {
             $key = Str::beforeLast($segment, $parts[0]);
-            if (!empty($key)) {
-                return '"' . $key . '"' . $parts[0];
+
+            if (! empty($key)) {
+                return '"'.$key.'"'.$parts[0];
             }
+
             return $parts[0];
         }
-        return '"' . $segment . '"';
+
+        return '"'.$segment.'"';
     }
 }

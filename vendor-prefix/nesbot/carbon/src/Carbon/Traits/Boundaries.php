@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,11 +15,13 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Traits;
 
 use Archetype\Vendor\Carbon\Exceptions\UnknownUnitException;
 use Archetype\Vendor\Carbon\Unit;
 use Archetype\Vendor\Carbon\WeekDay;
+
 /**
  * Trait Boundaries.
  *
@@ -48,6 +56,7 @@ trait Boundaries
     {
         return $this->setTime(0, 0, 0, 0);
     }
+
     /**
      * Resets the time to 23:59:59.999999 end of day
      *
@@ -62,6 +71,7 @@ trait Boundaries
     {
         return $this->setTime(static::HOURS_PER_DAY - 1, static::MINUTES_PER_HOUR - 1, static::SECONDS_PER_MINUTE - 1, static::MICROSECONDS_PER_SECOND - 1);
     }
+
     /**
      * Resets the date to the first day of the month and the time to 00:00:00
      *
@@ -76,6 +86,7 @@ trait Boundaries
     {
         return $this->setDate($this->year, $this->month, 1)->startOfDay();
     }
+
     /**
      * Resets the date to end of the month and time to 23:59:59.999999
      *
@@ -90,6 +101,7 @@ trait Boundaries
     {
         return $this->setDate($this->year, $this->month, $this->daysInMonth)->endOfDay();
     }
+
     /**
      * Resets the date to the first day of the quarter and the time to 00:00:00
      *
@@ -103,8 +115,10 @@ trait Boundaries
     public function startOfQuarter()
     {
         $month = ($this->quarter - 1) * static::MONTHS_PER_QUARTER + 1;
+
         return $this->setDate($this->year, $month, 1)->startOfDay();
     }
+
     /**
      * Resets the date to end of the quarter and time to 23:59:59.999999
      *
@@ -119,6 +133,7 @@ trait Boundaries
     {
         return $this->startOfQuarter()->addMonths(static::MONTHS_PER_QUARTER - 1)->endOfMonth();
     }
+
     /**
      * Resets the date to the first day of the year and the time to 00:00:00
      *
@@ -133,6 +148,7 @@ trait Boundaries
     {
         return $this->setDate($this->year, 1, 1)->startOfDay();
     }
+
     /**
      * Resets the date to end of the year and time to 23:59:59.999999
      *
@@ -147,6 +163,7 @@ trait Boundaries
     {
         return $this->setDate($this->year, 12, 31)->endOfDay();
     }
+
     /**
      * Resets the date to the first day of the decade and the time to 00:00:00
      *
@@ -160,8 +177,10 @@ trait Boundaries
     public function startOfDecade()
     {
         $year = $this->year - $this->year % static::YEARS_PER_DECADE;
+
         return $this->setDate($year, 1, 1)->startOfDay();
     }
+
     /**
      * Resets the date to end of the decade and time to 23:59:59.999999
      *
@@ -175,8 +194,10 @@ trait Boundaries
     public function endOfDecade()
     {
         $year = $this->year - $this->year % static::YEARS_PER_DECADE + static::YEARS_PER_DECADE - 1;
+
         return $this->setDate($year, 12, 31)->endOfDay();
     }
+
     /**
      * Resets the date to the first day of the century and the time to 00:00:00
      *
@@ -190,8 +211,10 @@ trait Boundaries
     public function startOfCentury()
     {
         $year = $this->year - ($this->year - 1) % static::YEARS_PER_CENTURY;
+
         return $this->setDate($year, 1, 1)->startOfDay();
     }
+
     /**
      * Resets the date to end of the century and time to 23:59:59.999999
      *
@@ -205,8 +228,10 @@ trait Boundaries
     public function endOfCentury()
     {
         $year = $this->year - 1 - ($this->year - 1) % static::YEARS_PER_CENTURY + static::YEARS_PER_CENTURY;
+
         return $this->setDate($year, 12, 31)->endOfDay();
     }
+
     /**
      * Resets the date to the first day of the millennium and the time to 00:00:00
      *
@@ -220,8 +245,10 @@ trait Boundaries
     public function startOfMillennium()
     {
         $year = $this->year - ($this->year - 1) % static::YEARS_PER_MILLENNIUM;
+
         return $this->setDate($year, 1, 1)->startOfDay();
     }
+
     /**
      * Resets the date to end of the millennium and time to 23:59:59.999999
      *
@@ -235,8 +262,10 @@ trait Boundaries
     public function endOfMillennium()
     {
         $year = $this->year - 1 - ($this->year - 1) % static::YEARS_PER_MILLENNIUM + static::YEARS_PER_MILLENNIUM;
+
         return $this->setDate($year, 12, 31)->endOfDay();
     }
+
     /**
      * Resets the date to the first day of week (defined in $weekStartsAt) and the time to 00:00:00
      *
@@ -253,8 +282,14 @@ trait Boundaries
      */
     public function startOfWeek(WeekDay|int|null $weekStartsAt = null): static
     {
-        return $this->subDays((static::DAYS_PER_WEEK + $this->dayOfWeek - (WeekDay::int($weekStartsAt) ?? $this->firstWeekDay)) % static::DAYS_PER_WEEK)->startOfDay();
+        return $this
+            ->subDays(
+                (static::DAYS_PER_WEEK + $this->dayOfWeek - (WeekDay::int($weekStartsAt) ?? $this->firstWeekDay)) %
+                static::DAYS_PER_WEEK,
+            )
+            ->startOfDay();
     }
+
     /**
      * Resets the date to end of week (defined in $weekEndsAt) and time to 23:59:59.999999
      *
@@ -271,8 +306,14 @@ trait Boundaries
      */
     public function endOfWeek(WeekDay|int|null $weekEndsAt = null): static
     {
-        return $this->addDays((static::DAYS_PER_WEEK - $this->dayOfWeek + (WeekDay::int($weekEndsAt) ?? $this->lastWeekDay)) % static::DAYS_PER_WEEK)->endOfDay();
+        return $this
+            ->addDays(
+                (static::DAYS_PER_WEEK - $this->dayOfWeek + (WeekDay::int($weekEndsAt) ?? $this->lastWeekDay)) %
+                static::DAYS_PER_WEEK,
+            )
+            ->endOfDay();
     }
+
     /**
      * Modify to start of current hour, minutes and seconds become 0
      *
@@ -285,6 +326,7 @@ trait Boundaries
     {
         return $this->setTime($this->hour, 0, 0, 0);
     }
+
     /**
      * Modify to end of current hour, minutes and seconds become 59
      *
@@ -297,6 +339,7 @@ trait Boundaries
     {
         return $this->setTime($this->hour, static::MINUTES_PER_HOUR - 1, static::SECONDS_PER_MINUTE - 1, static::MICROSECONDS_PER_SECOND - 1);
     }
+
     /**
      * Modify to start of current minute, seconds become 0
      *
@@ -309,6 +352,7 @@ trait Boundaries
     {
         return $this->setTime($this->hour, $this->minute, 0, 0);
     }
+
     /**
      * Modify to end of current minute, seconds become 59
      *
@@ -321,6 +365,7 @@ trait Boundaries
     {
         return $this->setTime($this->hour, $this->minute, static::SECONDS_PER_MINUTE - 1, static::MICROSECONDS_PER_SECOND - 1);
     }
+
     /**
      * Modify to start of current second, microseconds become 0
      *
@@ -335,6 +380,7 @@ trait Boundaries
     {
         return $this->setTime($this->hour, $this->minute, $this->second, 0);
     }
+
     /**
      * Modify to end of current second, microseconds become 999999
      *
@@ -349,6 +395,7 @@ trait Boundaries
     {
         return $this->setTime($this->hour, $this->minute, $this->second, static::MICROSECONDS_PER_SECOND - 1);
     }
+
     /**
      * Modify to start of current millisecond, microseconds such as 12345 become 123000
      *
@@ -362,8 +409,10 @@ trait Boundaries
     public function startOfMillisecond(): static
     {
         $millisecond = (int) floor($this->micro / 1000);
+
         return $this->setTime($this->hour, $this->minute, $this->second, $millisecond * 1000);
     }
+
     /**
      * Modify to end of current millisecond, microseconds such as 12345 become 123999
      *
@@ -377,8 +426,10 @@ trait Boundaries
     public function endOfMillisecond(): static
     {
         $millisecond = (int) floor($this->micro / 1000);
+
         return $this->setTime($this->hour, $this->minute, $this->second, $millisecond * 1000 + 999);
     }
+
     /**
      * Modify to start of current given unit.
      *
@@ -392,12 +443,14 @@ trait Boundaries
     public function startOf(Unit|string $unit, mixed ...$params): static
     {
         $ucfUnit = ucfirst($unit instanceof Unit ? $unit->value : static::singularUnit($unit));
-        $method = "startOf{$ucfUnit}";
+        $method = "startOf$ucfUnit";
         if (!method_exists($this, $method)) {
             throw new UnknownUnitException($unit);
         }
-        return $this->{$method}(...$params);
+
+        return $this->$method(...$params);
     }
+
     /**
      * Modify to end of current given unit.
      *
@@ -411,10 +464,11 @@ trait Boundaries
     public function endOf(Unit|string $unit, mixed ...$params): static
     {
         $ucfUnit = ucfirst($unit instanceof Unit ? $unit->value : static::singularUnit($unit));
-        $method = "endOf{$ucfUnit}";
+        $method = "endOf$ucfUnit";
         if (!method_exists($this, $method)) {
             throw new UnknownUnitException($unit);
         }
-        return $this->{$method}(...$params);
+
+        return $this->$method(...$params);
     }
 }

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 /**
  * Configuration for a Schema.
  */
@@ -13,13 +19,17 @@ class SchemaConfig
      *
      * @var bool
      */
-    protected $hasExplicitForeignKeyIndexes = \false;
+    protected $hasExplicitForeignKeyIndexes = false;
+
     /** @var int */
     protected $maxIdentifierLength = 63;
+
     /** @var string|null */
     protected $name;
+
     /** @var mixed[] */
     protected $defaultTableOptions = [];
+
     /**
      * @deprecated
      *
@@ -27,9 +37,15 @@ class SchemaConfig
      */
     public function hasExplicitForeignKeyIndexes()
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4822', 'SchemaConfig::hasExplicitForeignKeyIndexes() is deprecated.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4822',
+            'SchemaConfig::hasExplicitForeignKeyIndexes() is deprecated.',
+        );
+
         return $this->hasExplicitForeignKeyIndexes;
     }
+
     /**
      * @deprecated
      *
@@ -39,9 +55,15 @@ class SchemaConfig
      */
     public function setExplicitForeignKeyIndexes($flag)
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4822', 'SchemaConfig::setExplicitForeignKeyIndexes() is deprecated.');
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4822',
+            'SchemaConfig::setExplicitForeignKeyIndexes() is deprecated.',
+        );
+
         $this->hasExplicitForeignKeyIndexes = (bool) $flag;
     }
+
     /**
      * @param int $length
      *
@@ -51,11 +73,13 @@ class SchemaConfig
     {
         $this->maxIdentifierLength = (int) $length;
     }
+
     /** @return int */
     public function getMaxIdentifierLength()
     {
         return $this->maxIdentifierLength;
     }
+
     /**
      * Gets the default namespace of schema objects.
      *
@@ -65,6 +89,7 @@ class SchemaConfig
     {
         return $this->name;
     }
+
     /**
      * Sets the default namespace name of schema objects.
      *
@@ -76,6 +101,7 @@ class SchemaConfig
     {
         $this->name = $name;
     }
+
     /**
      * Gets the default options that are passed to Table instances created with
      * Schema#createTable().
@@ -86,6 +112,7 @@ class SchemaConfig
     {
         return $this->defaultTableOptions;
     }
+
     /**
      * @param mixed[] $defaultTableOptions
      *

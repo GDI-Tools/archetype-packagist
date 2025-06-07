@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Event\Listeners;
 
@@ -6,11 +11,14 @@ use Archetype\Vendor\Doctrine\Common\EventSubscriber;
 use Archetype\Vendor\Doctrine\DBAL\Event\ConnectionEventArgs;
 use Archetype\Vendor\Doctrine\DBAL\Events;
 use Archetype\Vendor\Doctrine\DBAL\Exception;
+
 use function array_change_key_case;
 use function array_merge;
 use function count;
 use function implode;
+
 use const CASE_UPPER;
+
 /**
  * Should be used when Oracle Server default environment does not match the Doctrine requirements.
  *
@@ -26,12 +34,20 @@ use const CASE_UPPER;
 class OracleSessionInit implements EventSubscriber
 {
     /** @var string[] */
-    protected $_defaultSessionVars = ['NLS_TIME_FORMAT' => 'HH24:MI:SS', 'NLS_DATE_FORMAT' => 'YYYY-MM-DD HH24:MI:SS', 'NLS_TIMESTAMP_FORMAT' => 'YYYY-MM-DD HH24:MI:SS', 'NLS_TIMESTAMP_TZ_FORMAT' => 'YYYY-MM-DD HH24:MI:SS TZH:TZM', 'NLS_NUMERIC_CHARACTERS' => '.,'];
+    protected $_defaultSessionVars = [
+        'NLS_TIME_FORMAT' => 'HH24:MI:SS',
+        'NLS_DATE_FORMAT' => 'YYYY-MM-DD HH24:MI:SS',
+        'NLS_TIMESTAMP_FORMAT' => 'YYYY-MM-DD HH24:MI:SS',
+        'NLS_TIMESTAMP_TZ_FORMAT' => 'YYYY-MM-DD HH24:MI:SS TZH:TZM',
+        'NLS_NUMERIC_CHARACTERS' => '.,',
+    ];
+
     /** @param string[] $oracleSessionVars */
     public function __construct(array $oracleSessionVars = [])
     {
         $this->_defaultSessionVars = array_merge($this->_defaultSessionVars, $oracleSessionVars);
     }
+
     /**
      * @return void
      *
@@ -42,6 +58,7 @@ class OracleSessionInit implements EventSubscriber
         if (count($this->_defaultSessionVars) === 0) {
             return;
         }
+
         $vars = [];
         foreach (array_change_key_case($this->_defaultSessionVars, CASE_UPPER) as $option => $value) {
             if ($option === 'CURRENT_SCHEMA') {
@@ -50,9 +67,11 @@ class OracleSessionInit implements EventSubscriber
                 $vars[] = $option . " = '" . $value . "'";
             }
         }
+
         $sql = 'ALTER SESSION SET ' . implode(' ', $vars);
         $args->getConnection()->executeStatement($sql);
     }
+
     /**
      * {@inheritDoc}
      */

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Concerns;
 
 use Archetype\Vendor\Illuminate\Database\Eloquent\ModelNotFoundException;
+
 trait HasUniqueStringIds
 {
     /**
@@ -11,6 +17,7 @@ trait HasUniqueStringIds
      * @return mixed
      */
     abstract public function newUniqueId();
+
     /**
      * Determine if given key is valid.
      *
@@ -18,6 +25,7 @@ trait HasUniqueStringIds
      * @return bool
      */
     abstract protected function isValidUniqueId($value): bool;
+
     /**
      * Initialize the trait.
      *
@@ -25,8 +33,9 @@ trait HasUniqueStringIds
      */
     public function initializeHasUniqueStringIds()
     {
-        $this->usesUniqueIds = \true;
+        $this->usesUniqueIds = true;
     }
+
     /**
      * Get the columns that should receive a unique identifier.
      *
@@ -36,26 +45,30 @@ trait HasUniqueStringIds
     {
         return $this->usesUniqueIds() ? [$this->getKeyName()] : parent::uniqueIds();
     }
+
     /**
      * Retrieve the model for a bound value.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\Relation<*, *, *>  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Model|\Archetype\Vendor\Illuminate\Database\Eloquent\Relations\Relation<*, *, *>  $query
      * @param  mixed  $value
      * @param  string|null  $field
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
+     * @return \Archetype\Vendor\Illuminate\Contracts\Database\Eloquent\Builder
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Archetype\Vendor\Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function resolveRouteBindingQuery($query, $value, $field = null)
     {
-        if ($field && in_array($field, $this->uniqueIds()) && !$this->isValidUniqueId($value)) {
+        if ($field && in_array($field, $this->uniqueIds()) && ! $this->isValidUniqueId($value)) {
             $this->handleInvalidUniqueId($value, $field);
         }
-        if (!$field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && !$this->isValidUniqueId($value)) {
+
+        if (! $field && in_array($this->getRouteKeyName(), $this->uniqueIds()) && ! $this->isValidUniqueId($value)) {
             $this->handleInvalidUniqueId($value, $field);
         }
+
         return parent::resolveRouteBindingQuery($query, $value, $field);
     }
+
     /**
      * Get the auto-incrementing key type.
      *
@@ -66,8 +79,10 @@ trait HasUniqueStringIds
         if (in_array($this->getKeyName(), $this->uniqueIds())) {
             return 'string';
         }
+
         return parent::getKeyType();
     }
+
     /**
      * Get the value indicating whether the IDs are incrementing.
      *
@@ -76,10 +91,12 @@ trait HasUniqueStringIds
     public function getIncrementing()
     {
         if (in_array($this->getKeyName(), $this->uniqueIds())) {
-            return \false;
+            return false;
         }
+
         return parent::getIncrementing();
     }
+
     /**
      * Throw an exception for the given invalid unique ID.
      *
@@ -87,10 +104,10 @@ trait HasUniqueStringIds
      * @param  string|null  $field
      * @return never
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Archetype\Vendor\Illuminate\Database\Eloquent\ModelNotFoundException
      */
     protected function handleInvalidUniqueId($value, $field)
     {
-        throw (new ModelNotFoundException())->setModel(get_class($this), $value);
+        throw (new ModelNotFoundException)->setModel(get_class($this), $value);
     }
 }

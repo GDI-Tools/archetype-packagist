@@ -1,28 +1,35 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent;
 
 /**
- * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Archetype\Vendor\Illuminate\Database\Eloquent\Builder
  */
 class HigherOrderBuilderProxy
 {
     /**
      * The collection being operated on.
      *
-     * @var \Illuminate\Database\Eloquent\Builder<*>
+     * @var \Archetype\Vendor\Illuminate\Database\Eloquent\Builder<*>
      */
     protected $builder;
+
     /**
      * The method being proxied.
      *
      * @var string
      */
     protected $method;
+
     /**
      * Create a new proxy instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<*>  $builder
+     * @param  \Archetype\Vendor\Illuminate\Database\Eloquent\Builder<*>  $builder
      * @param  string  $method
      */
     public function __construct(Builder $builder, $method)
@@ -30,6 +37,7 @@ class HigherOrderBuilderProxy
         $this->method = $method;
         $this->builder = $builder;
     }
+
     /**
      * Proxy a scope call onto the query builder.
      *

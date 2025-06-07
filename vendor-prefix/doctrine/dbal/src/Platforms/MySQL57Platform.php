@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
 
@@ -7,6 +12,7 @@ use Archetype\Vendor\Doctrine\DBAL\Schema\TableDiff;
 use Archetype\Vendor\Doctrine\DBAL\SQL\Parser;
 use Archetype\Vendor\Doctrine\DBAL\Types\Types;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 /**
  * Provides the behavior, features and SQL dialect of the MySQL 5.7 database platform.
  *
@@ -22,9 +28,16 @@ class MySQL57Platform extends MySQLPlatform
      */
     public function hasNativeJsonType()
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5509', '%s is deprecated.', __METHOD__);
-        return \true;
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5509',
+            '%s is deprecated.',
+            __METHOD__,
+        );
+
+        return true;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -32,10 +45,12 @@ class MySQL57Platform extends MySQLPlatform
     {
         return 'JSON';
     }
+
     public function createSQLParser(): Parser
     {
-        return new Parser(\true);
+        return new Parser(true);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -43,6 +58,7 @@ class MySQL57Platform extends MySQLPlatform
     {
         return [];
     }
+
     /**
      * {@inheritDoc}
      */
@@ -50,6 +66,7 @@ class MySQL57Platform extends MySQLPlatform
     {
         return [];
     }
+
     /**
      * {@inheritDoc}
      */
@@ -57,6 +74,7 @@ class MySQL57Platform extends MySQLPlatform
     {
         return ['ALTER TABLE ' . $tableName . ' RENAME INDEX ' . $oldIndexName . ' TO ' . $index->getQuotedName($this)];
     }
+
     /**
      * {@inheritDoc}
      *
@@ -64,15 +82,23 @@ class MySQL57Platform extends MySQLPlatform
      */
     protected function getReservedKeywordsClass()
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/issues/4510', 'MySQL57Platform::getReservedKeywordsClass() is deprecated,' . ' use MySQL57Platform::createReservedKeywordsList() instead.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/issues/4510',
+            'MySQL57Platform::getReservedKeywordsClass() is deprecated,'
+                . ' use MySQL57Platform::createReservedKeywordsList() instead.',
+        );
+
         return Keywords\MySQL57Keywords::class;
     }
+
     /**
      * {@inheritDoc}
      */
     protected function initializeDoctrineTypeMappings()
     {
         parent::initializeDoctrineTypeMappings();
+
         $this->doctrineTypeMapping['json'] = Types::JSON;
     }
 }

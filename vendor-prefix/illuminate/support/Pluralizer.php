@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use Archetype\Vendor\Doctrine\Inflector\InflectorFactory;
+
 class Pluralizer
 {
     /**
@@ -11,12 +17,14 @@ class Pluralizer
      * @var static
      */
     protected static $inflector;
+
     /**
      * The language that should be used by the inflector.
      *
      * @var string
      */
     protected static $language = 'english';
+
     /**
      * Uncountable non-nouns word forms.
      *
@@ -24,7 +32,11 @@ class Pluralizer
      *
      * @var string[]
      */
-    public static $uncountable = ['recommended', 'related'];
+    public static $uncountable = [
+        'recommended',
+        'related',
+    ];
+
     /**
      * Get the plural form of an English word.
      *
@@ -37,12 +49,16 @@ class Pluralizer
         if (is_countable($count)) {
             $count = count($count);
         }
+
         if ((int) abs($count) === 1 || static::uncountable($value) || preg_match('/^(.*)[A-Za-z0-9\x{0080}-\x{FFFF}]$/u', $value) == 0) {
             return $value;
         }
+
         $plural = static::inflector()->pluralize($value);
+
         return static::matchCase($plural, $value);
     }
+
     /**
      * Get the singular form of an English word.
      *
@@ -52,8 +68,10 @@ class Pluralizer
     public static function singular($value)
     {
         $singular = static::inflector()->singularize($value);
+
         return static::matchCase($singular, $value);
     }
+
     /**
      * Determine if the given value is uncountable.
      *
@@ -64,6 +82,7 @@ class Pluralizer
     {
         return in_array(strtolower($value), static::$uncountable);
     }
+
     /**
      * Attempt to match the case on two strings.
      *
@@ -74,25 +93,30 @@ class Pluralizer
     protected static function matchCase($value, $comparison)
     {
         $functions = ['mb_strtolower', 'mb_strtoupper', 'ucfirst', 'ucwords'];
+
         foreach ($functions as $function) {
             if ($function($comparison) === $comparison) {
                 return $function($value);
             }
         }
+
         return $value;
     }
+
     /**
      * Get the inflector instance.
      *
-     * @return \Doctrine\Inflector\Inflector
+     * @return \Archetype\Vendor\Doctrine\Inflector\Inflector
      */
     public static function inflector()
     {
         if (is_null(static::$inflector)) {
             static::$inflector = InflectorFactory::createForLanguage(static::$language)->build();
         }
+
         return static::$inflector;
     }
+
     /**
      * Specify the language that should be used by the inflector.
      *
@@ -102,6 +126,7 @@ class Pluralizer
     public static function useLanguage(string $language)
     {
         static::$language = $language;
+
         static::$inflector = null;
     }
 }

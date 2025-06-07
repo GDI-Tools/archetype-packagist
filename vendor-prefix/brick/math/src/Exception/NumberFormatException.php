@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Brick\Math\Exception;
 
 /**
@@ -8,26 +14,33 @@ namespace Archetype\Vendor\Brick\Math\Exception;
  */
 class NumberFormatException extends MathException
 {
-    public static function invalidFormat(string $value): self
+    public static function invalidFormat(string $value) : self
     {
-        return new self(\sprintf('The given value "%s" does not represent a valid number.', $value));
+        return new self(\sprintf(
+            'The given value "%s" does not represent a valid number.',
+            $value,
+        ));
     }
+
     /**
      * @param string $char The failing character.
      *
      * @psalm-pure
      */
-    public static function charNotInAlphabet(string $char): self
+    public static function charNotInAlphabet(string $char) : self
     {
         $ord = \ord($char);
+
         if ($ord < 32 || $ord > 126) {
             $char = \strtoupper(\dechex($ord));
+
             if ($ord < 10) {
                 $char = '0' . $char;
             }
         } else {
             $char = '"' . $char . '"';
         }
+
         return new self(\sprintf('Char %s is not a valid character in the given alphabet.', $char));
     }
 }

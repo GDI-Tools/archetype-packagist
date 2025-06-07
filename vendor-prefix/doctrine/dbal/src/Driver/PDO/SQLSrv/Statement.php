@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\PDO\SQLSrv;
 
@@ -8,16 +13,21 @@ use Archetype\Vendor\Doctrine\DBAL\Driver\PDO\Statement as PDOStatement;
 use Archetype\Vendor\Doctrine\DBAL\ParameterType;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
 use PDO;
+
 use function func_num_args;
+
 final class Statement extends AbstractStatementMiddleware
 {
     private PDOStatement $statement;
+
     /** @internal The statement can be only instantiated by its driver connection. */
     public function __construct(PDOStatement $statement)
     {
         parent::__construct($statement);
+
         $this->statement = $statement;
     }
+
     /**
      * {@inheritDoc}
      *
@@ -33,28 +43,54 @@ final class Statement extends AbstractStatementMiddleware
      *
      * @phpstan-assert ParameterType::* $type
      */
-    public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null, $driverOptions = null): bool
-    {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5563', '%s is deprecated. Use bindValue() instead.', __METHOD__);
+    public function bindParam(
+        $param,
+        &$variable,
+        $type = ParameterType::STRING,
+        $length = null,
+        $driverOptions = null
+    ): bool {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5563',
+            '%s is deprecated. Use bindValue() instead.',
+            __METHOD__,
+        );
+
         if (func_num_args() < 3) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5558', 'Not passing $type to Statement::bindParam() is deprecated.' . ' Pass the type corresponding to the parameter being bound.');
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5558',
+                'Not passing $type to Statement::bindParam() is deprecated.'
+                    . ' Pass the type corresponding to the parameter being bound.',
+            );
         }
+
         if (func_num_args() > 4) {
-            Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/issues/4533', 'The $driverOptions argument of Statement::bindParam() is deprecated.');
+            Deprecation::triggerIfCalledFromOutside(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/issues/4533',
+                'The $driverOptions argument of Statement::bindParam() is deprecated.',
+            );
         }
+
         switch ($type) {
             case ParameterType::LARGE_OBJECT:
             case ParameterType::BINARY:
                 $driverOptions ??= PDO::SQLSRV_ENCODING_BINARY;
+
                 break;
+
             case ParameterType::ASCII:
-                $type = ParameterType::STRING;
-                $length = 0;
+                $type          = ParameterType::STRING;
+                $length        = 0;
                 $driverOptions = PDO::SQLSRV_ENCODING_SYSTEM;
                 break;
         }
+
         return $this->statement->bindParam($param, $variable, $type, $length ?? 0, $driverOptions);
     }
+
     /**
      * @throws UnknownParameterType
      *
@@ -65,8 +101,14 @@ final class Statement extends AbstractStatementMiddleware
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         if (func_num_args() < 3) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5558', 'Not passing $type to Statement::bindValue() is deprecated.' . ' Pass the type corresponding to the parameter being bound.');
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5558',
+                'Not passing $type to Statement::bindValue() is deprecated.'
+                    . ' Pass the type corresponding to the parameter being bound.',
+            );
         }
+
         return $this->bindParam($param, $value, $type);
     }
 }

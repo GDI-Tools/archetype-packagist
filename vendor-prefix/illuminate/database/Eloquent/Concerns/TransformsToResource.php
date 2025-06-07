@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Concerns;
 
-use Archetype\Vendor\Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Archetype\Vendor\Illuminate\Support\Str;
 use LogicException;
+
 trait TransformsToResource
 {
     /**
@@ -20,8 +26,10 @@ trait TransformsToResource
         if ($resourceClass === null) {
             return $this->guessResource();
         }
+
         return $resourceClass::make($this);
     }
+
     /**
      * Guess the resource class for the model.
      *
@@ -36,8 +44,10 @@ trait TransformsToResource
                 return $resourceClass::make($this);
             }
         }
+
         throw new LogicException(sprintf('Failed to find resource class for model [%s].', get_class($this)));
     }
+
     /**
      * Guess the resource class name for the model.
      *
@@ -46,12 +56,24 @@ trait TransformsToResource
     public static function guessResourceName(): array
     {
         $modelClass = static::class;
-        if (!Str::contains($modelClass, '\Models\\')) {
+
+        if (! Str::contains($modelClass, '\\Models\\')) {
             return [];
         }
-        $relativeNamespace = Str::after($modelClass, '\Models\\');
-        $relativeNamespace = Str::contains($relativeNamespace, '\\') ? Str::before($relativeNamespace, '\\' . class_basename($modelClass)) : '';
-        $potentialResource = sprintf('%s\Http\Resources\%s%s', Str::before($modelClass, '\Models'), strlen($relativeNamespace) > 0 ? $relativeNamespace . '\\' : '', class_basename($modelClass));
-        return [$potentialResource . 'Resource', $potentialResource];
+
+        $relativeNamespace = Str::after($modelClass, '\\Models\\');
+
+        $relativeNamespace = Str::contains($relativeNamespace, '\\')
+            ? Str::before($relativeNamespace, '\\'.class_basename($modelClass))
+            : '';
+
+        $potentialResource = sprintf(
+            '%s\\Http\\Resources\\%s%s',
+            Str::before($modelClass, '\\Models'),
+            strlen($relativeNamespace) > 0 ? $relativeNamespace.'\\' : '',
+            class_basename($modelClass)
+        );
+
+        return [$potentialResource.'Resource', $potentialResource];
     }
 }

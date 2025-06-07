@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid;
 
 use JsonSerializable;
@@ -18,12 +22,17 @@ use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
 use Archetype\Vendor\Ramsey\Uuid\Type\Integer as IntegerObject;
 use Serializable;
 use Stringable;
+
 /**
  * A UUID is a universally unique identifier adhering to an agreed-upon representation format and standard for generation
  *
  * @immutable
  */
-interface UuidInterface extends DeprecatedUuidInterface, JsonSerializable, Serializable, Stringable
+interface UuidInterface extends
+    DeprecatedUuidInterface,
+    JsonSerializable,
+    Serializable,
+    Stringable
 {
     /**
      * Returns -1, 0, or 1 if the UUID is less than, equal to, or greater than the other UUID
@@ -36,6 +45,7 @@ interface UuidInterface extends DeprecatedUuidInterface, JsonSerializable, Seria
      * @return int<-1,1> -1, 0, or 1 if the UUID is less than, equal to, or greater than $other
      */
     public function compareTo(UuidInterface $other): int;
+
     /**
      * Returns true if the UUID is equal to the provided object
      *
@@ -47,24 +57,29 @@ interface UuidInterface extends DeprecatedUuidInterface, JsonSerializable, Seria
      * @return bool True if the other object is equal to this UUID
      */
     public function equals(?object $other): bool;
+
     /**
      * Returns the binary string representation of the UUID
      *
      * @return non-empty-string
      */
     public function getBytes(): string;
+
     /**
      * Returns the fields that comprise this UUID
      */
     public function getFields(): FieldsInterface;
+
     /**
      * Returns the hexadecimal representation of the UUID
      */
     public function getHex(): Hexadecimal;
+
     /**
      * Returns the integer representation of the UUID
      */
     public function getInteger(): IntegerObject;
+
     /**
      * Returns the string standard representation of the UUID as a URN
      *
@@ -74,12 +89,14 @@ interface UuidInterface extends DeprecatedUuidInterface, JsonSerializable, Seria
      * @link https://www.rfc-editor.org/rfc/rfc4122.html#section-3 RFC 4122, 3. Namespace Registration Template
      */
     public function getUrn(): string;
+
     /**
      * Returns the string standard representation of the UUID
      *
      * @return non-empty-string
      */
     public function toString(): string;
+
     /**
      * Casts the UUID to the string standard representation
      *

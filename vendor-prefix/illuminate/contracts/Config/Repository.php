@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Config;
 
@@ -11,6 +16,7 @@ interface Repository
      * @return bool
      */
     public function has($key);
+
     /**
      * Get the specified configuration value.
      *
@@ -19,12 +25,14 @@ interface Repository
      * @return mixed
      */
     public function get($key, $default = null);
+
     /**
      * Get all of the configuration items for the application.
      *
      * @return array
      */
     public function all();
+
     /**
      * Set a given configuration value.
      *
@@ -33,6 +41,7 @@ interface Repository
      * @return void
      */
     public function set($key, $value = null);
+
     /**
      * Prepend a value onto an array configuration value.
      *
@@ -41,6 +50,7 @@ interface Repository
      * @return void
      */
     public function prepend($key, $value);
+
     /**
      * Push a value onto an array configuration value.
      *

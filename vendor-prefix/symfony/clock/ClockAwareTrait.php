@@ -7,11 +7,15 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Clock;
 
 use Archetype\Vendor\Psr\Clock\ClockInterface;
-use Archetype\Vendor\Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Contracts\Service\Attribute\Required;
+
 /**
  * A trait to help write time-sensitive classes.
  *
@@ -20,14 +24,17 @@ use Archetype\Vendor\Symfony\Contracts\Service\Attribute\Required;
 trait ClockAwareTrait
 {
     private readonly ClockInterface $clock;
+
     #[Required]
     public function setClock(ClockInterface $clock): void
     {
         $this->clock = $clock;
     }
+
     protected function now(): DatePoint
     {
         $now = ($this->clock ??= new Clock())->now();
+
         return $now instanceof DatePoint ? $now : DatePoint::createFromInterface($now);
     }
 }

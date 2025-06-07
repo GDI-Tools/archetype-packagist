@@ -7,7 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Exception;
 
 class IncompleteDsnException extends InvalidArgumentException
@@ -15,8 +18,9 @@ class IncompleteDsnException extends InvalidArgumentException
     public function __construct(string $message, ?string $dsn = null, ?\Throwable $previous = null)
     {
         if ($dsn) {
-            $message = \sprintf('Invalid "%s" provider DSN: ', $dsn) . $message;
+            $message = \sprintf('Invalid "%s" provider DSN: ', $dsn).$message;
         }
+
         parent::__construct($message, 0, $previous);
     }
 }

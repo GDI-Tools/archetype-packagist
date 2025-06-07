@@ -1,21 +1,26 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 /**
- * @method static \Illuminate\Contracts\Cache\Repository store(string|null $name = null)
- * @method static \Illuminate\Contracts\Cache\Repository driver(string|null $driver = null)
- * @method static \Illuminate\Contracts\Cache\Repository memo(string|null $driver = null)
- * @method static \Illuminate\Contracts\Cache\Repository resolve(string $name)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Repository store(string|null $name = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Repository driver(string|null $driver = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Repository memo(string|null $driver = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Repository resolve(string $name)
  * @method static \Illuminate\Cache\Repository build(array $config)
- * @method static \Illuminate\Cache\Repository repository(\Illuminate\Contracts\Cache\Store $store, array $config = [])
+ * @method static \Illuminate\Cache\Repository repository(\Archetype\Vendor\Illuminate\Contracts\Cache\Store $store, array $config = [])
  * @method static void refreshEventDispatcher()
  * @method static string getDefaultDriver()
  * @method static void setDefaultDriver(string $name)
  * @method static \Illuminate\Cache\CacheManager forgetDriver(array|string|null $name = null)
  * @method static void purge(string|null $name = null)
  * @method static \Illuminate\Cache\CacheManager extend(string $driver, \Closure $callback)
- * @method static \Illuminate\Cache\CacheManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
+ * @method static \Illuminate\Cache\CacheManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
  * @method static bool has(array|string $key)
  * @method static bool missing(string $key)
  * @method static mixed get(array|string $key, mixed $default = null)
@@ -43,10 +48,10 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static bool supportsTags()
  * @method static int|null getDefaultCacheTime()
  * @method static \Illuminate\Cache\Repository setDefaultCacheTime(int|null $seconds)
- * @method static \Illuminate\Contracts\Cache\Store getStore()
- * @method static \Illuminate\Cache\Repository setStore(\Illuminate\Contracts\Cache\Store $store)
- * @method static \Illuminate\Contracts\Events\Dispatcher|null getEventDispatcher()
- * @method static void setEventDispatcher(\Illuminate\Contracts\Events\Dispatcher $events)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Store getStore()
+ * @method static \Illuminate\Cache\Repository setStore(\Archetype\Vendor\Illuminate\Contracts\Cache\Store $store)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher|null getEventDispatcher()
+ * @method static void setEventDispatcher(\Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher $events)
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
@@ -54,8 +59,8 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static mixed macroCall(string $method, array $parameters)
  * @method static bool flush()
  * @method static string getPrefix()
- * @method static \Illuminate\Contracts\Cache\Lock lock(string $name, int $seconds = 0, string|null $owner = null)
- * @method static \Illuminate\Contracts\Cache\Lock restoreLock(string $name, string $owner)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Lock lock(string $name, int $seconds = 0, string|null $owner = null)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Cache\Lock restoreLock(string $name, string $owner)
  *
  * @see \Illuminate\Cache\CacheManager
  * @see \Illuminate\Cache\Repository

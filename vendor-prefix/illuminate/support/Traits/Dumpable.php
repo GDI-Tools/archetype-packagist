@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Traits;
 
@@ -14,6 +19,7 @@ trait Dumpable
     {
         dd($this, ...$args);
     }
+
     /**
      * Dump the given arguments.
      *
@@ -23,6 +29,7 @@ trait Dumpable
     public function dump(...$args)
     {
         dump($this, ...$args);
+
         return $this;
     }
 }

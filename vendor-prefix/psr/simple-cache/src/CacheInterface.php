@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Psr\SimpleCache;
 
@@ -12,10 +17,11 @@ interface CacheInterface
      *
      * @return mixed The value of the item from the cache, or $default in case of cache miss.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
     public function get(string $key, mixed $default = null): mixed;
+
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional expiration TTL time.
      *
@@ -27,10 +33,11 @@ interface CacheInterface
      *
      * @return bool True on success and false on failure.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
     public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool;
+
     /**
      * Delete an item from the cache by its unique key.
      *
@@ -38,16 +45,18 @@ interface CacheInterface
      *
      * @return bool True if the item was successfully removed. False if there was an error.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
     public function delete(string $key): bool;
+
     /**
      * Wipes clean the entire cache's keys.
      *
      * @return bool True on success and false on failure.
      */
     public function clear(): bool;
+
     /**
      * Obtains multiple cache items by their unique keys.
      *
@@ -56,11 +65,12 @@ interface CacheInterface
      *
      * @return iterable<string, mixed> A list of key => value pairs. Cache keys that do not exist or are stale will have $default as value.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if $keys is neither an array nor a Traversable,
      *   or if any of the $keys are not a legal value.
      */
     public function getMultiple(iterable $keys, mixed $default = null): iterable;
+
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
@@ -71,11 +81,12 @@ interface CacheInterface
      *
      * @return bool True on success and false on failure.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if $values is neither an array nor a Traversable,
      *   or if any of the $values are not a legal value.
      */
     public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool;
+
     /**
      * Deletes multiple cache items in a single operation.
      *
@@ -83,11 +94,12 @@ interface CacheInterface
      *
      * @return bool True if the items were successfully removed. False if there was an error.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if $keys is neither an array nor a Traversable,
      *   or if any of the $keys are not a legal value.
      */
     public function deleteMultiple(iterable $keys): bool;
+
     /**
      * Determines whether an item is present in the cache.
      *
@@ -100,7 +112,7 @@ interface CacheInterface
      *
      * @return bool
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\SimpleCache\InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
     public function has(string $key): bool;

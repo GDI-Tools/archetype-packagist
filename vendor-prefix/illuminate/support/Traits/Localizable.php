@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Traits;
 
 use Archetype\Vendor\Illuminate\Container\Container;
+
 trait Localizable
 {
     /**
@@ -14,13 +20,17 @@ trait Localizable
      */
     public function withLocale($locale, $callback)
     {
-        if (!$locale) {
+        if (! $locale) {
             return $callback();
         }
+
         $app = Container::getInstance();
+
         $original = $app->getLocale();
+
         try {
             $app->setLocale($locale);
+
             return $callback();
         } finally {
             $app->setLocale($original);

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /*
  * This file is part of Result Type.
  *
@@ -9,6 +15,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\GrahamCampbell\ResultType;
 
 /**
@@ -20,9 +27,10 @@ abstract class Result
     /**
      * Get the success option value.
      *
-     * @return \PhpOption\Option<T>
+     * @return \Archetype\Vendor\PhpOption\Option<T>
      */
     abstract public function success();
+
     /**
      * Map over the success value.
      *
@@ -30,26 +38,29 @@ abstract class Result
      *
      * @param callable(T):S $f
      *
-     * @return \GrahamCampbell\ResultType\Result<S,E>
+     * @return \Archetype\Vendor\GrahamCampbell\ResultType\Result<S,E>
      */
     abstract public function map(callable $f);
+
     /**
      * Flat map over the success value.
      *
      * @template S
      * @template F
      *
-     * @param callable(T):\GrahamCampbell\ResultType\Result<S,F> $f
+     * @param callable(T):\Archetype\Vendor\GrahamCampbell\ResultType\Result<S,F> $f
      *
-     * @return \GrahamCampbell\ResultType\Result<S,F>
+     * @return \Archetype\Vendor\GrahamCampbell\ResultType\Result<S,F>
      */
     abstract public function flatMap(callable $f);
+
     /**
      * Get the error option value.
      *
-     * @return \PhpOption\Option<E>
+     * @return \Archetype\Vendor\PhpOption\Option<E>
      */
     abstract public function error();
+
     /**
      * Map over the error value.
      *
@@ -57,7 +68,7 @@ abstract class Result
      *
      * @param callable(E):F $f
      *
-     * @return \GrahamCampbell\ResultType\Result<T,F>
+     * @return \Archetype\Vendor\GrahamCampbell\ResultType\Result<T,F>
      */
     abstract public function mapError(callable $f);
 }

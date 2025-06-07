@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Psr\Log;
 
@@ -25,6 +30,7 @@ interface LoggerInterface
      * @param mixed[] $context
      */
     public function emergency(string|\Stringable $message, array $context = []): void;
+
     /**
      * Action must be taken immediately.
      *
@@ -34,6 +40,7 @@ interface LoggerInterface
      * @param mixed[] $context
      */
     public function alert(string|\Stringable $message, array $context = []): void;
+
     /**
      * Critical conditions.
      *
@@ -42,6 +49,7 @@ interface LoggerInterface
      * @param mixed[] $context
      */
     public function critical(string|\Stringable $message, array $context = []): void;
+
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
@@ -49,6 +57,7 @@ interface LoggerInterface
      * @param mixed[] $context
      */
     public function error(string|\Stringable $message, array $context = []): void;
+
     /**
      * Exceptional occurrences that are not errors.
      *
@@ -58,12 +67,14 @@ interface LoggerInterface
      * @param mixed[] $context
      */
     public function warning(string|\Stringable $message, array $context = []): void;
+
     /**
      * Normal but significant events.
      *
      * @param mixed[] $context
      */
     public function notice(string|\Stringable $message, array $context = []): void;
+
     /**
      * Interesting events.
      *
@@ -72,19 +83,21 @@ interface LoggerInterface
      * @param mixed[] $context
      */
     public function info(string|\Stringable $message, array $context = []): void;
+
     /**
      * Detailed debug information.
      *
      * @param mixed[] $context
      */
     public function debug(string|\Stringable $message, array $context = []): void;
+
     /**
      * Logs with an arbitrary level.
      *
      * @param mixed $level
      * @param mixed[] $context
      *
-     * @throws \Psr\Log\InvalidArgumentException
+     * @throws \Archetype\Vendor\Psr\Log\InvalidArgumentException
      */
     public function log($level, string|\Stringable $message, array $context = []): void;
 }

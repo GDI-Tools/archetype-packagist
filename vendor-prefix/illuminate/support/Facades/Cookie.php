@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -31,8 +36,9 @@ class Cookie extends Facade
      */
     public static function has($key)
     {
-        return !is_null(static::$app['request']->cookie($key, null));
+        return ! is_null(static::$app['request']->cookie($key, null));
     }
+
     /**
      * Retrieve a cookie from the request.
      *
@@ -44,6 +50,7 @@ class Cookie extends Facade
     {
         return static::$app['request']->cookie($key, $default);
     }
+
     /**
      * Get the registered name of the component.
      *

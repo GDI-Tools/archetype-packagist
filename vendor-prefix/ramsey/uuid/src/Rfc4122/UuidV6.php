@@ -8,11 +8,16 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use Archetype\Vendor\Ramsey\Uuid\Nonstandard\UuidV6 as NonstandardUuidV6;
+
 /**
  * Reordered Gregorian time, or version 6, UUIDs include timestamp, clock sequence, and node values that are combined
  * into a 128-bit unsigned integer

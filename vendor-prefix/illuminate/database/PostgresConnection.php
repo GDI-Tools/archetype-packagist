@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database;
 
@@ -9,6 +14,7 @@ use Archetype\Vendor\Illuminate\Database\Schema\Grammars\PostgresGrammar as Sche
 use Archetype\Vendor\Illuminate\Database\Schema\PostgresBuilder;
 use Archetype\Vendor\Illuminate\Database\Schema\PostgresSchemaState;
 use Archetype\Vendor\Illuminate\Filesystem\Filesystem;
+
 class PostgresConnection extends Connection
 {
     /**
@@ -18,6 +24,7 @@ class PostgresConnection extends Connection
     {
         return 'PostgreSQL';
     }
+
     /**
      * Escape a binary value for safe SQL embedding.
      *
@@ -27,8 +34,10 @@ class PostgresConnection extends Connection
     protected function escapeBinary($value)
     {
         $hex = bin2hex($value);
-        return "'\\x{$hex}'::bytea";
+
+        return "'\x{$hex}'::bytea";
     }
+
     /**
      * Escape a bool value for safe SQL embedding.
      *
@@ -39,6 +48,7 @@ class PostgresConnection extends Connection
     {
         return $value ? 'true' : 'false';
     }
+
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
@@ -49,54 +59,60 @@ class PostgresConnection extends Connection
     {
         return '23505' === $exception->getCode();
     }
+
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\PostgresGrammar
+     * @return \Archetype\Vendor\Illuminate\Database\Query\Grammars\PostgresGrammar
      */
     protected function getDefaultQueryGrammar()
     {
         return new QueryGrammar($this);
     }
+
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\PostgresBuilder
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\PostgresBuilder
      */
     public function getSchemaBuilder()
     {
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
+
         return new PostgresBuilder($this);
     }
+
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\PostgresGrammar
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\Grammars\PostgresGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
         return new SchemaGrammar($this);
     }
+
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
+     * @param  \Archetype\Vendor\Illuminate\Filesystem\Filesystem|null  $files
      * @param  callable|null  $processFactory
-     * @return \Illuminate\Database\Schema\PostgresSchemaState
+     * @return \Archetype\Vendor\Illuminate\Database\Schema\PostgresSchemaState
      */
     public function getSchemaState(?Filesystem $files = null, ?callable $processFactory = null)
     {
         return new PostgresSchemaState($this, $files, $processFactory);
     }
+
     /**
      * Get the default post processor instance.
      *
-     * @return \Illuminate\Database\Query\Processors\PostgresProcessor
+     * @return \Archetype\Vendor\Illuminate\Database\Query\Processors\PostgresProcessor
      */
     protected function getDefaultPostProcessor()
     {
-        return new PostgresProcessor();
+        return new PostgresProcessor;
     }
 }

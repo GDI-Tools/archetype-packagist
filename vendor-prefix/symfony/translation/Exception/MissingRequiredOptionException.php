@@ -7,7 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
+
 namespace Archetype\Vendor\Symfony\Component\Translation\Exception;
 
 /**
@@ -18,6 +21,7 @@ class MissingRequiredOptionException extends IncompleteDsnException
     public function __construct(string $option, ?string $dsn = null, ?\Throwable $previous = null)
     {
         $message = \sprintf('The option "%s" is required but missing.', $option);
+
         parent::__construct($message, $dsn, $previous);
     }
 }

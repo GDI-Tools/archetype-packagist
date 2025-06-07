@@ -1,14 +1,20 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Bus;
 
-use Archetype\Vendor\Aws\DynamoDb\DynamoDbClient;
+use Aws\DynamoDb\DynamoDbClient;
 use Archetype\Vendor\Illuminate\Contracts\Bus\Dispatcher as DispatcherContract;
 use Archetype\Vendor\Illuminate\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 use Archetype\Vendor\Illuminate\Contracts\Queue\Factory as QueueFactoryContract;
 use Archetype\Vendor\Illuminate\Contracts\Support\DeferrableProvider;
 use Archetype\Vendor\Illuminate\Support\Arr;
 use Archetype\Vendor\Illuminate\Support\ServiceProvider;
+
 class BusServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -23,10 +29,18 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
                 return $app[QueueFactoryContract::class]->connection($connection);
             });
         });
+
         $this->registerBatchServices();
-        $this->app->alias(Dispatcher::class, DispatcherContract::class);
-        $this->app->alias(Dispatcher::class, QueueingDispatcherContract::class);
+
+        $this->app->alias(
+            Dispatcher::class, DispatcherContract::class
+        );
+
+        $this->app->alias(
+            Dispatcher::class, QueueingDispatcherContract::class
+        );
     }
+
     /**
      * Register the batch handling services.
      *
@@ -36,23 +50,48 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->app->singleton(BatchRepository::class, function ($app) {
             $driver = $app->config->get('queue.batching.driver', 'database');
-            return $driver === 'dynamodb' ? $app->make(DynamoBatchRepository::class) : $app->make(DatabaseBatchRepository::class);
+
+            return $driver === 'dynamodb'
+                ? $app->make(DynamoBatchRepository::class)
+                : $app->make(DatabaseBatchRepository::class);
         });
+
         $this->app->singleton(DatabaseBatchRepository::class, function ($app) {
-            return new DatabaseBatchRepository($app->make(BatchFactory::class), $app->make('db')->connection($app->config->get('queue.batching.database')), $app->config->get('queue.batching.table', 'job_batches'));
+            return new DatabaseBatchRepository(
+                $app->make(BatchFactory::class),
+                $app->make('db')->connection($app->config->get('queue.batching.database')),
+                $app->config->get('queue.batching.table', 'job_batches')
+            );
         });
+
         $this->app->singleton(DynamoBatchRepository::class, function ($app) {
             $config = $app->config->get('queue.batching');
-            $dynamoConfig = ['region' => $config['region'], 'version' => 'latest', 'endpoint' => $config['endpoint'] ?? null];
-            if (!empty($config['key']) && !empty($config['secret'])) {
+
+            $dynamoConfig = [
+                'region' => $config['region'],
+                'version' => 'latest',
+                'endpoint' => $config['endpoint'] ?? null,
+            ];
+
+            if (! empty($config['key']) && ! empty($config['secret'])) {
                 $dynamoConfig['credentials'] = Arr::only($config, ['key', 'secret']);
-                if (!empty($config['token'])) {
+
+                if (! empty($config['token'])) {
                     $dynamoConfig['credentials']['token'] = $config['token'];
                 }
             }
-            return new DynamoBatchRepository($app->make(BatchFactory::class), new DynamoDbClient($dynamoConfig), $app->config->get('app.name'), $app->config->get('queue.batching.table', 'job_batches'), ttl: $app->config->get('queue.batching.ttl', null), ttlAttribute: $app->config->get('queue.batching.ttl_attribute', 'ttl'));
+
+            return new DynamoBatchRepository(
+                $app->make(BatchFactory::class),
+                new DynamoDbClient($dynamoConfig),
+                $app->config->get('app.name'),
+                $app->config->get('queue.batching.table', 'job_batches'),
+                ttl: $app->config->get('queue.batching.ttl', null),
+                ttlAttribute: $app->config->get('queue.batching.ttl_attribute', 'ttl'),
+            );
         });
     }
+
     /**
      * Get the services provided by the provider.
      *
@@ -60,6 +99,12 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function provides()
     {
-        return [Dispatcher::class, DispatcherContract::class, QueueingDispatcherContract::class, BatchRepository::class, DatabaseBatchRepository::class];
+        return [
+            Dispatcher::class,
+            DispatcherContract::class,
+            QueueingDispatcherContract::class,
+            BatchRepository::class,
+            DatabaseBatchRepository::class,
+        ];
     }
 }

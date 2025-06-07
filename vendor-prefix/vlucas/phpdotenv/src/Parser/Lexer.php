@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Parser;
 
 final class Lexer
@@ -8,7 +14,10 @@ final class Lexer
     /**
      * The regex for each type of token.
      */
-    private const PATTERNS = ['[\r\n]{1,1000}', '[^\S\r\n]{1,1000}', '\\\\', '\'', '"', '\#', '\$', '([^(\s\\\\\'"\#\$)]|\(|\)){1,1000}'];
+    private const PATTERNS = [
+        '[\r\n]{1,1000}', '[^\S\r\n]{1,1000}', '\\\\', '\'', '"', '\\#', '\\$', '([^(\s\\\\\'"\\#\\$)]|\\(|\\)){1,1000}',
+    ];
+
     /**
      * This class is a singleton.
      *
@@ -20,6 +29,7 @@ final class Lexer
     {
         //
     }
+
     /**
      * Convert content into a token stream.
      *
@@ -33,15 +43,20 @@ final class Lexer
     public static function lex(string $content)
     {
         static $regex;
+
         if ($regex === null) {
-            $regex = '((' . \implode(')|(', self::PATTERNS) . '))A';
+            $regex = '(('.\implode(')|(', self::PATTERNS).'))A';
         }
+
         $offset = 0;
+
         while (isset($content[$offset])) {
             if (!\preg_match($regex, $content, $matches, 0, $offset)) {
                 throw new \Error(\sprintf('Lexer encountered unexpected character [%s].', $content[$offset]));
             }
+
             $offset += \strlen($matches[0]);
+
             yield $matches[0];
         }
     }

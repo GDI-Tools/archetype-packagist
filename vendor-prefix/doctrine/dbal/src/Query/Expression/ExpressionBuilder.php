@@ -1,29 +1,38 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Query\Expression;
 
 use Archetype\Vendor\Doctrine\DBAL\Connection;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function func_get_arg;
 use function func_get_args;
 use function func_num_args;
 use function implode;
 use function sprintf;
+
 /**
  * ExpressionBuilder class is responsible to dynamically create SQL query parts.
  */
 class ExpressionBuilder
 {
-    public const EQ = '=';
+    public const EQ  = '=';
     public const NEQ = '<>';
-    public const LT = '<';
+    public const LT  = '<';
     public const LTE = '<=';
-    public const GT = '>';
+    public const GT  = '>';
     public const GTE = '>=';
+
     /**
      * The DBAL Connection.
      */
     private Connection $connection;
+
     /**
      * Initializes a new <tt>ExpressionBuilder</tt>.
      *
@@ -33,6 +42,7 @@ class ExpressionBuilder
     {
         $this->connection = $connection;
     }
+
     /**
      * Creates a conjunction of the given expressions.
      *
@@ -43,6 +53,7 @@ class ExpressionBuilder
     {
         return CompositeExpression::and($expression, ...$expressions);
     }
+
     /**
      * Creates a disjunction of the given expressions.
      *
@@ -53,6 +64,7 @@ class ExpressionBuilder
     {
         return CompositeExpression::or($expression, ...$expressions);
     }
+
     /**
      * @deprecated Use `and()` instead.
      *
@@ -63,9 +75,15 @@ class ExpressionBuilder
      */
     public function andX($x = null)
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/3851', 'ExpressionBuilder::andX() is deprecated, use ExpressionBuilder::and() instead.');
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/3851',
+            'ExpressionBuilder::andX() is deprecated, use ExpressionBuilder::and() instead.',
+        );
+
         return new CompositeExpression(CompositeExpression::TYPE_AND, func_get_args());
     }
+
     /**
      * @deprecated Use `or()` instead.
      *
@@ -76,9 +94,15 @@ class ExpressionBuilder
      */
     public function orX($x = null)
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/3851', 'ExpressionBuilder::orX() is deprecated, use ExpressionBuilder::or() instead.');
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/3851',
+            'ExpressionBuilder::orX() is deprecated, use ExpressionBuilder::or() instead.',
+        );
+
         return new CompositeExpression(CompositeExpression::TYPE_OR, func_get_args());
     }
+
     /**
      * Creates a comparison expression.
      *
@@ -92,6 +116,7 @@ class ExpressionBuilder
     {
         return $x . ' ' . $operator . ' ' . $y;
     }
+
     /**
      * Creates an equality comparison expression with the given arguments.
      *
@@ -111,6 +136,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, self::EQ, $y);
     }
+
     /**
      * Creates a non equality comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
@@ -129,6 +155,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, self::NEQ, $y);
     }
+
     /**
      * Creates a lower-than comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
@@ -147,6 +174,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, self::LT, $y);
     }
+
     /**
      * Creates a lower-than-equal comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
@@ -165,6 +193,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, self::LTE, $y);
     }
+
     /**
      * Creates a greater-than comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
@@ -183,6 +212,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, self::GT, $y);
     }
+
     /**
      * Creates a greater-than-equal comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
@@ -201,6 +231,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, self::GTE, $y);
     }
+
     /**
      * Creates an IS NULL expression with the given arguments.
      *
@@ -212,6 +243,7 @@ class ExpressionBuilder
     {
         return $x . ' IS NULL';
     }
+
     /**
      * Creates an IS NOT NULL expression with the given arguments.
      *
@@ -223,6 +255,7 @@ class ExpressionBuilder
     {
         return $x . ' IS NOT NULL';
     }
+
     /**
      * Creates a LIKE() comparison expression with the given arguments.
      *
@@ -231,10 +264,12 @@ class ExpressionBuilder
      *
      * @return string
      */
-    public function like($x, $y)
+    public function like($x, $y/*, ?string $escapeChar = null */)
     {
-        return $this->comparison($x, 'LIKE', $y) . (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
+        return $this->comparison($x, 'LIKE', $y) .
+            (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
     }
+
     /**
      * Creates a NOT LIKE() comparison expression with the given arguments.
      *
@@ -243,10 +278,12 @@ class ExpressionBuilder
      *
      * @return string
      */
-    public function notLike($x, $y)
+    public function notLike($x, $y/*, ?string $escapeChar = null */)
     {
-        return $this->comparison($x, 'NOT LIKE', $y) . (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
+        return $this->comparison($x, 'NOT LIKE', $y) .
+            (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
     }
+
     /**
      * Creates an IN () comparison expression with the given arguments.
      *
@@ -259,6 +296,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, 'IN', '(' . implode(', ', (array) $y) . ')');
     }
+
     /**
      * Creates a NOT IN () comparison expression with the given arguments.
      *
@@ -271,6 +309,7 @@ class ExpressionBuilder
     {
         return $this->comparison($x, 'NOT IN', '(' . implode(', ', (array) $y) . ')');
     }
+
     /**
      * Builds an SQL literal from a given input parameter.
      *

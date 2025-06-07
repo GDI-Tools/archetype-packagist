@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL;
 
@@ -8,6 +13,7 @@ use Archetype\Vendor\Doctrine\DBAL\Driver\Exception;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SensitiveParameter;
+
 /**
  * Driver interface.
  * Interface that all DBAL drivers must implement.
@@ -30,6 +36,7 @@ interface Driver
         #[SensitiveParameter]
         array $params
     );
+
     /**
      * Gets the DatabasePlatform instance that provides all the metadata about
      * the platform this driver connects to.
@@ -37,6 +44,7 @@ interface Driver
      * @return AbstractPlatform The database platform.
      */
     public function getDatabasePlatform();
+
     /**
      * Gets the SchemaManager that can be used to inspect and change the underlying
      * database schema of the platform this driver connects to.
@@ -46,6 +54,7 @@ interface Driver
      * @return AbstractSchemaManager
      */
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform);
+
     /**
      * Gets the ExceptionConverter that can be used to convert driver-level exceptions into DBAL exceptions.
      */

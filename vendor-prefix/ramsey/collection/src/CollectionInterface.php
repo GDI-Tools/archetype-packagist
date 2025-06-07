@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection;
 
 use Archetype\Vendor\Ramsey\Collection\Exception\CollectionMismatchException;
@@ -17,6 +21,7 @@ use Archetype\Vendor\Ramsey\Collection\Exception\InvalidArgumentException;
 use Archetype\Vendor\Ramsey\Collection\Exception\InvalidPropertyOrMethod;
 use Archetype\Vendor\Ramsey\Collection\Exception\NoSuchElementException;
 use Archetype\Vendor\Ramsey\Collection\Exception\UnsupportedOperationException;
+
 /**
  * A collection represents a group of values, known as its elements.
  *
@@ -56,17 +61,20 @@ interface CollectionInterface extends ArrayInterface
      *     $element for any reason other than that it already contains the element.
      */
     public function add(mixed $element): bool;
+
     /**
      * Returns `true` if this collection contains the specified element.
      *
      * @param T $element The element to check whether the collection contains.
      * @param bool $strict Whether to perform a strict type check on the value.
      */
-    public function contains(mixed $element, bool $strict = \true): bool;
+    public function contains(mixed $element, bool $strict = true): bool;
+
     /**
      * Returns the type associated with this collection.
      */
     public function getType(): string;
+
     /**
      * Removes a single instance of the specified element from this collection,
      * if it is present.
@@ -76,6 +84,7 @@ interface CollectionInterface extends ArrayInterface
      * @return bool `true` if an element was removed as a result of this call.
      */
     public function remove(mixed $element): bool;
+
     /**
      * Returns the values from the given property, method, or array key.
      *
@@ -90,6 +99,7 @@ interface CollectionInterface extends ArrayInterface
      *     collection.
      */
     public function column(string $propertyOrMethod): array;
+
     /**
      * Returns the first item of the collection.
      *
@@ -98,6 +108,7 @@ interface CollectionInterface extends ArrayInterface
      * @throws NoSuchElementException if this collection is empty.
      */
     public function first(): mixed;
+
     /**
      * Returns the last item of the collection.
      *
@@ -106,6 +117,7 @@ interface CollectionInterface extends ArrayInterface
      * @throws NoSuchElementException if this collection is empty.
      */
     public function last(): mixed;
+
     /**
      * Sort the collection by a property, method, or array key with the given
      * sort order.
@@ -127,6 +139,7 @@ interface CollectionInterface extends ArrayInterface
      *     collection.
      */
     public function sort(?string $propertyOrMethod = null, Sort $order = Sort::Ascending): self;
+
     /**
      * Filter out items of the collection which don't match the criteria of
      * given callback.
@@ -142,6 +155,7 @@ interface CollectionInterface extends ArrayInterface
      * @return CollectionInterface<T>
      */
     public function filter(callable $callback): self;
+
     /**
      * Create a new collection where the result of the given property, method,
      * or array key of each item in the collection equals the given value.
@@ -161,6 +175,7 @@ interface CollectionInterface extends ArrayInterface
      *     collection.
      */
     public function where(?string $propertyOrMethod, mixed $value): self;
+
     /**
      * Apply a given callback method on each item of the collection.
      *
@@ -179,6 +194,7 @@ interface CollectionInterface extends ArrayInterface
      * @template TCallbackReturn
      */
     public function map(callable $callback): self;
+
     /**
      * Apply a given callback method on each item of the collection
      * to reduce it to a single value.
@@ -195,6 +211,7 @@ interface CollectionInterface extends ArrayInterface
      * @template TCarry
      */
     public function reduce(callable $callback, mixed $initial): mixed;
+
     /**
      * Create a new collection with divergent items between current and given
      * collection.
@@ -208,6 +225,7 @@ interface CollectionInterface extends ArrayInterface
      *     differing types.
      */
     public function diff(CollectionInterface $other): self;
+
     /**
      * Create a new collection with intersecting item between current and given
      * collection.
@@ -221,6 +239,7 @@ interface CollectionInterface extends ArrayInterface
      *     differing types.
      */
     public function intersect(CollectionInterface $other): self;
+
     /**
      * Merge current items and items of given collections into a new one.
      *

@@ -1,12 +1,17 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 /**
- * @method static \Psr\Log\LoggerInterface build(array $config)
- * @method static \Psr\Log\LoggerInterface stack(array $channels, string|null $channel = null)
- * @method static \Psr\Log\LoggerInterface channel(string|null $channel = null)
- * @method static \Psr\Log\LoggerInterface driver(string|null $driver = null)
+ * @method static \Archetype\Vendor\Psr\Log\LoggerInterface build(array $config)
+ * @method static \Archetype\Vendor\Psr\Log\LoggerInterface stack(array $channels, string|null $channel = null)
+ * @method static \Archetype\Vendor\Psr\Log\LoggerInterface channel(string|null $channel = null)
+ * @method static \Archetype\Vendor\Psr\Log\LoggerInterface driver(string|null $driver = null)
  * @method static \Illuminate\Log\LogManager shareContext(array $context)
  * @method static array sharedContext()
  * @method static \Illuminate\Log\LogManager withoutContext(string[]|null $keys = null)
@@ -25,13 +30,13 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static void info(string|\Stringable $message, array $context = [])
  * @method static void debug(string|\Stringable $message, array $context = [])
  * @method static void log(mixed $level, string|\Stringable $message, array $context = [])
- * @method static \Illuminate\Log\LogManager setApplication(\Illuminate\Contracts\Foundation\Application $app)
- * @method static void write(string $level, \Illuminate\Contracts\Support\Arrayable|\Illuminate\Contracts\Support\Jsonable|\Illuminate\Support\Stringable|array|string $message, array $context = [])
+ * @method static \Illuminate\Log\LogManager setApplication(\Archetype\Vendor\Illuminate\Contracts\Foundation\Application $app)
+ * @method static void write(string $level, \Archetype\Vendor\Illuminate\Contracts\Support\Arrayable|\Archetype\Vendor\Illuminate\Contracts\Support\Jsonable|\Archetype\Vendor\Illuminate\Support\Stringable|array|string $message, array $context = [])
  * @method static \Illuminate\Log\Logger withContext(array $context = [])
  * @method static void listen(\Closure $callback)
- * @method static \Psr\Log\LoggerInterface getLogger()
- * @method static \Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
- * @method static void setEventDispatcher(\Illuminate\Contracts\Events\Dispatcher $dispatcher)
+ * @method static \Archetype\Vendor\Psr\Log\LoggerInterface getLogger()
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
+ * @method static void setEventDispatcher(\Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher $dispatcher)
  * @method static \Illuminate\Log\Logger|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
  * @method static \Illuminate\Log\Logger|mixed unless(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
  *

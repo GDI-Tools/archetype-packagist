@@ -8,14 +8,19 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid;
 
 use DateTimeInterface;
 use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
 use Archetype\Vendor\Ramsey\Uuid\Type\Integer as IntegerObject;
 use Archetype\Vendor\Ramsey\Uuid\Validator\ValidatorInterface;
+
 /**
  * UuidFactoryInterface defines the common functionality all `UuidFactory` instances must implement
  */
@@ -29,6 +34,7 @@ interface UuidFactoryInterface
      * @return UuidInterface A UuidInterface instance created from a binary string representation
      */
     public function fromBytes(string $bytes): UuidInterface;
+
     /**
      * Creates a UUID from a DateTimeInterface instance
      *
@@ -39,7 +45,12 @@ interface UuidFactoryInterface
      *
      * @return UuidInterface A UuidInterface instance that represents a version 1 UUID created from a DateTimeInterface instance
      */
-    public function fromDateTime(DateTimeInterface $dateTime, ?Hexadecimal $node = null, ?int $clockSeq = null): UuidInterface;
+    public function fromDateTime(
+        DateTimeInterface $dateTime,
+        ?Hexadecimal $node = null,
+        ?int $clockSeq = null,
+    ): UuidInterface;
+
     /**
      * Creates a UUID from a 128-bit integer string
      *
@@ -48,6 +59,7 @@ interface UuidFactoryInterface
      * @return UuidInterface A UuidInterface instance created from the string representation of a 128-bit integer
      */
     public function fromInteger(string $integer): UuidInterface;
+
     /**
      * Creates a UUID from the string standard representation
      *
@@ -56,10 +68,12 @@ interface UuidFactoryInterface
      * @return UuidInterface A UuidInterface instance created from a hexadecimal string representation
      */
     public function fromString(string $uuid): UuidInterface;
+
     /**
      * Returns the validator used by the factory
      */
     public function getValidator(): ValidatorInterface;
+
     /**
      * Returns a version 1 (Gregorian time) UUID from a host ID, sequence number, and the current time
      *
@@ -71,6 +85,7 @@ interface UuidFactoryInterface
      * @return UuidInterface A UuidInterface instance that represents a version 1 UUID
      */
     public function uuid1($node = null, ?int $clockSeq = null): UuidInterface;
+
     /**
      * Returns a version 2 (DCE Security) UUID from a local domain, local identifier, host ID, clock sequence, and the
      * current time
@@ -85,7 +100,13 @@ interface UuidFactoryInterface
      *
      * @return UuidInterface A UuidInterface instance that represents a version 2 UUID
      */
-    public function uuid2(int $localDomain, ?IntegerObject $localIdentifier = null, ?Hexadecimal $node = null, ?int $clockSeq = null): UuidInterface;
+    public function uuid2(
+        int $localDomain,
+        ?IntegerObject $localIdentifier = null,
+        ?Hexadecimal $node = null,
+        ?int $clockSeq = null,
+    ): UuidInterface;
+
     /**
      * Returns a version 3 (name-based) UUID based on the MD5 hash of a namespace ID and a name
      *
@@ -95,12 +116,14 @@ interface UuidFactoryInterface
      * @return UuidInterface A UuidInterface instance that represents a version 3 UUID
      */
     public function uuid3($ns, string $name): UuidInterface;
+
     /**
      * Returns a version 4 (random) UUID
      *
      * @return UuidInterface A UuidInterface instance that represents a version 4 UUID
      */
     public function uuid4(): UuidInterface;
+
     /**
      * Returns a version 5 (name-based) UUID based on the SHA-1 hash of a namespace ID and a name
      *
@@ -110,6 +133,7 @@ interface UuidFactoryInterface
      * @return UuidInterface A UuidInterface instance that represents a version 5 UUID
      */
     public function uuid5($ns, string $name): UuidInterface;
+
     /**
      * Returns a version 6 (reordered Gregorian time) UUID from a host ID, sequence number, and the current time
      *

@@ -1,29 +1,39 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\IBMDB2;
 
 use SensitiveParameter;
+
 use function implode;
 use function sprintf;
 use function strpos;
+
 /**
  * IBM DB2 DSN
  */
 final class DataSourceName
 {
     private string $string;
+
     private function __construct(
         #[SensitiveParameter]
         string $string
-    )
-    {
+    ) {
         $this->string = $string;
     }
+
     public function toString(): string
     {
         return $this->string;
     }
+
     /**
      * Creates the object from an array representation
      *
@@ -32,14 +42,16 @@ final class DataSourceName
     public static function fromArray(
         #[SensitiveParameter]
         array $params
-    ): self
-    {
+    ): self {
         $chunks = [];
+
         foreach ($params as $key => $value) {
             $chunks[] = sprintf('%s=%s', $key, $value);
         }
+
         return new self(implode(';', $chunks));
     }
+
     /**
      * Creates the object from the given DBAL connection parameters.
      *
@@ -48,18 +60,30 @@ final class DataSourceName
     public static function fromConnectionParameters(
         #[SensitiveParameter]
         array $params
-    ): self
-    {
-        if (isset($params['dbname']) && strpos($params['dbname'], '=') !== \false) {
+    ): self {
+        if (isset($params['dbname']) && strpos($params['dbname'], '=') !== false) {
             return new self($params['dbname']);
         }
+
         $dsnParams = [];
-        foreach (['host' => 'HOSTNAME', 'port' => 'PORT', 'protocol' => 'PROTOCOL', 'dbname' => 'DATABASE', 'user' => 'UID', 'password' => 'PWD'] as $dbalParam => $dsnParam) {
-            if (!isset($params[$dbalParam])) {
+
+        foreach (
+            [
+                'host'     => 'HOSTNAME',
+                'port'     => 'PORT',
+                'protocol' => 'PROTOCOL',
+                'dbname'   => 'DATABASE',
+                'user'     => 'UID',
+                'password' => 'PWD',
+            ] as $dbalParam => $dsnParam
+        ) {
+            if (! isset($params[$dbalParam])) {
                 continue;
             }
+
             $dsnParams[$dsnParam] = $params[$dbalParam];
         }
+
         return self::fromArray($dsnParams);
     }
 }

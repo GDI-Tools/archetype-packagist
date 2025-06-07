@@ -1,7 +1,5 @@
 <?php
 
-namespace Archetype\Vendor;
-
 /**
  * This file is part of the Carbon package.
  *
@@ -10,6 +8,7 @@ namespace Archetype\Vendor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 /*
  * Authors:
  * - tarunvelli
@@ -17,4 +16,6 @@ namespace Archetype\Vendor;
  * - KID
  * - shankesgk2
  */
-return \array_replace_recursive(require __DIR__ . '/zh_Hant.php', ['after' => ':time后']);
+return array_replace_recursive(require __DIR__.'/zh_Hant.php', [
+    'after' => ':time后',
+]);

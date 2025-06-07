@@ -1,15 +1,23 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Driver\Middleware;
 
 use Archetype\Vendor\Doctrine\DBAL\Driver\Result;
+
 abstract class AbstractResultMiddleware implements Result
 {
     private Result $wrappedResult;
+
     public function __construct(Result $result)
     {
         $this->wrappedResult = $result;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -17,6 +25,7 @@ abstract class AbstractResultMiddleware implements Result
     {
         return $this->wrappedResult->fetchNumeric();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -24,6 +33,7 @@ abstract class AbstractResultMiddleware implements Result
     {
         return $this->wrappedResult->fetchAssociative();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -31,6 +41,7 @@ abstract class AbstractResultMiddleware implements Result
     {
         return $this->wrappedResult->fetchOne();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -38,6 +49,7 @@ abstract class AbstractResultMiddleware implements Result
     {
         return $this->wrappedResult->fetchAllNumeric();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -45,6 +57,7 @@ abstract class AbstractResultMiddleware implements Result
     {
         return $this->wrappedResult->fetchAllAssociative();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -52,14 +65,17 @@ abstract class AbstractResultMiddleware implements Result
     {
         return $this->wrappedResult->fetchFirstColumn();
     }
+
     public function rowCount(): int
     {
         return $this->wrappedResult->rowCount();
     }
+
     public function columnCount(): int
     {
         return $this->wrappedResult->columnCount();
     }
+
     public function free(): void
     {
         $this->wrappedResult->free();

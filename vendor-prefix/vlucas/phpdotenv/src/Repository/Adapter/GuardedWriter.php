@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license BSD-3-Clause
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Dotenv\Repository\Adapter;
 
 final class GuardedWriter implements WriterInterface
@@ -8,19 +14,21 @@ final class GuardedWriter implements WriterInterface
     /**
      * The inner writer to use.
      *
-     * @var \Dotenv\Repository\Adapter\WriterInterface
+     * @var \Archetype\Vendor\Dotenv\Repository\Adapter\WriterInterface
      */
     private $writer;
+
     /**
      * The variable name allow list.
      *
      * @var string[]
      */
     private $allowList;
+
     /**
      * Create a new guarded writer instance.
      *
-     * @param \Dotenv\Repository\Adapter\WriterInterface $writer
+     * @param \Archetype\Vendor\Dotenv\Repository\Adapter\WriterInterface $writer
      * @param string[]                                   $allowList
      *
      * @return void
@@ -30,6 +38,7 @@ final class GuardedWriter implements WriterInterface
         $this->writer = $writer;
         $this->allowList = $allowList;
     }
+
     /**
      * Write to an environment variable, if possible.
      *
@@ -42,11 +51,13 @@ final class GuardedWriter implements WriterInterface
     {
         // Don't set non-allowed variables
         if (!$this->isAllowed($name)) {
-            return \false;
+            return false;
         }
+
         // Set the value on the inner writer
         return $this->writer->write($name, $value);
     }
+
     /**
      * Delete an environment variable, if possible.
      *
@@ -58,11 +69,13 @@ final class GuardedWriter implements WriterInterface
     {
         // Don't clear non-allowed variables
         if (!$this->isAllowed($name)) {
-            return \false;
+            return false;
         }
+
         // Set the value on the inner writer
         return $this->writer->delete($name);
     }
+
     /**
      * Determine if the given variable is allowed.
      *
@@ -72,6 +85,6 @@ final class GuardedWriter implements WriterInterface
      */
     private function isAllowed(string $name)
     {
-        return \in_array($name, $this->allowList, \true);
+        return \in_array($name, $this->allowList, true);
     }
 }

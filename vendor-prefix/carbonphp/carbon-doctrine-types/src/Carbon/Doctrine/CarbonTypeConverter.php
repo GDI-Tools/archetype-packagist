@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Carbon\Doctrine;
 
@@ -12,6 +17,7 @@ use Archetype\Vendor\Doctrine\DBAL\Platforms\SqlitePlatform;
 use Archetype\Vendor\Doctrine\DBAL\Platforms\SQLServerPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Types\ConversionException;
 use Exception;
+
 /**
  * @template T of CarbonInterface
  */
@@ -23,7 +29,8 @@ trait CarbonTypeConverter
      *
      * @readonly
      */
-    public bool $external = \true;
+    public bool $external = true;
+
     /**
      * @return class-string<T>
      */
@@ -31,19 +38,29 @@ trait CarbonTypeConverter
     {
         return Carbon::class;
     }
+
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        $precision = min($fieldDeclaration['precision'] ?? DateTimeDefaultPrecision::get(), $this->getMaximumPrecision($platform));
+        $precision = min(
+            $fieldDeclaration['precision'] ?? DateTimeDefaultPrecision::get(),
+            $this->getMaximumPrecision($platform),
+        );
+
         $type = parent::getSQLDeclaration($fieldDeclaration, $platform);
+
         if (!$precision) {
             return $type;
         }
+
         if (str_contains($type, '(')) {
-            return preg_replace('/\(\d+\)/', "({$precision})", $type);
+            return preg_replace('/\(\d+\)/', "($precision)", $type);
         }
-        [$before, $after] = explode(' ', "{$type} ");
-        return trim("{$before}({$precision}) {$after}");
+
+        [$before, $after] = explode(' ', "$type ");
+
+        return trim("$before($precision) $after");
     }
+
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
@@ -52,24 +69,36 @@ trait CarbonTypeConverter
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $class = $this->getCarbonClassName();
+
         if ($value === null || is_a($value, $class)) {
             return $value;
         }
+
         if ($value instanceof DateTimeInterface) {
             return $class::instance($value);
         }
+
         $date = null;
         $error = null;
+
         try {
             $date = $class::parse($value);
         } catch (Exception $exception) {
             $error = $exception;
         }
+
         if (!$date) {
-            throw ConversionException::conversionFailedFormat($value, $this->getTypeName(), 'Y-m-d H:i:s.u or any format supported by ' . $class . '::parse()', $error);
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getTypeName(),
+                'Y-m-d H:i:s.u or any format supported by '.$class.'::parse()',
+                $error
+            );
         }
+
         return $date;
     }
+
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -78,28 +107,40 @@ trait CarbonTypeConverter
         if ($value === null) {
             return $value;
         }
+
         if ($value instanceof DateTimeInterface) {
             return $value->format('Y-m-d H:i:s.u');
         }
-        throw ConversionException::conversionFailedInvalidType($value, $this->getTypeName(), ['null', 'DateTime', 'Carbon']);
+
+        throw ConversionException::conversionFailedInvalidType(
+            $value,
+            $this->getTypeName(),
+            ['null', 'DateTime', 'Archetype\Vendor\Carbon']
+        );
     }
+
     private function getTypeName(): string
     {
         $chunks = explode('\\', static::class);
         $type = preg_replace('/Type$/', '', end($chunks));
+
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $type));
     }
+
     private function getMaximumPrecision(AbstractPlatform $platform): int
     {
         if ($platform instanceof DB2Platform) {
             return 12;
         }
+
         if ($platform instanceof OraclePlatform) {
             return 9;
         }
+
         if ($platform instanceof SQLServerPlatform || $platform instanceof SqlitePlatform) {
             return 3;
         }
+
         return 6;
     }
 }

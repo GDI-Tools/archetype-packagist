@@ -8,12 +8,17 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Builder;
 
 use Archetype\Vendor\Ramsey\Uuid\Codec\CodecInterface;
 use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
+
 /**
  * A UUID builder builds instances of UuidInterface
  *

@@ -1,16 +1,23 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Laravel\SerializableClosure;
 
 use Closure;
+
 class UnsignedSerializableClosure
 {
     /**
      * The closure's serializable.
      *
-     * @var \Laravel\SerializableClosure\Contracts\Serializable
+     * @var \Archetype\Vendor\Laravel\SerializableClosure\Contracts\Serializable
      */
     protected $serializable;
+
     /**
      * Creates a new serializable closure instance.
      *
@@ -21,6 +28,7 @@ class UnsignedSerializableClosure
     {
         $this->serializable = new Serializers\Native($closure);
     }
+
     /**
      * Resolve the closure with the given arguments.
      *
@@ -30,6 +38,7 @@ class UnsignedSerializableClosure
     {
         return call_user_func_array($this->serializable, func_get_args());
     }
+
     /**
      * Gets the closure.
      *
@@ -39,19 +48,23 @@ class UnsignedSerializableClosure
     {
         return $this->serializable->getClosure();
     }
+
     /**
      * Get the serializable representation of the closure.
      *
-     * @return array{serializable: \Laravel\SerializableClosure\Contracts\Serializable}
+     * @return array{serializable: \Archetype\Vendor\Laravel\SerializableClosure\Contracts\Serializable}
      */
     public function __serialize()
     {
-        return ['serializable' => $this->serializable];
+        return [
+            'serializable' => $this->serializable,
+        ];
     }
+
     /**
      * Restore the closure after serialization.
      *
-     * @param  array{serializable: \Laravel\SerializableClosure\Contracts\Serializable}  $data
+     * @param  array{serializable: \Archetype\Vendor\Laravel\SerializableClosure\Contracts\Serializable}  $data
      * @return void
      */
     public function __unserialize($data)

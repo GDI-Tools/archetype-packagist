@@ -8,12 +8,17 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Rfc4122;
 
 use Archetype\Vendor\Ramsey\Uuid\Fields\FieldsInterface as BaseFieldsInterface;
 use Archetype\Vendor\Ramsey\Uuid\Type\Hexadecimal;
+
 /**
  * UUID fields, as defined by RFC 4122
  *
@@ -41,34 +46,42 @@ interface FieldsInterface extends BaseFieldsInterface
      * Returns the full 16-bit clock sequence, with the variant bits (two most significant bits) masked out
      */
     public function getClockSeq(): Hexadecimal;
+
     /**
      * Returns the high field of the clock sequence multiplexed with the variant
      */
     public function getClockSeqHiAndReserved(): Hexadecimal;
+
     /**
      * Returns the low field of the clock sequence
      */
     public function getClockSeqLow(): Hexadecimal;
+
     /**
      * Returns the node field
      */
     public function getNode(): Hexadecimal;
+
     /**
      * Returns the high field of the timestamp multiplexed with the version
      */
     public function getTimeHiAndVersion(): Hexadecimal;
+
     /**
      * Returns the low field of the timestamp
      */
     public function getTimeLow(): Hexadecimal;
+
     /**
      * Returns the middle field of the timestamp
      */
     public function getTimeMid(): Hexadecimal;
+
     /**
      * Returns the full 60-bit timestamp, without the version
      */
     public function getTimestamp(): Hexadecimal;
+
     /**
      * Returns the variant
      *
@@ -84,6 +97,7 @@ interface FieldsInterface extends BaseFieldsInterface
      * @link https://www.rfc-editor.org/rfc/rfc9562#section-4.1 RFC 9562, 4.1. Variant Field
      */
     public function getVariant(): int;
+
     /**
      * Returns the UUID version
      *
@@ -104,6 +118,7 @@ interface FieldsInterface extends BaseFieldsInterface
      * @link https://www.rfc-editor.org/rfc/rfc9562#section-4.2 RFC 9562, 4.2. Version Field
      */
     public function getVersion(): ?int;
+
     /**
      * Returns true if these fields represent a nil UUID
      *

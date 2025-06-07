@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Pipeline;
 
 use Archetype\Vendor\Illuminate\Contracts\Pipeline\Hub as PipelineHubContract;
 use Archetype\Vendor\Illuminate\Contracts\Support\DeferrableProvider;
 use Archetype\Vendor\Illuminate\Support\ServiceProvider;
+
 class PipelineServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
@@ -14,9 +20,14 @@ class PipelineServiceProvider extends ServiceProvider implements DeferrableProvi
      */
     public function register()
     {
-        $this->app->singleton(PipelineHubContract::class, Hub::class);
-        $this->app->bind('pipeline', fn($app) => new Pipeline($app));
+        $this->app->singleton(
+            PipelineHubContract::class,
+            Hub::class
+        );
+
+        $this->app->bind('pipeline', fn ($app) => new Pipeline($app));
     }
+
     /**
      * Get the services provided by the provider.
      *
@@ -24,6 +35,9 @@ class PipelineServiceProvider extends ServiceProvider implements DeferrableProvi
      */
     public function provides()
     {
-        return [PipelineHubContract::class, 'pipeline'];
+        return [
+            PipelineHubContract::class,
+            'pipeline',
+        ];
     }
 }

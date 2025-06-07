@@ -8,8 +8,12 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Guid;
 
 use Archetype\Vendor\Ramsey\Uuid\Builder\UuidBuilderInterface;
@@ -19,6 +23,7 @@ use Archetype\Vendor\Ramsey\Uuid\Converter\TimeConverterInterface;
 use Archetype\Vendor\Ramsey\Uuid\Exception\UnableToBuildUuidException;
 use Archetype\Vendor\Ramsey\Uuid\UuidInterface;
 use Throwable;
+
 /**
  * GuidBuilder builds instances of Guid
  *
@@ -33,9 +38,12 @@ class GuidBuilder implements UuidBuilderInterface
      * @param TimeConverterInterface $timeConverter The time converter to use for converting timestamps extracted from a
      *     UUID to Unix timestamps
      */
-    public function __construct(private NumberConverterInterface $numberConverter, private TimeConverterInterface $timeConverter)
-    {
+    public function __construct(
+        private NumberConverterInterface $numberConverter,
+        private TimeConverterInterface $timeConverter,
+    ) {
     }
+
     /**
      * Builds and returns a Guid
      *
@@ -52,6 +60,7 @@ class GuidBuilder implements UuidBuilderInterface
             throw new UnableToBuildUuidException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
+
     /**
      * Proxy method to allow injecting a mock for testing
      */

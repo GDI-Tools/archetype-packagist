@@ -1,7 +1,5 @@
 <?php
 
-namespace Archetype\Vendor;
-
 /**
  * This file is part of the Carbon package.
  *
@@ -10,6 +8,7 @@ namespace Archetype\Vendor;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 /*
  * Authors:
  * - sheriffmarley
@@ -18,4 +17,11 @@ namespace Archetype\Vendor;
  * - Namoshek
  * - Bernhard Baumrock (BernhardBaumrock)
  */
-return \array_replace_recursive(require __DIR__ . '/de.php', ['months' => [0 => 'Jänner'], 'months_short' => [0 => 'Jän']]);
+return array_replace_recursive(require __DIR__.'/de.php', [
+    'months' => [
+        0 => 'Jänner',
+    ],
+    'months_short' => [
+        0 => 'Jän',
+    ],
+]);

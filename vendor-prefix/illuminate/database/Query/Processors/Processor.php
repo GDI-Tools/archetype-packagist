@@ -1,14 +1,20 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Database\Query\Processors;
 
 use Archetype\Vendor\Illuminate\Database\Query\Builder;
+
 class Processor
 {
     /**
      * Process the results of a "select" query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  array  $results
      * @return array
      */
@@ -16,10 +22,11 @@ class Processor
     {
         return $results;
     }
+
     /**
      * Process an  "insert get ID" query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Archetype\Vendor\Illuminate\Database\Query\Builder  $query
      * @param  string  $sql
      * @param  array  $values
      * @param  string|null  $sequence
@@ -28,9 +35,12 @@ class Processor
     public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
     {
         $query->getConnection()->insert($sql, $values);
+
         $id = $query->getConnection()->getPdo()->lastInsertId($sequence);
+
         return is_numeric($id) ? (int) $id : $id;
     }
+
     /**
      * Process the results of a schemas query.
      *
@@ -41,14 +51,15 @@ class Processor
     {
         return array_map(function ($result) {
             $result = (object) $result;
+
             return [
                 'name' => $result->name,
-                'path' => $result->path ?? null,
-                // SQLite Only...
+                'path' => $result->path ?? null, // SQLite Only...
                 'default' => (bool) $result->default,
             ];
         }, $results);
     }
+
     /**
      * Process the results of a tables query.
      *
@@ -59,19 +70,19 @@ class Processor
     {
         return array_map(function ($result) {
             $result = (object) $result;
+
             return [
                 'name' => $result->name,
                 'schema' => $result->schema ?? null,
-                'schema_qualified_name' => isset($result->schema) ? $result->schema . '.' . $result->name : $result->name,
+                'schema_qualified_name' => isset($result->schema) ? $result->schema.'.'.$result->name : $result->name,
                 'size' => isset($result->size) ? (int) $result->size : null,
-                'comment' => $result->comment ?? null,
-                // MySQL and PostgreSQL
-                'collation' => $result->collation ?? null,
-                // MySQL only
-                'engine' => $result->engine ?? null,
+                'comment' => $result->comment ?? null, // MySQL and PostgreSQL
+                'collation' => $result->collation ?? null, // MySQL only
+                'engine' => $result->engine ?? null, // MySQL only
             ];
         }, $results);
     }
+
     /**
      * Process the results of a views query.
      *
@@ -82,9 +93,16 @@ class Processor
     {
         return array_map(function ($result) {
             $result = (object) $result;
-            return ['name' => $result->name, 'schema' => $result->schema ?? null, 'schema_qualified_name' => isset($result->schema) ? $result->schema . '.' . $result->name : $result->name, 'definition' => $result->definition];
+
+            return [
+                'name' => $result->name,
+                'schema' => $result->schema ?? null,
+                'schema_qualified_name' => isset($result->schema) ? $result->schema.'.'.$result->name : $result->name,
+                'definition' => $result->definition,
+            ];
         }, $results);
     }
+
     /**
      * Process the results of a types query.
      *
@@ -95,6 +113,7 @@ class Processor
     {
         return $results;
     }
+
     /**
      * Process the results of a columns query.
      *
@@ -105,6 +124,7 @@ class Processor
     {
         return $results;
     }
+
     /**
      * Process the results of an indexes query.
      *
@@ -115,6 +135,7 @@ class Processor
     {
         return $results;
     }
+
     /**
      * Process the results of a foreign keys query.
      *

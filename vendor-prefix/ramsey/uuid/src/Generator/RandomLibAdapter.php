@@ -8,12 +8,17 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Uuid\Generator;
 
-use Archetype\Vendor\RandomLib\Factory;
-use Archetype\Vendor\RandomLib\Generator;
+use RandomLib\Factory;
+use RandomLib\Generator;
+
 /**
  * RandomLibAdapter generates strings of random binary data using the paragonie/random-lib library
  *
@@ -25,6 +30,7 @@ use Archetype\Vendor\RandomLib\Generator;
 class RandomLibAdapter implements RandomGeneratorInterface
 {
     private Generator $generator;
+
     /**
      * Constructs a RandomLibAdapter
      *
@@ -39,8 +45,10 @@ class RandomLibAdapter implements RandomGeneratorInterface
             $factory = new Factory();
             $generator = $factory->getHighStrengthGenerator();
         }
+
         $this->generator = $generator;
     }
+
     public function generate(int $length): string
     {
         return $this->generator->generate($length);

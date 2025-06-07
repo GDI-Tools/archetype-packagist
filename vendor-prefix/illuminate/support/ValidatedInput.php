@@ -1,21 +1,29 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use ArrayIterator;
 use Archetype\Vendor\Illuminate\Contracts\Support\ValidatedData;
 use Archetype\Vendor\Illuminate\Support\Traits\InteractsWithData;
-use Archetype\Vendor\Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\VarDumper\VarDumper;
 use Traversable;
+
 class ValidatedInput implements ValidatedData
 {
     use InteractsWithData;
+
     /**
      * The underlying input.
      *
      * @var array
      */
     protected $input;
+
     /**
      * Create a new validated input container.
      *
@@ -25,6 +33,7 @@ class ValidatedInput implements ValidatedData
     {
         $this->input = $input;
     }
+
     /**
      * Merge the validated input with the given array of additional data.
      *
@@ -35,6 +44,7 @@ class ValidatedInput implements ValidatedData
     {
         return new static(array_merge($this->all(), $items));
     }
+
     /**
      * Get the raw, underlying input array.
      *
@@ -43,15 +53,19 @@ class ValidatedInput implements ValidatedData
      */
     public function all($keys = null)
     {
-        if (!$keys) {
+        if (! $keys) {
             return $this->input;
         }
+
         $input = [];
+
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
             Arr::set($input, $key, Arr::get($this->input, $key));
         }
+
         return $input;
     }
+
     /**
      * Retrieve data from the instance.
      *
@@ -63,6 +77,7 @@ class ValidatedInput implements ValidatedData
     {
         return $this->input($key, $default);
     }
+
     /**
      * Get the keys for all of the input.
      *
@@ -72,6 +87,7 @@ class ValidatedInput implements ValidatedData
     {
         return array_keys($this->input());
     }
+
     /**
      * Retrieve an input item from the validated inputs.
      *
@@ -81,8 +97,11 @@ class ValidatedInput implements ValidatedData
      */
     public function input($key = null, $default = null)
     {
-        return data_get($this->all(), $key, $default);
+        return data_get(
+            $this->all(), $key, $default
+        );
     }
+
     /**
      * Dump the validated inputs items and end the script.
      *
@@ -92,8 +111,10 @@ class ValidatedInput implements ValidatedData
     public function dd(...$keys)
     {
         $this->dump(...$keys);
+
         exit(1);
     }
+
     /**
      * Dump the items.
      *
@@ -103,9 +124,12 @@ class ValidatedInput implements ValidatedData
     public function dump($keys = [])
     {
         $keys = is_array($keys) ? $keys : func_get_args();
+
         VarDumper::dump(count($keys) > 0 ? $this->only($keys) : $this->all());
+
         return $this;
     }
+
     /**
      * Get the instance as an array.
      *
@@ -115,6 +139,7 @@ class ValidatedInput implements ValidatedData
     {
         return $this->all();
     }
+
     /**
      * Dynamically access input data.
      *
@@ -125,6 +150,7 @@ class ValidatedInput implements ValidatedData
     {
         return $this->input($name);
     }
+
     /**
      * Dynamically set input data.
      *
@@ -136,6 +162,7 @@ class ValidatedInput implements ValidatedData
     {
         $this->input[$name] = $value;
     }
+
     /**
      * Determine if an input item is set.
      *
@@ -145,6 +172,7 @@ class ValidatedInput implements ValidatedData
     {
         return $this->exists($name);
     }
+
     /**
      * Remove an input item.
      *
@@ -155,6 +183,7 @@ class ValidatedInput implements ValidatedData
     {
         unset($this->input[$name]);
     }
+
     /**
      * Determine if an item exists at an offset.
      *
@@ -165,6 +194,7 @@ class ValidatedInput implements ValidatedData
     {
         return $this->exists($key);
     }
+
     /**
      * Get an item at a given offset.
      *
@@ -175,6 +205,7 @@ class ValidatedInput implements ValidatedData
     {
         return $this->input($key);
     }
+
     /**
      * Set the item at a given offset.
      *
@@ -190,6 +221,7 @@ class ValidatedInput implements ValidatedData
             $this->input[$key] = $value;
         }
     }
+
     /**
      * Unset the item at a given offset.
      *
@@ -200,6 +232,7 @@ class ValidatedInput implements ValidatedData
     {
         unset($this->input[$key]);
     }
+
     /**
      * Get an iterator for the input.
      *

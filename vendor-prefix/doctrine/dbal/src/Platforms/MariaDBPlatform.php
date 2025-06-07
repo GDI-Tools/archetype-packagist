@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
 
 use Archetype\Vendor\Doctrine\DBAL\Types\Types;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 /**
  * Provides the behavior, features and SQL dialect of the MariaDB database platform of the oldest supported version.
  */
@@ -21,6 +27,7 @@ class MariaDBPlatform extends MySQLPlatform
     {
         return AbstractPlatform::getDefaultValueDeclarationSQL($column);
     }
+
     /**
      * {@inheritDoc}
      *
@@ -30,15 +37,24 @@ class MariaDBPlatform extends MySQLPlatform
     {
         return 'LONGTEXT';
     }
+
     /** @deprecated Implement {@see createReservedKeywordsList()} instead. */
     protected function getReservedKeywordsClass(): string
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/issues/4510', 'MariaDb1027Platform::getReservedKeywordsClass() is deprecated,' . ' use MariaDb1027Platform::createReservedKeywordsList() instead.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/issues/4510',
+            'MariaDb1027Platform::getReservedKeywordsClass() is deprecated,'
+                . ' use MariaDb1027Platform::createReservedKeywordsList() instead.',
+        );
+
         return Keywords\MariaDb102Keywords::class;
     }
+
     protected function initializeDoctrineTypeMappings(): void
     {
         parent::initializeDoctrineTypeMappings();
+
         $this->doctrineTypeMapping['json'] = Types::JSON;
     }
 }

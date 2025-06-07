@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL;
 
 use Archetype\Vendor\Doctrine\DBAL\Platforms\AbstractPlatform;
 use Archetype\Vendor\Doctrine\DBAL\Types\Type;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function func_num_args;
 use function is_string;
+
 /**
  * A database abstraction-level statement that implements support for logging, DBAL mapping types, etc.
  */
@@ -18,36 +25,42 @@ class Statement
      * @var string
      */
     protected $sql;
+
     /**
      * The bound parameters.
      *
      * @var mixed[]
      */
     protected $params = [];
+
     /**
      * The parameter types.
      *
      * @var int[]|string[]
      */
     protected $types = [];
+
     /**
      * The underlying driver statement.
      *
      * @var Driver\Statement
      */
     protected $stmt;
+
     /**
      * The underlying database platform.
      *
      * @var AbstractPlatform
      */
     protected $platform;
+
     /**
      * The connection this statement is bound to and executed on.
      *
      * @var Connection
      */
     protected $conn;
+
     /**
      * Creates a new <tt>Statement</tt> for the given SQL and <tt>Connection</tt>.
      *
@@ -61,11 +74,12 @@ class Statement
      */
     public function __construct(Connection $conn, Driver\Statement $statement, string $sql)
     {
-        $this->conn = $conn;
-        $this->stmt = $statement;
-        $this->sql = $sql;
+        $this->conn     = $conn;
+        $this->stmt     = $statement;
+        $this->sql      = $sql;
         $this->platform = $conn->getDatabasePlatform();
     }
+
     /**
      * Binds a parameter value to the statement.
      *
@@ -85,24 +99,30 @@ class Statement
     public function bindValue($param, $value, $type = ParameterType::STRING)
     {
         $this->params[$param] = $value;
-        $this->types[$param] = $type;
+        $this->types[$param]  = $type;
+
         $bindingType = ParameterType::STRING;
+
         if ($type !== null) {
             if (is_string($type)) {
                 $type = Type::getType($type);
             }
+
             $bindingType = $type;
+
             if ($type instanceof Type) {
-                $value = $type->convertToDatabaseValue($value, $this->platform);
+                $value       = $type->convertToDatabaseValue($value, $this->platform);
                 $bindingType = $type->getBindingType();
             }
         }
+
         try {
             return $this->stmt->bindValue($param, $value, $bindingType);
         } catch (Driver\Exception $e) {
             throw $this->conn->convertException($e);
         }
     }
+
     /**
      * Binds a parameter to a value by reference.
      *
@@ -122,18 +142,27 @@ class Statement
      */
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null)
     {
-        Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5563', '%s is deprecated. Use bindValue() instead.', __METHOD__);
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5563',
+            '%s is deprecated. Use bindValue() instead.',
+            __METHOD__,
+        );
+
         $this->params[$param] = $variable;
-        $this->types[$param] = $type;
+        $this->types[$param]  = $type;
+
         try {
             if (func_num_args() > 3) {
                 return $this->stmt->bindParam($param, $variable, $type, $length);
             }
+
             return $this->stmt->bindParam($param, $variable, $type);
         } catch (Driver\Exception $e) {
             throw $this->conn->convertException($e);
         }
     }
+
     /**
      * Executes the statement with the currently bound parameters.
      *
@@ -145,16 +174,27 @@ class Statement
      */
     public function execute($params = null): Result
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/4580', '%s() is deprecated, use Statement::executeQuery() or Statement::executeStatement() instead', __METHOD__);
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4580',
+            '%s() is deprecated, use Statement::executeQuery() or Statement::executeStatement() instead',
+            __METHOD__,
+        );
+
         if ($params !== null) {
             $this->params = $params;
         }
+
         $logger = $this->conn->getConfiguration()->getSQLLogger();
         if ($logger !== null) {
             $logger->startQuery($this->sql, $this->params, $this->types);
         }
+
         try {
-            return new Result($this->stmt->execute($params), $this->conn);
+            return new Result(
+                $this->stmt->execute($params),
+                $this->conn,
+            );
         } catch (Driver\Exception $ex) {
             throw $this->conn->convertExceptionDuringQuery($ex, $this->sql, $this->params, $this->types);
         } finally {
@@ -163,6 +203,7 @@ class Statement
             }
         }
     }
+
     /**
      * Executes the statement with the currently bound parameters and return result.
      *
@@ -173,14 +214,21 @@ class Statement
     public function executeQuery(array $params = []): Result
     {
         if (func_num_args() > 0) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5556', 'Passing $params to Statement::executeQuery() is deprecated. Bind parameters using' . ' Statement::bindParam() or Statement::bindValue() instead.');
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5556',
+                'Passing $params to Statement::executeQuery() is deprecated. Bind parameters using'
+                    . ' Statement::bindParam() or Statement::bindValue() instead.',
+            );
         }
+
         if ($params === []) {
-            $params = null;
-            // Workaround as long execute() exists and used internally.
+            $params = null; // Workaround as long execute() exists and used internally.
         }
+
         return $this->execute($params);
     }
+
     /**
      * Executes the statement with the currently bound parameters and return affected rows.
      *
@@ -191,14 +239,21 @@ class Statement
     public function executeStatement(array $params = []): int
     {
         if (func_num_args() > 0) {
-            Deprecation::trigger('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5556', 'Passing $params to Statement::executeStatement() is deprecated. Bind parameters using' . ' Statement::bindParam() or Statement::bindValue() instead.');
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5556',
+                'Passing $params to Statement::executeStatement() is deprecated. Bind parameters using'
+                    . ' Statement::bindParam() or Statement::bindValue() instead.',
+            );
         }
+
         if ($params === []) {
-            $params = null;
-            // Workaround as long execute() exists and used internally.
+            $params = null; // Workaround as long execute() exists and used internally.
         }
+
         return $this->execute($params)->rowCount();
     }
+
     /**
      * Gets the wrapped driver statement.
      *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Laravel\SerializableClosure\Support;
 
@@ -11,30 +16,35 @@ class ClosureStream
      * @var string
      */
     const STREAM_PROTO = 'laravel-serializable-closure';
+
     /**
      * Checks if this stream is registered.
      *
      * @var bool
      */
-    protected static $isRegistered = \false;
+    protected static $isRegistered = false;
+
     /**
      * The stream content.
      *
      * @var string
      */
     protected $content;
+
     /**
      * The stream content.
      *
      * @var int
      */
     protected $length;
+
     /**
      * The stream pointer.
      *
      * @var int
      */
     protected $pointer = 0;
+
     /**
      * Opens file or URL.
      *
@@ -46,10 +56,12 @@ class ClosureStream
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
-        $this->content = "<?php\nreturn " . substr($path, strlen(static::STREAM_PROTO . '://')) . ';';
+        $this->content = "<?php\nreturn ".substr($path, strlen(static::STREAM_PROTO.'://')).';';
         $this->length = strlen($this->content);
-        return \true;
+
+        return true;
     }
+
     /**
      * Read from stream.
      *
@@ -59,9 +71,12 @@ class ClosureStream
     public function stream_read($count)
     {
         $value = substr($this->content, $this->pointer, $count);
+
         $this->pointer += $count;
+
         return $value;
     }
+
     /**
      * Tests for end-of-file on a file pointer.
      *
@@ -71,6 +86,7 @@ class ClosureStream
     {
         return $this->pointer >= $this->length;
     }
+
     /**
      * Change stream options.
      *
@@ -81,8 +97,9 @@ class ClosureStream
      */
     public function stream_set_option($option, $arg1, $arg2)
     {
-        return \false;
+        return false;
     }
+
     /**
      * Retrieve information about a file resource.
      *
@@ -93,8 +110,10 @@ class ClosureStream
         $stat = stat(__FILE__);
         // @phpstan-ignore-next-line
         $stat[7] = $stat['size'] = $this->length;
+
         return $stat;
     }
+
     /**
      * Retrieve information about a file.
      *
@@ -107,8 +126,10 @@ class ClosureStream
         $stat = stat(__FILE__);
         // @phpstan-ignore-next-line
         $stat[7] = $stat['size'] = $this->length;
+
         return $stat;
     }
+
     /**
      * Seeks to specific location in a stream.
      *
@@ -116,26 +137,31 @@ class ClosureStream
      * @param  int  $whence
      * @return bool
      */
-    public function stream_seek($offset, $whence = \SEEK_SET)
+    public function stream_seek($offset, $whence = SEEK_SET)
     {
         $crt = $this->pointer;
+
         switch ($whence) {
-            case \SEEK_SET:
+            case SEEK_SET:
                 $this->pointer = $offset;
                 break;
-            case \SEEK_CUR:
+            case SEEK_CUR:
                 $this->pointer += $offset;
                 break;
-            case \SEEK_END:
+            case SEEK_END:
                 $this->pointer = $this->length + $offset;
                 break;
         }
+
         if ($this->pointer < 0 || $this->pointer >= $this->length) {
             $this->pointer = $crt;
-            return \false;
+
+            return false;
         }
-        return \true;
+
+        return true;
     }
+
     /**
      * Retrieve the current position of a stream.
      *
@@ -145,6 +171,7 @@ class ClosureStream
     {
         return $this->pointer;
     }
+
     /**
      * Registers the stream.
      *
@@ -152,7 +179,7 @@ class ClosureStream
      */
     public static function register()
     {
-        if (!static::$isRegistered) {
+        if (! static::$isRegistered) {
             static::$isRegistered = stream_wrapper_register(static::STREAM_PROTO, __CLASS__);
         }
     }

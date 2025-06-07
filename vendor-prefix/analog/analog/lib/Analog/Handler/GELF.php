@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Analog\Handler;
 
@@ -13,7 +18,7 @@ namespace Archetype\Vendor\Analog\Handler;
  *     require 'GELFMessagePublisher.php';
  *     
  *     // Initialize the Analog GELF handler
- *     Analog::handler (Analog\Handler\GELF::init (
+ *     Analog::handler (Archetype\Vendor\Analog\Handler\GELF::init (
  *         '172.16.22.30'
  *     ));
  *     
@@ -23,25 +28,26 @@ namespace Archetype\Vendor\Analog\Handler;
  *     // Send an ordinary message
  *     Analog::log ('An error message');
  */
-class GELF
-{
-    public static function init($host = '127.0.0.1', $port = \Archetype\Vendor\GELFMessagePublisher::GRAYLOG2_DEFAULT_PORT)
-    {
-        $publisher = new \Archetype\Vendor\GELFMessagePublisher($host, $port);
-        return function ($info) use ($publisher) {
-            $message = new \Archetype\Vendor\GELFMessage();
-            $message->setHost($info['machine']);
-            $message->setLevel($info['level']);
-            if (is_array($info['message'])) {
-                $message->setShortMessage($info['message'][0]);
-                $message->setFullMessage($info['message'][0]);
-                $message->setFile($info['message'][1]);
-                $message->setLine($info['message'][2]);
-            } else {
-                $message->setShortMessage($info['message']);
-                $message->setFullMessage($info['message']);
-            }
-            $publisher->publish($message);
-        };
-    }
+class GELF {
+	public static function init ($host = '127.0.0.1', $port = \GELFMessagePublisher::GRAYLOG2_DEFAULT_PORT) {
+		$publisher = new \GELFMessagePublisher ($host, $port);
+
+		return function ($info) use ($publisher) {
+			$message = new \GELFMessage ();
+			$message->setHost ($info['machine']);
+			$message->setLevel ($info['level']);
+
+			if (is_array ($info['message'])) {
+				$message->setShortMessage ($info['message'][0]);
+				$message->setFullMessage ($info['message'][0]);
+				$message->setFile ($info['message'][1]);
+				$message->setLine ($info['message'][2]);
+			} else {
+				$message->setShortMessage ($info['message']);
+				$message->setFullMessage ($info['message']);
+			}
+
+			$publisher->publish ($message);
+		};
+	}
 }

@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms\Keywords;
 
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function array_merge;
+
 /**
  * MySQL 8.0 reserved keywords list.
  */
@@ -16,9 +23,15 @@ class MySQL80Keywords extends MySQL57Keywords
      */
     public function getName()
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5433', 'MySQL80Keywords::getName() is deprecated.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5433',
+            'MySQL80Keywords::getName() is deprecated.',
+        );
+
         return 'MySQL80';
     }
+
     /**
      * {@inheritDoc}
      *
@@ -27,7 +40,41 @@ class MySQL80Keywords extends MySQL57Keywords
     protected function getKeywords()
     {
         $keywords = parent::getKeywords();
-        $keywords = array_merge($keywords, ['ADMIN', 'ARRAY', 'CUBE', 'CUME_DIST', 'DENSE_RANK', 'EMPTY', 'EXCEPT', 'FIRST_VALUE', 'FUNCTION', 'GROUPING', 'GROUPS', 'JSON_TABLE', 'LAG', 'LAST_VALUE', 'LATERAL', 'LEAD', 'MEMBER', 'NTH_VALUE', 'NTILE', 'OF', 'OVER', 'PERCENT_RANK', 'PERSIST', 'PERSIST_ONLY', 'RANK', 'RECURSIVE', 'ROW', 'ROWS', 'ROW_NUMBER', 'SYSTEM', 'WINDOW']);
+
+        $keywords = array_merge($keywords, [
+            'ADMIN',
+            'ARRAY',
+            'CUBE',
+            'CUME_DIST',
+            'DENSE_RANK',
+            'EMPTY',
+            'EXCEPT',
+            'FIRST_VALUE',
+            'FUNCTION',
+            'GROUPING',
+            'GROUPS',
+            'JSON_TABLE',
+            'LAG',
+            'LAST_VALUE',
+            'LATERAL',
+            'LEAD',
+            'MEMBER',
+            'NTH_VALUE',
+            'NTILE',
+            'OF',
+            'OVER',
+            'PERCENT_RANK',
+            'PERSIST',
+            'PERSIST_ONLY',
+            'RANK',
+            'RECURSIVE',
+            'ROW',
+            'ROWS',
+            'ROW_NUMBER',
+            'SYSTEM',
+            'WINDOW',
+        ]);
+
         return $keywords;
     }
 }

@@ -1,12 +1,19 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\Inflector\Rules\English;
 
 use Archetype\Vendor\Doctrine\Inflector\Rules\Pattern;
 use Archetype\Vendor\Doctrine\Inflector\Rules\Substitution;
 use Archetype\Vendor\Doctrine\Inflector\Rules\Transformation;
 use Archetype\Vendor\Doctrine\Inflector\Rules\Word;
+
 class Inflectible
 {
     /** @return Transformation[] */
@@ -16,7 +23,7 @@ class Inflectible
         yield new Transformation(new Pattern('(s)tatus$'), '\1\2tatus');
         yield new Transformation(new Pattern('(c)ampus$'), '\1\2ampus');
         yield new Transformation(new Pattern('^(.*)(menu)s$'), '\1\2');
-        yield new Transformation(new Pattern('(quiz)zes$'), '\1');
+        yield new Transformation(new Pattern('(quiz)zes$'), '\\1');
         yield new Transformation(new Pattern('(matr)ices$'), '\1ix');
         yield new Transformation(new Pattern('(vert|ind)ices$'), '\1ex');
         yield new Transformation(new Pattern('^(ox)en'), '\1');
@@ -56,6 +63,7 @@ class Inflectible
         yield new Transformation(new Pattern('^shorts$'), 'shorts');
         yield new Transformation(new Pattern('s$'), '');
     }
+
     /** @return Transformation[] */
     public static function getPlural(): iterable
     {
@@ -85,6 +93,7 @@ class Inflectible
         yield new Transformation(new Pattern('^$'), '');
         yield new Transformation(new Pattern('$'), 's');
     }
+
     /** @return Substitution[] */
     public static function getIrregular(): iterable
     {

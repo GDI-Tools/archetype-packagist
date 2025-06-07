@@ -1,16 +1,21 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
 /**
- * @method static \Illuminate\Contracts\View\View file(string $path, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
- * @method static \Illuminate\Contracts\View\View make(string $view, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
- * @method static \Illuminate\Contracts\View\View first(array $views, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
- * @method static string renderWhen(bool $condition, string $view, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
- * @method static string renderUnless(bool $condition, string $view, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+ * @method static \Archetype\Vendor\Illuminate\Contracts\View\View file(string $path, \Archetype\Vendor\Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+ * @method static \Archetype\Vendor\Illuminate\Contracts\View\View make(string $view, \Archetype\Vendor\Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+ * @method static \Archetype\Vendor\Illuminate\Contracts\View\View first(array $views, \Archetype\Vendor\Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+ * @method static string renderWhen(bool $condition, string $view, \Archetype\Vendor\Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+ * @method static string renderUnless(bool $condition, string $view, \Archetype\Vendor\Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
  * @method static string renderEach(string $view, array $data, string $iterator, string $empty = 'raw|')
  * @method static bool exists(string $view)
- * @method static \Illuminate\Contracts\View\Engine getEngineFromPath(string $path)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\View\Engine getEngineFromPath(string $path)
  * @method static mixed share(array|string $key, mixed|null $value = null)
  * @method static void incrementRender()
  * @method static void decrementRender()
@@ -30,17 +35,17 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static \Illuminate\View\ViewFinderInterface getFinder()
  * @method static void setFinder(\Illuminate\View\ViewFinderInterface $finder)
  * @method static void flushFinderCache()
- * @method static \Illuminate\Contracts\Events\Dispatcher getDispatcher()
- * @method static void setDispatcher(\Illuminate\Contracts\Events\Dispatcher $events)
- * @method static \Illuminate\Contracts\Container\Container getContainer()
- * @method static void setContainer(\Illuminate\Contracts\Container\Container $container)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher getDispatcher()
+ * @method static void setDispatcher(\Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher $events)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Container\Container getContainer()
+ * @method static void setContainer(\Archetype\Vendor\Illuminate\Contracts\Container\Container $container)
  * @method static mixed shared(string $key, mixed $default = null)
  * @method static array getShared()
  * @method static void macro(string $name, object|callable $macro)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
- * @method static void startComponent(\Illuminate\Contracts\View\View|\Illuminate\Contracts\Support\Htmlable|\Closure|string $view, array $data = [])
+ * @method static void startComponent(\Archetype\Vendor\Illuminate\Contracts\View\View|\Archetype\Vendor\Illuminate\Contracts\Support\Htmlable|\Closure|string $view, array $data = [])
  * @method static void startComponentFirst(array $names, array $data = [])
  * @method static string renderComponent()
  * @method static mixed|null getConsumableComponentData(string $key, mixed $default = null)
@@ -49,8 +54,8 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static array creator(array|string $views, \Closure|string $callback)
  * @method static array composers(array $composers)
  * @method static array composer(array|string $views, \Closure|string $callback)
- * @method static void callComposer(\Illuminate\Contracts\View\View $view)
- * @method static void callCreator(\Illuminate\Contracts\View\View $view)
+ * @method static void callComposer(\Archetype\Vendor\Illuminate\Contracts\View\View $view)
+ * @method static void callCreator(\Archetype\Vendor\Illuminate\Contracts\View\View $view)
  * @method static void startFragment(string $fragment)
  * @method static string stopFragment()
  * @method static mixed getFragment(string $name, string|null $default = null)

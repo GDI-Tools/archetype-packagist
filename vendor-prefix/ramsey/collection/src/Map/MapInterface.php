@@ -8,11 +8,16 @@
  *
  * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
  * @license http://opensource.org/licenses/MIT MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
-declare (strict_types=1);
+
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Ramsey\Collection\Map;
 
 use Archetype\Vendor\Ramsey\Collection\ArrayInterface;
+
 /**
  * An object that maps keys to values.
  *
@@ -29,7 +34,8 @@ interface MapInterface extends ArrayInterface
      *
      * @param K $key The key to check in the map.
      */
-    public function containsKey(int|string $key): bool;
+    public function containsKey(int | string $key): bool;
+
     /**
      * Returns `true` if this map maps one or more keys to the specified value.
      *
@@ -38,12 +44,14 @@ interface MapInterface extends ArrayInterface
      * @param T $value The value to check in the map.
      */
     public function containsValue(mixed $value): bool;
+
     /**
      * Return an array of the keys contained in this map.
      *
      * @return list<K>
      */
     public function keys(): array;
+
     /**
      * Returns the value to which the specified key is mapped, `null` if this
      * map contains no mapping for the key, or (optionally) `$defaultValue` if
@@ -54,7 +62,8 @@ interface MapInterface extends ArrayInterface
      *
      * @return T | null the value or `null` if the key could not be found.
      */
-    public function get(int|string $key, mixed $defaultValue = null): mixed;
+    public function get(int | string $key, mixed $defaultValue = null): mixed;
+
     /**
      * Associates the specified value with the specified key in this map.
      *
@@ -67,7 +76,8 @@ interface MapInterface extends ArrayInterface
      * @return T | null the previous value associated with key, or `null` if
      *     there was no mapping for `$key`.
      */
-    public function put(int|string $key, mixed $value): mixed;
+    public function put(int | string $key, mixed $value): mixed;
+
     /**
      * Associates the specified value with the specified key in this map only if
      * it is not already set.
@@ -81,7 +91,8 @@ interface MapInterface extends ArrayInterface
      * @return T | null the previous value associated with key, or `null` if
      *     there was no mapping for `$key`.
      */
-    public function putIfAbsent(int|string $key, mixed $value): mixed;
+    public function putIfAbsent(int | string $key, mixed $value): mixed;
+
     /**
      * Removes the mapping for a key from this map if it is present.
      *
@@ -90,7 +101,8 @@ interface MapInterface extends ArrayInterface
      * @return T | null the previous value associated with key, or `null` if
      *     there was no mapping for `$key`.
      */
-    public function remove(int|string $key): mixed;
+    public function remove(int | string $key): mixed;
+
     /**
      * Removes the entry for the specified key only if it is currently mapped to
      * the specified value.
@@ -102,7 +114,8 @@ interface MapInterface extends ArrayInterface
      *
      * @return bool true if the value was removed.
      */
-    public function removeIf(int|string $key, mixed $value): bool;
+    public function removeIf(int | string $key, mixed $value): bool;
+
     /**
      * Replaces the entry for the specified key only if it is currently mapped
      * to some value.
@@ -113,7 +126,8 @@ interface MapInterface extends ArrayInterface
      * @return T | null the previous value associated with key, or `null` if
      *     there was no mapping for `$key`.
      */
-    public function replace(int|string $key, mixed $value): mixed;
+    public function replace(int | string $key, mixed $value): mixed;
+
     /**
      * Replaces the entry for the specified key only if currently mapped to the
      * specified value.
@@ -126,5 +140,5 @@ interface MapInterface extends ArrayInterface
      *
      * @return bool true if the value was replaced.
      */
-    public function replaceIf(int|string $key, mixed $oldValue, mixed $newValue): bool;
+    public function replaceIf(int | string $key, mixed $oldValue, mixed $newValue): bool;
 }

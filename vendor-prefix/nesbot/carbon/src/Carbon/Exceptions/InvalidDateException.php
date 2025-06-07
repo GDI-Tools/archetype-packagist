@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,10 +15,12 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
+
 class InvalidDateException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**
@@ -21,12 +29,14 @@ class InvalidDateException extends BaseInvalidArgumentException implements Inval
      * @var string
      */
     private $field;
+
     /**
      * The invalid value.
      *
      * @var mixed
      */
     private $value;
+
     /**
      * Constructor.
      *
@@ -39,8 +49,9 @@ class InvalidDateException extends BaseInvalidArgumentException implements Inval
     {
         $this->field = $field;
         $this->value = $value;
-        parent::__construct($field . ' : ' . $value . ' is not a valid value.', $code, $previous);
+        parent::__construct($field.' : '.$value.' is not a valid value.', $code, $previous);
     }
+
     /**
      * Get the invalid field.
      *
@@ -50,6 +61,7 @@ class InvalidDateException extends BaseInvalidArgumentException implements Inval
     {
         return $this->field;
     }
+
     /**
      * Get the invalid value.
      *

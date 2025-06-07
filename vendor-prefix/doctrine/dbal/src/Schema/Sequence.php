@@ -1,11 +1,18 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
 
 use Archetype\Vendor\Doctrine\DBAL\Schema\Visitor\Visitor;
 use Archetype\Vendor\Doctrine\Deprecations\Deprecation;
+
 use function count;
 use function sprintf;
+
 /**
  * Sequence structure.
  */
@@ -13,10 +20,13 @@ class Sequence extends AbstractAsset
 {
     /** @var int */
     protected $allocationSize = 1;
+
     /** @var int */
     protected $initialValue = 1;
+
     /** @var int|null */
     protected $cache;
+
     /**
      * @param string   $name
      * @param int      $allocationSize
@@ -30,21 +40,25 @@ class Sequence extends AbstractAsset
         $this->setInitialValue($initialValue);
         $this->cache = $cache;
     }
+
     /** @return int */
     public function getAllocationSize()
     {
         return $this->allocationSize;
     }
+
     /** @return int */
     public function getInitialValue()
     {
         return $this->initialValue;
     }
+
     /** @return int|null */
     public function getCache()
     {
         return $this->cache;
     }
+
     /**
      * @param int $allocationSize
      *
@@ -57,8 +71,10 @@ class Sequence extends AbstractAsset
         } else {
             $this->allocationSize = 1;
         }
+
         return $this;
     }
+
     /**
      * @param int $initialValue
      *
@@ -71,8 +87,10 @@ class Sequence extends AbstractAsset
         } else {
             $this->initialValue = 1;
         }
+
         return $this;
     }
+
     /**
      * @param int $cache
      *
@@ -81,8 +99,10 @@ class Sequence extends AbstractAsset
     public function setCache($cache)
     {
         $this->cache = $cache;
+
         return $this;
     }
+
     /**
      * Checks if this sequence is an autoincrement sequence for a given table.
      *
@@ -94,22 +114,30 @@ class Sequence extends AbstractAsset
     public function isAutoIncrementsFor(Table $table)
     {
         $primaryKey = $table->getPrimaryKey();
+
         if ($primaryKey === null) {
-            return \false;
+            return false;
         }
+
         $pkColumns = $primaryKey->getColumns();
+
         if (count($pkColumns) !== 1) {
-            return \false;
+            return false;
         }
+
         $column = $table->getColumn($pkColumns[0]);
-        if (!$column->getAutoincrement()) {
-            return \false;
+
+        if (! $column->getAutoincrement()) {
+            return false;
         }
-        $sequenceName = $this->getShortestName($table->getNamespaceName());
-        $tableName = $table->getShortestName($table->getNamespaceName());
+
+        $sequenceName      = $this->getShortestName($table->getNamespaceName());
+        $tableName         = $table->getShortestName($table->getNamespaceName());
         $tableSequenceName = sprintf('%s_%s_seq', $tableName, $column->getShortestName($table->getNamespaceName()));
+
         return $tableSequenceName === $sequenceName;
     }
+
     /**
      * @deprecated
      *
@@ -117,7 +145,12 @@ class Sequence extends AbstractAsset
      */
     public function visit(Visitor $visitor)
     {
-        Deprecation::triggerIfCalledFromOutside('doctrine/dbal', 'https://github.com/doctrine/dbal/pull/5435', 'Sequence::visit() is deprecated.');
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5435',
+            'Sequence::visit() is deprecated.',
+        );
+
         $visitor->acceptSequence($this);
     }
 }

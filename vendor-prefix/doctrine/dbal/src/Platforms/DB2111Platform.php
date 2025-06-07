@@ -1,9 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
 
 use Archetype\Vendor\Doctrine\DBAL\Exception;
+
 use function sprintf;
+
 /**
  * Provides the behavior, features and SQL dialect of the IBM DB2 11.1 (11.1 GA) database platform.
  *
@@ -24,12 +31,15 @@ class DB2111Platform extends DB2Platform
         if ($offset > 0) {
             $query .= sprintf(' OFFSET %u ROWS', $offset);
         }
+
         if ($limit !== null) {
             if ($limit < 0) {
                 throw new Exception(sprintf('Limit must be a positive integer or zero, %d given', $limit));
             }
+
             $query .= sprintf(' FETCH %s %u ROWS ONLY', $offset === 0 ? 'FIRST' : 'NEXT', $limit);
         }
+
         return $query;
     }
 }

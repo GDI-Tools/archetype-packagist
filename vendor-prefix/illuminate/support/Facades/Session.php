@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
 
@@ -13,8 +18,8 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static mixed driver(string|null $driver = null)
  * @method static \Illuminate\Session\SessionManager extend(string $driver, \Closure $callback)
  * @method static array getDrivers()
- * @method static \Illuminate\Contracts\Container\Container getContainer()
- * @method static \Illuminate\Session\SessionManager setContainer(\Illuminate\Contracts\Container\Container $container)
+ * @method static \Archetype\Vendor\Illuminate\Contracts\Container\Container getContainer()
+ * @method static \Illuminate\Session\SessionManager setContainer(\Archetype\Vendor\Illuminate\Contracts\Container\Container $container)
  * @method static \Illuminate\Session\SessionManager forgetDrivers()
  * @method static bool start()
  * @method static void save()
@@ -58,7 +63,7 @@ namespace Archetype\Vendor\Illuminate\Support\Facades;
  * @method static string token()
  * @method static void regenerateToken()
  * @method static bool hasPreviousUri()
- * @method static \Illuminate\Support\Uri previousUri()
+ * @method static \Archetype\Vendor\Illuminate\Support\Uri previousUri()
  * @method static string|null previousUrl()
  * @method static void setPreviousUrl(string $url)
  * @method static void passwordConfirmed()

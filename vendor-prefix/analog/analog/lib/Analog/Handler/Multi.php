@@ -1,4 +1,9 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Analog\Handler;
 
@@ -8,7 +13,7 @@ namespace Archetype\Vendor\Analog\Handler;
  *
  * Usage:
  *
- *		Analog::handler( Analog\Handler\Multi::init( array(
+ *		Analog::handler( Archetype\Vendor\Analog\Handler\Multi::init( array(
  *			// anything error or worse goes to this
  *			Analog::ERROR => array(
  *				Analog\Handler\Mail::init( $to, $subject, $from ),
@@ -16,10 +21,10 @@ namespace Archetype\Vendor\Analog\Handler;
  *			),
  *
  *			// Warnings are sent here
- *			Analog::WARNING => Analog\Handler\File::init( 'logs/warnings.log' ),
+ *			Analog::WARNING => Archetype\Vendor\Analog\Handler\File::init( 'logs/warnings.log' ),
  *
  *			// Debug and info messages sent here
- *			Analog::DEBUG   => Analog\Handler\Ignore::init() // do nothing
+ *			Analog::DEBUG   => Archetype\Vendor\Analog\Handler\Ignore::init() // do nothing
  *		) ) );
  *     
  *     // will be ignored
@@ -31,33 +36,33 @@ namespace Archetype\Vendor\Analog\Handler;
  *     // will trigger an email notice
  *     Analog::log ('Uh oh...', Analog::ERROR);
  */
-class Multi
-{
-    public static function init($handlers)
-    {
-        return new Multi($handlers);
-    }
-    /**
-     * For use as a class instance
-     */
-    private $_handlers;
-    public function __construct($handlers)
-    {
-        $this->_handlers = $handlers;
-    }
-    public function log($info)
-    {
-        $level = is_numeric($info['level']) ? $info['level'] : 3;
-        while ($level <= 7) {
-            if (isset($this->_handlers[$level])) {
-                if (!is_array($this->_handlers[$level])) {
-                    $this->_handlers[$level] = array($this->_handlers[$level]);
-                }
-                foreach ($this->_handlers[$level] as $handler) {
-                    $handler($info);
-                }
-            }
-            $level++;
-        }
-    }
+class Multi {
+	public static function init ($handlers) {
+		return new Multi ($handlers);
+	}
+
+	/**
+	 * For use as a class instance
+	 */
+	private $_handlers;
+
+	public function __construct ($handlers) {
+		$this->_handlers = $handlers;
+	}
+
+	public function log ($info) {
+		$level = is_numeric ($info['level']) ? $info['level'] : 3;
+		while ($level <= 7) {
+			if (isset ($this->_handlers[$level])) {
+				if (! is_array ($this->_handlers[$level])) {
+					$this->_handlers[$level] = array ($this->_handlers[$level]);
+				}
+
+				foreach ($this->_handlers[$level] as $handler) {
+					$handler ($info);
+				}
+			}
+			$level++;
+		}
+	}
 }

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Illuminate\Support\Defer;
 
 use Archetype\Vendor\Illuminate\Support\Str;
+
 class DeferredCallback
 {
     /**
@@ -10,10 +16,11 @@ class DeferredCallback
      *
      * @param  callable  $callback
      */
-    public function __construct(public $callback, public ?string $name = null, public bool $always = \false)
+    public function __construct(public $callback, public ?string $name = null, public bool $always = false)
     {
         $this->name = $name ?? (string) Str::uuid();
     }
+
     /**
      * Specify the name of the deferred callback so it can be cancelled later.
      *
@@ -23,19 +30,23 @@ class DeferredCallback
     public function name(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
+
     /**
      * Indicate that the deferred callback should run even on unsuccessful requests and jobs.
      *
      * @param  bool  $always
      * @return $this
      */
-    public function always(bool $always = \true): self
+    public function always(bool $always = true): self
     {
         $this->always = $always;
+
         return $this;
     }
+
     /**
      * Invoke the deferred callback.
      *

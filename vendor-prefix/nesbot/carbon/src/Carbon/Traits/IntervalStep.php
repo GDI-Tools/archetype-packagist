@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 /**
  * This file is part of the Carbon package.
  *
@@ -9,6 +15,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Archetype\Vendor\Carbon\Traits;
 
 use Archetype\Vendor\Carbon\Callback;
@@ -18,6 +25,7 @@ use Archetype\Vendor\Carbon\CarbonInterface;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
+
 trait IntervalStep
 {
     /**
@@ -26,6 +34,7 @@ trait IntervalStep
      * @var Closure|null
      */
     protected $step;
+
     /**
      * Get the dynamic step in use.
      *
@@ -35,6 +44,7 @@ trait IntervalStep
     {
         return $this->step;
     }
+
     /**
      * Set a step to apply instead of a fixed interval to get the new date.
      *
@@ -46,6 +56,7 @@ trait IntervalStep
     {
         $this->step = $step;
     }
+
     /**
      * Take a date and apply either the step if set, or the current interval else.
      *
@@ -56,19 +67,24 @@ trait IntervalStep
      *
      * @return CarbonInterface
      */
-    public function convertDate(DateTimeInterface $dateTime, bool $negated = \false): CarbonInterface
+    public function convertDate(DateTimeInterface $dateTime, bool $negated = false): CarbonInterface
     {
         /** @var CarbonInterface $carbonDate */
         $carbonDate = $dateTime instanceof CarbonInterface ? $dateTime : $this->resolveCarbon($dateTime);
+
         if ($this->step) {
             $carbonDate = Callback::parameter($this->step, $carbonDate->avoidMutation());
+
             return $carbonDate->modify(($this->step)($carbonDate, $negated)->format('Y-m-d H:i:s.u e O'));
         }
+
         if ($negated) {
             return $carbonDate->rawSub($this);
         }
+
         return $carbonDate->rawAdd($this);
     }
+
     /**
      * Convert DateTimeImmutable instance to CarbonImmutable instance and DateTime instance to Carbon instance.
      */
@@ -77,6 +93,7 @@ trait IntervalStep
         if ($dateTime instanceof DateTimeImmutable) {
             return CarbonImmutable::instance($dateTime);
         }
+
         return Carbon::instance($dateTime);
     }
 }

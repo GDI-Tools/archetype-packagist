@@ -1,10 +1,17 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Archetype\Vendor\Doctrine\DBAL\Driver;
 
 use Exception as BaseException;
 use Throwable;
+
 /**
  * Base implementation of the {@see Exception} interface.
  *
@@ -16,6 +23,7 @@ abstract class AbstractException extends BaseException implements Exception
      * The SQLSTATE of the driver.
      */
     private ?string $sqlState = null;
+
     /**
      * @param string         $message  The driver error message.
      * @param string|null    $sqlState The SQLSTATE the driver is in at the time the error occurred, if any.
@@ -25,8 +33,10 @@ abstract class AbstractException extends BaseException implements Exception
     public function __construct($message, $sqlState = null, $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
+
         $this->sqlState = $sqlState;
     }
+
     /**
      * {@inheritDoc}
      */

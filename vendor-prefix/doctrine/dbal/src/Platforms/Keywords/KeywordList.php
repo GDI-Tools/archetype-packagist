@@ -1,10 +1,16 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms\Keywords;
 
 use function array_flip;
 use function array_map;
 use function strtoupper;
+
 /**
  * Abstract interface for a SQL reserved keyword dictionary.
  *
@@ -14,6 +20,7 @@ abstract class KeywordList
 {
     /** @var string[]|null */
     private ?array $keywords = null;
+
     /**
      * Checks if the given word is a keyword of this dialect/vendor platform.
      *
@@ -26,19 +33,23 @@ abstract class KeywordList
         if ($this->keywords === null) {
             $this->initializeKeywords();
         }
+
         return isset($this->keywords[strtoupper($word)]);
     }
+
     /** @return void */
     protected function initializeKeywords()
     {
         $this->keywords = array_flip(array_map('strtoupper', $this->getKeywords()));
     }
+
     /**
      * Returns the list of keywords.
      *
      * @return string[]
      */
     abstract protected function getKeywords();
+
     /**
      * Returns the name of this keyword list.
      *
