@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Factories;
@@ -13,7 +13,6 @@ use Archetype\Vendor\Illuminate\Container\Container;
 use Archetype\Vendor\Illuminate\Contracts\Foundation\Application;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
-use Archetype\Vendor\Illuminate\Database\Eloquent\SoftDeletes;
 use Archetype\Vendor\Illuminate\Support\Carbon;
 use Archetype\Vendor\Illuminate\Support\Collection;
 use Archetype\Vendor\Illuminate\Support\Enumerable;
@@ -976,7 +975,7 @@ abstract class Factory
             return $this->macroCall($method, $parameters);
         }
 
-        if ($method === 'trashed' && in_array(SoftDeletes::class, class_uses_recursive($this->modelName()))) {
+        if ($method === 'trashed' && $this->modelName()::isSoftDeletable()) {
             return $this->state([
                 $this->newModel()->getDeletedAtColumn() => $parameters[0] ?? Carbon::now()->subDay(),
             ]);

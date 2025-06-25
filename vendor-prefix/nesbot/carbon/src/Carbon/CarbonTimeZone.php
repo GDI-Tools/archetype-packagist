@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 declare(strict_types=1);
@@ -21,6 +21,7 @@ namespace Archetype\Vendor\Carbon;
 use Archetype\Vendor\Carbon\Exceptions\InvalidCastException;
 use Archetype\Vendor\Carbon\Exceptions\InvalidTimeZoneException;
 use Archetype\Vendor\Carbon\Traits\LocalFactory;
+use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
@@ -134,10 +135,23 @@ class CarbonTimeZone extends DateTimeZone
     {
         $name = $this->getName();
 
-        foreach ($this->listAbbreviations() as $abbreviation => $zones) {
+        $date = new DateTimeImmutable($dst ? 'July 1' : 'January 1', $this);
+        $timezone = $date->format('T');
+        $abbreviations = $this->listAbbreviations();
+        $matchingZones = array_merge($abbreviations[$timezone] ?? [], $abbreviations[strtolower($timezone)] ?? []);
+
+        if ($matchingZones !== []) {
+            foreach ($matchingZones as $zone) {
+                if ($zone['timezone_id'] === $name && $zone['dst'] == $dst) {
+                    return $timezone;
+                }
+            }
+        }
+
+        foreach ($abbreviations as $abbreviation => $zones) {
             foreach ($zones as $zone) {
                 if ($zone['timezone_id'] === $name && $zone['dst'] == $dst) {
-                    return $abbreviation;
+                    return strtoupper($abbreviation);
                 }
             }
         }

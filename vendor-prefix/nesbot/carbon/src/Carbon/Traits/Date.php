@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 declare(strict_types=1);
@@ -1841,6 +1841,8 @@ trait Date
 
     /**
      * Set the timezone or returns the timezone name if no arguments passed.
+     *
+     * @return ($value is null ? string : static)
      */
     public function tz(DateTimeZone|string|int|null $value = null): static|string
     {

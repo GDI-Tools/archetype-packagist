@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
@@ -299,9 +299,16 @@ SQL,
         foreach ($tableIndexes as $row) {
             $colNumbers    = array_map('intval', explode(' ', $row['indkey']));
             $columnNameSql = sprintf(
-                'SELECT attnum, attname FROM pg_attribute WHERE attrelid=%d AND attnum IN (%s) ORDER BY attnum ASC',
+                <<<'SQL'
+                SELECT attnum,
+                       quote_ident(attname) AS attname
+                FROM pg_attribute
+                WHERE attrelid = %d
+                  AND attnum IN (%s)
+                ORDER BY attnum
+                SQL,
                 $row['indrelid'],
-                implode(' ,', $colNumbers),
+                implode(', ', $colNumbers),
             );
 
             $indexColumns = $this->_conn->fetchAllAssociative($columnNameSql);
@@ -607,6 +614,8 @@ WHERE table_catalog = ?
   AND table_name != 'geometry_columns'
   AND table_name != 'spatial_ref_sys'
   AND table_type = 'BASE TABLE'
+ORDER BY
+  quote_ident(table_name)
 SQL;
 
         return $this->_conn->executeQuery($sql, [$databaseName]);
@@ -617,7 +626,7 @@ SQL;
         $sql = 'SELECT';
 
         if ($tableName === null) {
-            $sql .= ' c.relname AS table_name, n.nspname AS schema_name,';
+            $sql .= ' quote_ident(c.relname) AS table_name, quote_ident(n.nspname) AS schema_name,';
         }
 
         $sql .= sprintf(<<<'SQL'
@@ -669,7 +678,7 @@ SQL, $this->_platform->getDefaultColumnValueSQLSnippet());
         $sql = 'SELECT';
 
         if ($tableName === null) {
-            $sql .= ' tc.relname AS table_name, tn.nspname AS schema_name,';
+            $sql .= ' quote_ident(tc.relname) AS table_name, quote_ident(tn.nspname) AS schema_name,';
         }
 
         $sql .= <<<'SQL'
@@ -693,7 +702,7 @@ SQL;
             'c.relnamespace = n.oid',
         ], $this->buildQueryConditions($tableName));
 
-        $sql .= ' WHERE ' . implode(' AND ', $conditions) . ')';
+        $sql .= ' WHERE ' . implode(' AND ', $conditions) . ') ORDER BY quote_ident(ic.relname)';
 
         return $this->_conn->executeQuery($sql);
     }
@@ -703,7 +712,7 @@ SQL;
         $sql = 'SELECT';
 
         if ($tableName === null) {
-            $sql .= ' tc.relname AS table_name, tn.nspname AS schema_name,';
+            $sql .= ' quote_ident(tc.relname) AS table_name, quote_ident(tn.nspname) AS schema_name,';
         }
 
         $sql .= <<<'SQL'
@@ -720,7 +729,7 @@ SQL;
 
         $conditions = array_merge(['n.oid = c.relnamespace'], $this->buildQueryConditions($tableName));
 
-        $sql .= ' WHERE ' . implode(' AND ', $conditions) . ") AND r.contype = 'f'";
+        $sql .= ' WHERE ' . implode(' AND ', $conditions) . ") AND r.contype = 'f' ORDER BY quote_ident(r.conname)";
 
         return $this->_conn->executeQuery($sql);
     }
@@ -731,7 +740,8 @@ SQL;
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $sql = <<<'SQL'
-SELECT c.relname,
+SELECT n.nspname AS schema_name,
+       c.relname AS table_name,
        CASE c.relpersistence WHEN 'u' THEN true ELSE false END as unlogged,
        obj_description(c.oid, 'pg_class') AS comment
 FROM pg_class c
@@ -743,7 +753,12 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
 
-        return $this->_conn->fetchAllAssociativeIndexed($sql);
+        $tableOptions = [];
+        foreach ($this->_conn->iterateAssociative($sql) as $row) {
+            $tableOptions[$this->_getPortableTableDefinition($row)] = $row;
+        }
+
+        return $tableOptions;
     }
 
     /**

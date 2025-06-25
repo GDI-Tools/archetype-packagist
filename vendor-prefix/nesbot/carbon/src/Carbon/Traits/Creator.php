@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 declare(strict_types=1);
@@ -690,7 +690,7 @@ trait Creator
         string $format,
         string $time,
         $timezone = null,
-        ?string $locale = self::DEFAULT_LOCALE,
+        ?string $locale = CarbonInterface::DEFAULT_LOCALE,
         ?TranslatorInterface $translator = null
     ): ?self {
         $format = preg_replace_callback('/(?<!\\\\)(\\\\{2})*(LTS|LT|[Ll]{1,4})/', function ($match) use ($locale, $translator) {

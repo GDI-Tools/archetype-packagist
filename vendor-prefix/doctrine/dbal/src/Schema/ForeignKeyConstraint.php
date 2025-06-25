@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
@@ -254,6 +254,10 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
 
         if ($position !== false) {
             $name = substr($name, $position + 1);
+        }
+
+        if ($this->isIdentifierQuoted($name)) {
+            $name = $this->trimQuotes($name);
         }
 
         return strtolower($name);

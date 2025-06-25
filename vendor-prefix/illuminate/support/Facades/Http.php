@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
@@ -95,6 +95,8 @@ use Illuminate\Http\Client\Factory;
  * @method static \Illuminate\Http\Client\PendingRequest stub(callable $callback)
  * @method static \Illuminate\Http\Client\PendingRequest async(bool $async = true)
  * @method static \GuzzleHttp\Promise\PromiseInterface|null getPromise()
+ * @method static \Illuminate\Http\Client\PendingRequest truncateExceptionsAt(int $length)
+ * @method static \Illuminate\Http\Client\PendingRequest dontTruncateExceptions()
  * @method static \Illuminate\Http\Client\PendingRequest setClient(\GuzzleHttp\Client $client)
  * @method static \Illuminate\Http\Client\PendingRequest setHandler(callable $handler)
  * @method static array getOptions()

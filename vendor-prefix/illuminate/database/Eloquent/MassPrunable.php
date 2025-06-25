@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent;
@@ -28,7 +28,7 @@ trait MassPrunable
 
         $total = 0;
 
-        $softDeletable = in_array(SoftDeletes::class, class_uses_recursive(get_class($this)));
+        $softDeletable = static::isSoftDeletable();
 
         do {
             $total += $count = $softDeletable

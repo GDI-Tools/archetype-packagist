@@ -2,12 +2,13 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Support;
 
 use Closure;
+use Archetype\Vendor\Illuminate\Contracts\Support\HasOnceHash;
 use Archetype\Vendor\Laravel\SerializableClosure\Support\ReflectionClosure;
 
 class Onceable
@@ -66,7 +67,17 @@ class Onceable
         }
 
         $uses = array_map(
-            fn (mixed $argument) => is_object($argument) ? spl_object_hash($argument) : $argument,
+            static function (mixed $argument) {
+                if ($argument instanceof HasOnceHash) {
+                    return $argument->onceHash();
+                }
+
+                if (is_object($argument)) {
+                    return spl_object_hash($argument);
+                }
+
+                return $argument;
+            },
             $callable instanceof Closure ? (new ReflectionClosure($callable))->getClosureUsedVariables() : [],
         );
 

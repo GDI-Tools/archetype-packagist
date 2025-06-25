@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 /*
@@ -28,7 +28,7 @@ return [
     'year' => ':count godina|:count godine|:count godina',
     'y' => ':count g.',
     'month' => ':count mesec|:count meseca|:count meseci',
-    'm' => ':count mj.',
+    'm' => ':count mes.',
     'week' => ':count nedelja|:count nedelje|:count nedelja',
     'w' => ':count ned.',
     'day' => ':count dan|:count dana|:count dana',

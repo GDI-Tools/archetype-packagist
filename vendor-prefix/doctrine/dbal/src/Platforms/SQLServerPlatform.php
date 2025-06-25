@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
@@ -43,6 +43,7 @@ use function is_string;
 use function preg_match;
 use function preg_match_all;
 use function sprintf;
+use function str_contains;
 use function str_ends_with;
 use function str_replace;
 use function str_starts_with;
@@ -1782,11 +1783,17 @@ class SQLServerPlatform extends AbstractPlatform
 
     protected function getCommentOnTableSQL(string $tableName, ?string $comment): string
     {
+        if (str_contains($tableName, '.')) {
+            [$schemaName, $tableName] = explode('.', $tableName);
+        } else {
+            $schemaName = 'dbo';
+        }
+
         return $this->getAddExtendedPropertySQL(
             'MS_Description',
             $comment,
             'SCHEMA',
-            $this->quoteStringLiteral('dbo'),
+            $this->quoteStringLiteral($schemaName),
             'TABLE',
             $this->quoteStringLiteral($this->unquoteSingleIdentifier($tableName)),
         );

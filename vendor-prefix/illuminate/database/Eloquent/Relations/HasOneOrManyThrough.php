@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent\Relations;
@@ -14,7 +14,6 @@ use Archetype\Vendor\Illuminate\Database\Eloquent\Collection as EloquentCollecti
 use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
 use Archetype\Vendor\Illuminate\Database\Eloquent\ModelNotFoundException;
 use Archetype\Vendor\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Archetype\Vendor\Illuminate\Database\Eloquent\SoftDeletes;
 use Archetype\Vendor\Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Archetype\Vendor\Illuminate\Database\UniqueConstraintViolationException;
 
@@ -151,7 +150,7 @@ abstract class HasOneOrManyThrough extends Relation
      */
     public function throughParentSoftDeletes()
     {
-        return in_array(SoftDeletes::class, class_uses_recursive($this->throughParent));
+        return $this->throughParent::isSoftDeletable();
     }
 
     /**

@@ -2,11 +2,17 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Queue;
 
+/**
+ * @method int pendingSize(string|null $queue = null)
+ * @method int delayedSize(string|null $queue = null)
+ * @method int reservedSize(string|null $queue = null)
+ * @method int|null creationTimeOfOldestPendingJob(string|null $queue = null)
+ */
 interface Queue
 {
     /**
@@ -42,7 +48,6 @@ interface Queue
      *
      * @param  string  $payload
      * @param  string|null  $queue
-     * @param  array  $options
      * @return mixed
      */
     public function pushRaw($payload, $queue = null, array $options = []);

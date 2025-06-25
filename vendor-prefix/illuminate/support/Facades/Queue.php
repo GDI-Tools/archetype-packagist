@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
@@ -16,6 +16,7 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\QueueFake;
  * @method static void exceptionOccurred(mixed $callback)
  * @method static void looping(mixed $callback)
  * @method static void failing(mixed $callback)
+ * @method static void starting(mixed $callback)
  * @method static void stopping(mixed $callback)
  * @method static bool connected(string|null $name = null)
  * @method static \Archetype\Vendor\Illuminate\Contracts\Queue\Queue connection(string|null $name = null)
@@ -36,6 +37,10 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\QueueFake;
  * @method static \Archetype\Vendor\Illuminate\Contracts\Queue\Job|null pop(string|null $queue = null)
  * @method static string getConnectionName()
  * @method static \Archetype\Vendor\Illuminate\Contracts\Queue\Queue setConnectionName(string $name)
+ * @method static int pendingSize(string|null $queue = null)
+ * @method static int delayedSize(string|null $queue = null)
+ * @method static int reservedSize(string|null $queue = null)
+ * @method static int|null creationTimeOfOldestPendingJob(string|null $queue = null)
  * @method static mixed getJobTries(mixed $job)
  * @method static mixed getJobBackoff(mixed $job)
  * @method static mixed getJobExpiration(mixed $job)

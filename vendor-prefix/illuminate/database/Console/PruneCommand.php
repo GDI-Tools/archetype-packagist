@@ -2,16 +2,14 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Database\Console;
 
 use Illuminate\Console\Command;
 use Archetype\Vendor\Illuminate\Contracts\Events\Dispatcher;
-use Archetype\Vendor\Illuminate\Database\Eloquent\MassPrunable;
-use Archetype\Vendor\Illuminate\Database\Eloquent\Prunable;
-use Archetype\Vendor\Illuminate\Database\Eloquent\SoftDeletes;
+use Archetype\Vendor\Illuminate\Database\Eloquent\Model;
 use Archetype\Vendor\Illuminate\Database\Events\ModelPruningFinished;
 use Archetype\Vendor\Illuminate\Database\Events\ModelPruningStarting;
 use Archetype\Vendor\Illuminate\Database\Events\ModelsPruned;
@@ -106,7 +104,7 @@ class PruneCommand extends Command
             ? $instance->prunableChunkSize
             : $this->option('chunk');
 
-        $total = $this->isPrunable($model)
+        $total = $model::isPrunable()
             ? $instance->pruneAll($chunkSize)
             : 0;
 
@@ -145,7 +143,6 @@ class PruneCommand extends Command
                 );
             })
             ->when(! empty($except), fn ($models) => $models->reject(fn ($model) => in_array($model, $except)))
-            ->filter(fn ($model) => class_exists($model))
             ->filter(fn ($model) => $this->isPrunable($model))
             ->values();
     }
@@ -167,22 +164,9 @@ class PruneCommand extends Command
     }
 
     /**
-     * Determine if the given model class is prunable.
-     *
-     * @param  string  $model
-     * @return bool
-     */
-    protected function isPrunable($model)
-    {
-        $uses = class_uses_recursive($model);
-
-        return in_array(Prunable::class, $uses) || in_array(MassPrunable::class, $uses);
-    }
-
-    /**
      * Display how many models will be pruned.
      *
-     * @param  string  $model
+     * @param  class-string  $model
      * @return void
      */
     protected function pretendToPrune($model)
@@ -190,7 +174,7 @@ class PruneCommand extends Command
         $instance = new $model;
 
         $count = $instance->prunable()
-            ->when(in_array(SoftDeletes::class, class_uses_recursive(get_class($instance))), function ($query) {
+            ->when($model::isSoftDeletable(), function ($query) {
                 $query->withTrashed();
             })->count();
 
@@ -199,5 +183,19 @@ class PruneCommand extends Command
         } else {
             $this->components->info("{$count} [{$model}] records will be pruned.");
         }
+    }
+
+    /**
+     * Determine if the given model is prunable.
+     *
+     * @param  string  $model
+     * @return bool
+     */
+    private function isPrunable(string $model)
+    {
+        return class_exists($model)
+            && is_a($model, Model::class, true)
+            && ! (new \ReflectionClass($model))->isAbstract()
+            && $model::isPrunable();
     }
 }

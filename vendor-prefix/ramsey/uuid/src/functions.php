@@ -10,7 +10,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  * phpcs:disable Squiz.Functions.GlobalFunction
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 declare(strict_types=1);

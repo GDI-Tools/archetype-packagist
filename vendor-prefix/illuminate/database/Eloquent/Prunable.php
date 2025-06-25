@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Database\Eloquent;
@@ -25,7 +25,7 @@ trait Prunable
         $total = 0;
 
         $this->prunable()
-            ->when(in_array(SoftDeletes::class, class_uses_recursive(static::class)), function ($query) {
+            ->when(static::isSoftDeletable(), function ($query) {
                 $query->withTrashed();
             })->chunkById($chunkSize, function ($models) use (&$total) {
                 $models->each(function ($model) use (&$total) {
@@ -69,7 +69,7 @@ trait Prunable
     {
         $this->pruning();
 
-        return in_array(SoftDeletes::class, class_uses_recursive(static::class))
+        return static::isSoftDeletable()
             ? $this->forceDelete()
             : $this->delete();
     }

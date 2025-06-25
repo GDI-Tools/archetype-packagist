@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Platforms;
@@ -836,6 +836,16 @@ SQL
             $constraintName = $this->tableName($table) . '_pkey';
 
             return $this->getDropConstraintSQL($constraintName, $table);
+        }
+
+        if ($table !== null) {
+            $indexName = $index instanceof Index ? $index->getQuotedName($this) : $index;
+            $tableName = $table instanceof Table ? $table->getQuotedName($this) : $table;
+
+            if (strpos($tableName, '.') !== false) {
+                [$schema] = explode('.', $tableName);
+                $index    = $schema . '.' . $indexName;
+            }
         }
 
         return parent::getDropIndexSQL($index, $table);

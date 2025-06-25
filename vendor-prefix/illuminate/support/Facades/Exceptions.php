@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Support\Facades;
@@ -37,6 +37,7 @@ use Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake;
  * @method static void renderForConsole(\Symfony\Component\Console\Output\OutputInterface $output, \Throwable $e)
  * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake throwOnReport()
  * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake throwFirstReported()
+ * @method static array reported()
  * @method static \Archetype\Vendor\Illuminate\Support\Testing\Fakes\ExceptionHandlerFake setHandler(\Archetype\Vendor\Illuminate\Contracts\Debug\ExceptionHandler $handler)
  *
  * @see \Illuminate\Foundation\Exceptions\Handler

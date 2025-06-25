@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Doctrine\DBAL\Schema;
@@ -202,7 +202,7 @@ SQL,
 
     private function parseDefaultExpression(string $value): ?string
     {
-        while (preg_match('/^\((.*)\)$/s', $value, $matches)) {
+        while (preg_match('/^\((.*)\)$/s', $value, $matches) === 1) {
             $value = $matches[1];
         }
 
@@ -232,9 +232,15 @@ SQL,
             $name = $tableForeignKey['ForeignKey'];
 
             if (! isset($foreignKeys[$name])) {
+                $referencedTableName = $tableForeignKey['ReferenceTableName'];
+
+                if ($tableForeignKey['ReferenceSchemaName'] !== 'dbo') {
+                    $referencedTableName = $tableForeignKey['ReferenceSchemaName'] . '.' . $referencedTableName;
+                }
+
                 $foreignKeys[$name] = [
                     'local_columns' => [$tableForeignKey['ColumnName']],
-                    'foreign_table' => $tableForeignKey['ReferenceTableName'],
+                    'foreign_table' => $referencedTableName,
                     'foreign_columns' => [$tableForeignKey['ReferenceColumnName']],
                     'name' => $name,
                     'options' => [
@@ -561,31 +567,29 @@ SQL;
     {
         $sql = <<<'SQL'
           SELECT
-            tbl.name,
+            scm.name AS schema_name,
+            tbl.name AS table_name,
             p.value AS [table_comment]
           FROM
             sys.tables AS tbl
+            JOIN sys.schemas AS scm
+              ON tbl.schema_id = scm.schema_id
             INNER JOIN sys.extended_properties AS p ON p.major_id=tbl.object_id AND p.minor_id=0 AND p.class=1
 SQL;
 
-        $conditions = ["SCHEMA_NAME(tbl.schema_id) = N'dbo'", "p.name = N'MS_Description'"];
-        $params     = [];
+        $conditions = ["p.name = N'MS_Description'"];
 
         if ($tableName !== null) {
-            $conditions[] = "tbl.name = N'" . $tableName . "'";
+            $conditions[] = $this->getTableWhereClause($tableName, 'scm.name', 'tbl.name');
         }
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
 
-        /** @var array<string,array<string,mixed>> $metadata */
-        $metadata = $this->_conn->executeQuery($sql, $params)
-            ->fetchAllAssociativeIndexed();
-
         $tableOptions = [];
-        foreach ($metadata as $table => $data) {
+        foreach ($this->_conn->iterateAssociative($sql) as $data) {
             $data = array_change_key_case($data, CASE_LOWER);
 
-            $tableOptions[$table] = [
+            $tableOptions[$this->_getPortableTableDefinition($data)] = [
                 'comment' => $data['table_comment'],
             ];
         }

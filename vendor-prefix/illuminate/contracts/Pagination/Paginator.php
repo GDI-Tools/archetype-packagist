@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by Vitalii Sili on 07-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by Vitalii Sili on 25-June-2025 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Archetype\Vendor\Illuminate\Contracts\Pagination;
@@ -11,6 +11,8 @@ namespace Archetype\Vendor\Illuminate\Contracts\Pagination;
  * @template TKey of array-key
  *
  * @template-covariant TValue
+ *
+ * @method $this through(callable(TValue): mixed $callback)
  */
 interface Paginator
 {
